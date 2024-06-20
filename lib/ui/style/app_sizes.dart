@@ -1,0 +1,33 @@
+class AppSizes {
+  static const double pix250 = 250;
+  static const double pix230 = 230;
+  static const double pix220 = 220;
+  static const double pix210 = 210;
+  static const double pix190 = 190;
+  static const double pix170 = 170;
+  static const double pix150 = 150;
+  static const double pix130 = 130;
+  static const double pix120 = 120;
+  static const double pix100 = 100;
+  static const double pix88 = 88;
+  static const double pix80 = 80;
+  static const double pix70 = 70;
+  static const double pix60 = 60;
+  static const double pix56 = 56;
+  static const double pix48 = 48;
+  static const double pix45 = 45;
+  static const double pix40 = 40;
+  static const double pix32 = 32;
+  static const double pix30 = 30;
+  static const double pix28 = 28;
+  static const double pix24 = 24;
+  static const double pix22 = 22;
+  static const double pix20 = 20;
+  static const double pix16 = 16;
+  static const double pix10 = 10;
+  static const double pix12 = 12;
+  static const double pix8 = 8;
+  static const double pix6 = 6;
+  static const double pix4 = 4;
+  static const double pix2 = 2;
+}
