@@ -1,8 +1,11 @@
 import 'dart:io';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mekanly_com/logic/cubits/view_count/view_count.dart';
+import 'package:mekanly_com/ui/widgets/notfication_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:turkmen_localization_support/turkmen_localization_support.dart';
 
@@ -11,6 +14,7 @@ import '/logic/cubits/fav/fav_cubit.dart';
 import '/logic/cubits/house/house_cubit.dart';
 import '/logic/cubits/navigator/nav_cubit.dart';
 import 'config/config.dart';
+import 'firebase_options.dart';
 import 'localization/locals_delegate.dart';
 import 'logic/cubits/comments/comments_cubit.dart';
 import 'logic/cubits/cubits.dart';
@@ -28,13 +32,30 @@ class MyHttpOverrides extends HttpOverrides {
   }
 }
 
+Future<void> backgroundNotificationHandler(RemoteMessage message) async {
+  await FCMConfig().sendNotification(body: message.notification!.body!, title: message.notification!.title!);
+  return;
+}
+
 Future<void> main() async {
   await Future.delayed(const Duration(seconds: 3));
+
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   final prefs = await SharedPreferences.getInstance();
   HttpOverrides.global = MyHttpOverrides();
   await init();
 
+  await FCMConfig().requestPermission();
+  await FCMConfig().initAwesomeNotification();
+  FirebaseMessaging.onBackgroundMessage(backgroundNotificationHandler);
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp],
   ).then((_) async {
@@ -60,8 +81,24 @@ class MyAppState extends State<MyApp> {
   @override
   void initState() {
     logger("${"-" * 50} INITIALIZED${"-" * 50}");
-
+    firebaseTask();
     super.initState();
+  }
+
+  dynamic firebaseTask() async {
+    await FirebaseMessaging.instance.getToken().then(
+      (value) {
+        print(value);
+      },
+    );
+    // await FCMConfig().requestPermission();
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print(message);
+      print(message);
+      print(message.notification);
+      print(message.notification!.body);
+      FCMConfig().sendNotification(body: message.notification!.body!, title: message.notification!.title!);
+    });
   }
 
   @override
@@ -90,7 +127,7 @@ class MyAppState extends State<MyApp> {
               builder: ((context, child) => MediaQuery(data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)), child: child!)),
               scrollBehavior: CustomScrollBehavior(),
               navigatorKey: NavKey.mainKey,
-              title: 'Mekanly.com',
+              title: 'Mekanly',
               theme: theme.themeData,
               locale: locale,
               initialRoute: Routes.main,

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color primary = Color(0xff8497b0);
+  static const Color primary = Color(0xff019eff);
+  static const Color secondary = Color(0xff019eff);
 
-  static const Color buttons = Color(0xFF5b9bd5);
+  static const Color buttons = Color(0xff3750fe);
 
   static const Color mainTextDark = Color(0xFF212121);
   static const Color mainText = Color(0xfff1f3f5);
@@ -22,17 +23,17 @@ class AppColors {
   static const Color white = Colors.white;
 }
 
-class CustomMaterialStateColor extends MaterialStateColor {
+class CustomMaterialStateColor extends WidgetStateColor {
   final Color color;
 
   CustomMaterialStateColor(this.color) : super(0);
 
   @override
-  Color resolve(Set<MaterialState> states) {
+  Color resolve(Set<WidgetState> states) {
     return color;
   }
 }
 
-MaterialStateColor toMtrlStColor(Color color) {
+WidgetStateColor toMtrlStColor(Color color) {
   return CustomMaterialStateColor(color);
 }

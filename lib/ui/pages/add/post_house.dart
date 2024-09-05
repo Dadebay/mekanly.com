@@ -6,34 +6,33 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get_utils/get_utils.dart';
+import 'package:iconly/iconly.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mekanly_com/logic/cubits/navigator/nav_cubit.dart';
-import 'package:mekanly_com/ui/pages/add/category_selection_page.dart';
 import 'package:mekanly_com/ui/pages/profile/auth/logout_dialog.dart';
 import 'package:mekanly_com/ui/pages/profile/my_houses/my_houses.dart';
 import 'package:path/path.dart' as path;
 import 'package:table_calendar/table_calendar.dart';
 
+import '/config/config.dart';
+import '/logic/cubits/auth/auth_cubit.dart';
+import '/logic/cubits/region/region_cubit.dart';
+import '/models/models.dart';
+import '/ui/style/app_sizes.dart';
+import '/ui/style/style.dart';
+import '/ui/widgets/sli.dart';
 import '../../../localization/locals.dart';
 import '../../../logic/cubits/categs/categs_cubit.dart';
 import '../../../logic/cubits/house/house_cubit.dart';
 import '../../../logic/data/net.dart';
 import '../../widgets/widgets.dart';
 import '../home/widgets/widgets.dart';
-import '/config/config.dart';
-import '/logic/cubits/auth/auth_cubit.dart';
-import '/logic/cubits/lang/lang_cubit.dart';
-import '/logic/cubits/region/region_cubit.dart';
-import '/models/models.dart';
-import '/ui/pages/profile/terms_and_conditions.dart';
-import '/ui/style/app_sizes.dart';
-import '/ui/style/style.dart';
-import '/ui/widgets/sli.dart';
 import 'regions_page.dart';
 
 class PostHousePage extends StatefulWidget {
-  const PostHousePage({super.key});
-
+  const PostHousePage({super.key, required this.category, required this.categoryID});
+  final String category;
+  final int categoryID;
   @override
   PostHousePageState createState() => PostHousePageState();
 }
@@ -41,8 +40,7 @@ class PostHousePage extends StatefulWidget {
 class PostHousePageState extends State<PostHousePage> {
   final _formKey = GlobalKey<FormState>();
 
-  String selectedCategory = '';
-  int chosenCategId = 0;
+  // String selectedCategory = '';
 
   String selectedLocation = '';
   int? chosenCityId;
@@ -175,11 +173,10 @@ class PostHousePageState extends State<PostHousePage> {
     if (form.validate() &&
         _acceptTerms &&
         name.text.isNotEmpty &&
-        chosenCategId != 0 &&
         chosenCityId != null &&
         roomCount != 0 &&
-        _rangeEnd != null &&
-        _rangeStart != null &&
+        // _rangeEnd !=  &&
+        // _rangeStart != null &&
         houseImages.isNotEmpty &&
         priceCtrl.text.isNotEmpty &&
         descriptionCtrl.text.isNotEmpty &&
@@ -242,18 +239,18 @@ class PostHousePageState extends State<PostHousePage> {
     });
   }
 
-  void chooseCategory() async {
-    final selectedCategory = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const CategorySelectionPage()),
-    );
-    if (selectedCategory != null) {
-      setState(() {
-        this.selectedCategory = selectedCategory[0];
-        chosenCategId = selectedCategory[1];
-      });
-    }
-  }
+  // void chooseCategory() async {
+  //   final selectedCategory = await Navigator.push(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => const CategorySelectionPage()),
+  //   );
+  //   if (selectedCategory != null) {
+  //     setState(() {
+  //       this.selectedCategory = selectedCategory[0];
+  //       // chosenCategId = selectedCategory[1];
+  //     });
+  //   }
+  // }
 
   void chooseLocation() async {
     final List<Cities> selectedLocations = await Navigator.push(
@@ -341,7 +338,7 @@ class PostHousePageState extends State<PostHousePage> {
   bool isAllFilled() {
     return _acceptTerms ||
         name.text.isNotEmpty ||
-        chosenCategId != 0 ||
+        // chosenCategId != 0 ||
         chosenCityId != null ||
         roomCount != 0 ||
         guestNumber != 0 ||
@@ -353,12 +350,12 @@ class PostHousePageState extends State<PostHousePage> {
   }
 
   bool isClicked = false;
-
+  final bool _value = true;
   @override
   Widget build(BuildContext context) {
     var divider = Padding(
-      padding: const EdgeInsets.fromLTRB(AppSizes.pix10, 0, AppSizes.pix10, 0),
-      child: Divider(color: AppColors.secondaryText.withOpacity(.4), height: 1),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Divider(color: AppColors.buttons.withOpacity(.2), height: 1),
     );
     var locals = Locals.of(context);
     return PopScope(
@@ -393,7 +390,7 @@ class PostHousePageState extends State<PostHousePage> {
                         child: Tex(
                           locals.houseName,
                           con: context,
-                        ).title,
+                        ).title2,
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: AppSizes.pix16),
@@ -405,29 +402,32 @@ class PostHousePageState extends State<PostHousePage> {
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(25),
                           ],
-                          style: const TextStyle(color: AppColors.mainTextDark),
-                          decoration: InputDecoration(hintText: locals.nameHint, hintStyle: const TextStyle(color: AppColors.secondaryText, fontSize: AppSizes.pix12), border: InputBorder.none),
+                          style: const TextStyle(
+                            color: AppColors.mainTextDark,
+                          ),
+                          decoration: InputDecoration(
+                              hintText: locals.nameHint, isDense: false, hintStyle: const TextStyle(color: AppColors.secondaryText, fontSize: AppSizes.pix16), border: InputBorder.none),
                         ),
                       ),
+                      // divider,
+                      // ListTile(
+                      //   contentPadding: const EdgeInsets.only(left: AppSizes.pix10),
+                      //   minVerticalPadding: 0,
+                      //   dense: true,
+                      //   title: Tex(
+                      //     locals.category,
+                      //     padding: 0,
+                      //     con: context,
+                      //   ).title2,
+                      //   subtitle: Tex(
+                      //     (selectedCategory.isNotEmpty) ? selectedCategory : locals.notSelected,
+                      //     con: context,
+                      //   ).subtitle,
+                      //   onTap: chooseCategory,
+                      // ),
                       divider,
                       ListTile(
-                        contentPadding: const EdgeInsets.only(left: AppSizes.pix10),
-                        minVerticalPadding: 0,
-                        dense: true,
-                        title: Tex(
-                          locals.category,
-                          padding: 0,
-                          con: context,
-                        ).title,
-                        subtitle: Tex(
-                          (selectedCategory.isNotEmpty) ? selectedCategory : locals.notSelected,
-                          con: context,
-                        ).subtitle,
-                        onTap: chooseCategory,
-                      ),
-                      divider,
-                      ListTile(
-                        contentPadding: const EdgeInsets.only(left: AppSizes.pix10),
+                        contentPadding: const EdgeInsets.only(left: AppSizes.pix10, top: AppSizes.pix10, bottom: AppSizes.pix10),
                         minVerticalPadding: 0,
                         visualDensity: VisualDensity.compact,
                         dense: true,
@@ -435,7 +435,7 @@ class PostHousePageState extends State<PostHousePage> {
                           locals.location,
                           padding: 0,
                           con: context,
-                        ).title,
+                        ).title2,
                         subtitle: Tex(
                           selectedLocation.isNotEmpty
                               ? (chosenRegion == selectedLocation)
@@ -496,63 +496,72 @@ class PostHousePageState extends State<PostHousePage> {
                     ]),
                     Sli(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(AppSizes.pix8),
-                          child: Tex(locals.rules, con: context).title,
-                        ),
-                        Tex('     ${locals.enterTime}', con: context, padding: 0, size: AppSizes.pix16).subtitle,
-                        pickTime(context, enterTime, ignEnterTime, () => selectTime(context, enterTime)),
-                        Tex('     ${locals.leaveTime}', con: context, padding: 0, size: AppSizes.pix16).subtitle,
-                        pickTime(context, leaveTime, ignLeaveTime, () => selectTime(context, leaveTime)),
-                        Container(
-                          width: double.infinity,
-                          alignment: Alignment.center,
-                          color: AppColors.primary,
-                          padding: const EdgeInsets.all(AppSizes.pix4),
-                          child: Tex(
-                            locals.whenJourney,
-                            con: context,
-                          ).white,
-                        ),
-                        BlocBuilder<LangCubit, Locale>(
-                          builder: (context, state) {
-                            return TableCalendar(
-                              locale: context.read<LangCubit>().localize(state),
-                              daysOfWeekHeight: AppSizes.pix24,
-                              availableGestures: AvailableGestures.horizontalSwipe,
-                              firstDay: DateTime.now(),
-                              lastDay: DateTime.utc(2030),
-                              focusedDay: _focusedDay,
-                              selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-                              startingDayOfWeek: StartingDayOfWeek.monday,
-                              onDaySelected: onDaySelected,
-                              calendarStyle: CalendarStyle(
-                                selectedTextStyle: const TextStyle(color: AppColors.mainTextDark),
-                                selectedDecoration: const BoxDecoration(color: Colors.transparent),
-                                isTodayHighlighted: false,
-                                todayTextStyle: const TextStyle(color: AppColors.mainTextDark),
-                                rangeHighlightColor: AppColors.secondaryText.withOpacity(.4),
-                                rangeStartDecoration: const BoxDecoration(color: AppColors.statusBar, shape: BoxShape.circle),
-                                rangeEndDecoration: const BoxDecoration(color: AppColors.statusBar, shape: BoxShape.circle),
-                                todayDecoration: BoxDecoration(
-                                  color: Colors.transparent,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: AppColors.statusBar,
-                                  ),
-                                ),
-                              ),
-                              onPageChanged: (focusedDay) {
-                                _focusedDay = focusedDay;
-                              },
-                              rangeStartDay: _rangeStart,
-                              onRangeSelected: onRangeSelected,
-                              rangeEndDay: _rangeEnd,
-                              headerStyle: const HeaderStyle(titleCentered: true, formatButtonVisible: false),
-                              rangeSelectionMode: RangeSelectionMode.toggledOn,
-                            );
-                          },
-                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.all(AppSizes.pix8),
+                        //   child: Tex(locals.rules, con: context).title,
+                        // ),
+                        // Padding(
+                        //   padding: const EdgeInsets.symmetric(vertical: 10),
+                        //   child: Column(
+                        //     crossAxisAlignment: CrossAxisAlignment.start,
+                        //     children: [
+                        //       Tex('     ${locals.enterTime}', con: context, padding: 0, size: AppSizes.pix16).subtitle,
+                        //       pickTime(context, enterTime, ignEnterTime, () => selectTime(context, enterTime)),
+                        //     ],
+                        //   ),
+                        // ),
+                        // Tex('     ${locals.leaveTime}', con: context, padding: 0, size: AppSizes.pix16).subtitle,
+                        // pickTime(context, leaveTime, ignLeaveTime, () => selectTime(context, leaveTime)),
+                        // Container(
+                        //   margin: const EdgeInsets.only(top: 20),
+                        //   width: double.infinity,
+                        //   alignment: Alignment.center,
+                        //   color: AppColors.primary,
+                        //   padding: const EdgeInsets.all(AppSizes.pix4),
+                        //   child: Tex(
+                        //     locals.whenJourney,
+                        //     con: context,
+                        //   ).white,
+                        // ),
+                        // BlocBuilder<LangCubit, Locale>(
+                        //   builder: (context, state) {
+                        //     return TableCalendar(
+                        //       locale: context.read<LangCubit>().localize(state),
+                        //       daysOfWeekHeight: AppSizes.pix24,
+                        //       availableGestures: AvailableGestures.horizontalSwipe,
+                        //       firstDay: DateTime.now(),
+                        //       lastDay: DateTime.utc(2030),
+                        //       focusedDay: _focusedDay,
+                        //       selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                        //       startingDayOfWeek: StartingDayOfWeek.monday,
+                        //       onDaySelected: onDaySelected,
+                        //       calendarStyle: CalendarStyle(
+                        //         selectedTextStyle: const TextStyle(color: AppColors.mainTextDark),
+                        //         selectedDecoration: const BoxDecoration(color: Colors.transparent),
+                        //         isTodayHighlighted: false,
+                        //         todayTextStyle: const TextStyle(color: AppColors.mainTextDark),
+                        //         rangeHighlightColor: AppColors.secondaryText.withOpacity(.4),
+                        //         rangeStartDecoration: const BoxDecoration(color: AppColors.statusBar, shape: BoxShape.circle),
+                        //         rangeEndDecoration: const BoxDecoration(color: AppColors.statusBar, shape: BoxShape.circle),
+                        //         todayDecoration: BoxDecoration(
+                        //           color: Colors.transparent,
+                        //           shape: BoxShape.circle,
+                        //           border: Border.all(
+                        //             color: AppColors.statusBar,
+                        //           ),
+                        //         ),
+                        //       ),
+                        //       onPageChanged: (focusedDay) {
+                        //         _focusedDay = focusedDay;
+                        //       },
+                        //       rangeStartDay: _rangeStart,
+                        //       onRangeSelected: onRangeSelected,
+                        //       rangeEndDay: _rangeEnd,
+                        //       headerStyle: const HeaderStyle(titleCentered: true, formatButtonVisible: false),
+                        //       rangeSelectionMode: RangeSelectionMode.toggledOn,
+                        //     );
+                        //   },
+                        // ),
                         const SizedBox(height: AppSizes.pix16),
                         GestureDetector(
                           onTap: () async {
@@ -563,6 +572,8 @@ class PostHousePageState extends State<PostHousePage> {
                             padding: const EdgeInsets.symmetric(horizontal: AppSizes.pix20),
                             child: DottedBorder(
                               strokeCap: StrokeCap.round,
+                              radius: const Radius.circular(AppSizes.pix10),
+                              borderType: BorderType.RRect,
                               dashPattern: const [AppSizes.pix10, AppSizes.pix6],
                               child: Container(
                                 color: AppColors.background,
@@ -572,9 +583,12 @@ class PostHousePageState extends State<PostHousePage> {
                                     ? Stack(
                                         fit: StackFit.expand,
                                         children: [
-                                          Image.file(
-                                            houseImages[0],
-                                            fit: BoxFit.fitWidth,
+                                          ClipRRect(
+                                            borderRadius: borderAll10,
+                                            child: Image.file(
+                                              houseImages[0],
+                                              fit: BoxFit.fitWidth,
+                                            ),
                                           ),
                                           Positioned(
                                             top: 1,
@@ -594,13 +608,15 @@ class PostHousePageState extends State<PostHousePage> {
                                     : Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Tex(
-                                            locals.insertImage,
-                                            con: context,
-                                            align: TextAlign.center,
+                                          Padding(
+                                            padding: const EdgeInsets.only(right: 10),
+                                            child: Text(
+                                              locals.insertImage,
+                                              style: const TextStyle(color: Colors.black, fontFamily: robotoBold, fontSize: 24),
+                                            ),
                                           ),
                                           const Icon(
-                                            Icons.add_circle_outline_rounded,
+                                            IconlyLight.image,
                                             size: AppSizes.pix48,
                                             color: Colors.black38,
                                           ),
@@ -700,8 +716,9 @@ class PostHousePageState extends State<PostHousePage> {
                                 ],
                               )
                             : const SizedBox.shrink(),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(AppSizes.pix16, AppSizes.pix10, AppSizes.pix16, AppSizes.pix8),
+                        Container(
+                          decoration: BoxDecoration(borderRadius: borderAll, border: Border.all(color: Colors.black)),
+                          margin: const EdgeInsets.fromLTRB(AppSizes.pix16, AppSizes.pix10, AppSizes.pix16, AppSizes.pix8),
                           child: TextField(
                             onTapOutside: (event) {
                               FocusScope.of(context).unfocus();
@@ -710,9 +727,35 @@ class PostHousePageState extends State<PostHousePage> {
                             controller: descriptionCtrl,
                             decoration: InputDecoration(
                               hintText: locals.description,
-                              border: InputBorder.none,
+                              hintStyle: const TextStyle(color: Colors.grey, fontFamily: robotoBold, fontSize: 18),
                               filled: true,
                               fillColor: AppColors.secondaryText.withOpacity(.3),
+                              border: OutlineInputBorder(
+                                borderRadius: borderAll,
+                                borderSide: const BorderSide(color: Colors.grey, width: 2),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: borderAll,
+                                borderSide: BorderSide(color: Colors.grey.shade200, width: 2),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: borderAll,
+                                borderSide: const BorderSide(
+                                  color: AppColors.primary,
+                                  width: 2,
+                                ),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderRadius: borderAll,
+                                borderSide: const BorderSide(
+                                  color: Colors.red,
+                                  width: 2,
+                                ),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderRadius: borderAll,
+                                borderSide: const BorderSide(color: Colors.red, width: 2),
+                              ),
                             ),
                             maxLines: 4,
                           ),
@@ -725,9 +768,9 @@ class PostHousePageState extends State<PostHousePage> {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                Tex('${locals.dailyPrice}   ', con: context).title,
+                                Tex('${locals.dailyPrice} :   ', con: context).title,
                                 SizedBox(
-                                  width: AppSizes.pix60,
+                                  width: AppSizes.pix100,
                                   child: TextField(
                                     onTapOutside: (event) {
                                       FocusScope.of(context).unfocus();
@@ -755,7 +798,7 @@ class PostHousePageState extends State<PostHousePage> {
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Tex('${locals.yourPhone}  ', con: context, padding: AppSizes.pix2).title,
+                              Tex('${locals.yourPhone} :  ', con: context, padding: AppSizes.pix2).title,
                               Expanded(
                                 flex: 5,
                                 child: TextFormField(
@@ -764,6 +807,7 @@ class PostHousePageState extends State<PostHousePage> {
                                   textAlignVertical: TextAlignVertical.center,
                                   decoration: InputDecoration(
                                     isDense: true,
+                                    hintText: 'xx - xx - xx - xx',
                                     border: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.statusBar)),
                                     focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.statusBar)),
                                     contentPadding: const EdgeInsets.only(bottom: AppSizes.pix2),
@@ -789,39 +833,63 @@ class PostHousePageState extends State<PostHousePage> {
                                   },
                                 ),
                               ),
-                              Expanded(flex: 3, child: Container())
+                              Expanded(flex: 1, child: Container())
                             ],
                           ),
                         ),
-                        const SizedBox(height: AppSizes.pix10),
                         Padding(
                           padding: const EdgeInsets.only(
                             left: AppSizes.pix10,
+                            top: AppSizes.pix30,
                             bottom: AppSizes.pix100,
                           ),
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(AppSizes.pix6),
-                                child: InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      _acceptTerms = !_acceptTerms;
-                                    });
-                                  },
-                                  child: Icon(_acceptTerms ? Icons.check_box_outlined : Icons.check_box_outline_blank_outlined),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: AppColors.black,
                                 ),
-                              ),
-                              Expanded(
-                                child: InkWell(
-                                  onTap: () => go(context, const TermsAndConditions()),
-                                  child: SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Tex(locals.readAndAccept, con: context).linkedText,
+                                borderRadius: BorderRadius.circular(30)),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    locals.readAndAccept,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(color: Colors.black, fontFamily: robotoSemiBold, fontSize: AppSizes.pix16),
                                   ),
                                 ),
-                              ),
-                            ],
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 8),
+                                  child: Switch.adaptive(
+                                    value: _acceptTerms,
+                                    activeColor: AppColors.buttons,
+                                    onChanged: (newValue) => setState(() => _acceptTerms = newValue),
+                                  ),
+                                ),
+                                // Padding(
+                                //   padding: const EdgeInsets.all(AppSizes.pix6),
+                                //   child: InkWell(
+                                //     onTap: () {
+                                //       setState(() {
+                                //         _acceptTerms = !_acceptTerms;
+                                //       });
+                                //     },
+                                //     child: Icon(_acceptTerms ? Icons.check_box_outlined : Icons.check_box_outline_blank_outlined),
+                                //   ),
+                                // ),
+                                // Expanded(
+                                //   child: InkWell(
+                                //     onTap: () => go(context, const TermsAndConditions()),
+                                //     child: SingleChildScrollView(
+                                //       scrollDirection: Axis.horizontal,
+                                //       child: Tex(locals.readAndAccept, con: context).linkedText,
+                                //     ),
+                                //   ),
+                                // ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -833,7 +901,7 @@ class PostHousePageState extends State<PostHousePage> {
           visible: MediaQuery.of(context).viewInsets.bottom == 0.0,
           child: SizedBox(
             width: width(context) - 60,
-            height: AppSizes.pix32,
+            // height: AppSizes.pix32,
             child: FloatingActionButton(
               shape: RoundedRectangleBorder(borderRadius: borderAll10),
               backgroundColor: AppColors.buttons,
@@ -890,13 +958,15 @@ class PostHousePageState extends State<PostHousePage> {
 
                                             Map<String, dynamic> data = {
                                               "name": name.text,
-                                              "category_id": chosenCategId.toString(),
+                                              "category_id": widget.categoryID.toString(),
                                               "location_id": chosenCityId.toString(),
                                               "room_number": roomCount.toString(),
                                               "floor_number": floorCount.toString(),
                                               "guest_number": guestNumber.toString(),
-                                              "enter_time": toSendDate(_rangeStart),
-                                              "leave_time": toSendDate(_rangeEnd),
+                                              // "enter_time": toSendDate(_rangeStart),
+                                              "enter_time": toSendDate(DateTime.now()),
+                                              // "leave_time": toSendDate(_rangeEnd),
+                                              "leave_time": toSendDate(DateTime.now()),
                                               "description": descriptionCtrl.text,
                                               "price": priceCtrl.text,
                                               "bron_number": "+993${phoneCtrl.text}",
@@ -1001,7 +1071,10 @@ class PostHousePageState extends State<PostHousePage> {
                   errorToast(locals.fillAllBlanks);
                 }
               },
-              child: Tex(locals.addTheHouse, con: context).white,
+              child: Text(
+                locals.addTheHouse,
+                style: const TextStyle(color: Colors.white, fontFamily: robotoBold, fontSize: 24),
+              ),
             ),
           ),
         ),

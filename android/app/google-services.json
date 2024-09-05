@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "848730361934",
+    "project_id": "mekanly",
+    "storage_bucket": "mekanly.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:848730361934:android:c14ed119cd050af024731f",
+        "android_client_info": {
+          "package_name": "com.gurbanow.mekanly"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVEciNEJxDev7IO1VWjn8UrLSkB6jiqkM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iconly/iconly.dart';
+import 'package:mekanly_com/config/config.dart';
 import 'package:mekanly_com/ui/style/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,7 +14,7 @@ class AppThemeState {
 
 class ThemeCubit extends Cubit<AppThemeState> {
   ThemeCubit() : super(AppThemeState(_lightTheme));
-  static const fontt = TextStyle(fontFamily: 'Roboto', color: Colors.black);
+  static const fontt = TextStyle(fontFamily: robotoRegular, color: Colors.black);
   static const style = TextTheme(
     bodyLarge: fontt,
     bodySmall: fontt,
@@ -42,9 +43,22 @@ class ThemeCubit extends Cubit<AppThemeState> {
       backgroundColor: AppColors.white,
       surfaceTintColor: AppColors.white,
     ),
+    appBarTheme: const AppBarTheme(
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: AppColors.secondary,
+        statusBarBrightness: Brightness.light,
+      ),
+      elevation: 0,
+    ),
     textSelectionTheme: const TextSelectionThemeData(
       selectionHandleColor: Colors.transparent,
       cursorColor: AppColors.mainTextDark,
+    ),
+    actionIconTheme: ActionIconThemeData(
+      backButtonIconBuilder: (BuildContext context) => const Icon(
+        IconlyLight.arrow_left_circle,
+        color: Colors.black,
+      ),
     ),
     textTheme: style,
   );

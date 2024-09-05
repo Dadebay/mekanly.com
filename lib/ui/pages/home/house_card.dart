@@ -1,11 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:get/get_utils/get_utils.dart';
-import 'package:intl/intl.dart';
+import 'package:iconly/iconly.dart';
 import 'package:mekanly_com/ui/pages/home/detail/cached_net_image.dart';
 
-import '../../../logic/cubits/cubits.dart';
-import '../../../logic/cubits/lang/lang_cubit.dart';
-import '../../style/app_sizes.dart';
 import '/config/config.dart';
 import '/localization/locals.dart';
 import '/logic/cubits/fav/fav_cubit.dart';
@@ -13,6 +9,8 @@ import '/models/category/category_model.dart';
 import '/packages.dart';
 import '/ui/pages/home/home.dart';
 import '/ui/style/style.dart';
+import '../../../logic/cubits/cubits.dart';
+import '../../style/app_sizes.dart';
 
 class HouseCard extends StatelessWidget {
   const HouseCard({
@@ -32,10 +30,11 @@ class HouseCard extends StatelessWidget {
     final favCubit = context.read<FavCubit>();
 
     var locals = Locals.of(context);
+    double ratio = MediaQuery.of(context).size.width / 360;
 
     return Container(
       decoration: BoxDecoration(
-          borderRadius: borderAll,
+          borderRadius: borderAll6,
           gradient: house.luxe
               ? const LinearGradient(
                   begin: Alignment.bottomLeft,
@@ -56,104 +55,97 @@ class HouseCard extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 HouseCardImage(house: house),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(AppSizes.pix8, AppSizes.pix8, AppSizes.pix8, AppSizes.pix4),
+                  padding: const EdgeInsets.only(top: 5, left: 8),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Tex(
+                      Text(
                         house.name.characters.take(30).toString(),
-                        con: context,
-                        weight: FontWeight.bold,
-                      ).title,
+                        style: TextStyle(
+                          fontFamily: robotoBold,
+                          fontSize: ((Responsive.isTablet(context) ? AppSizes.pix12 : AppSizes.pix16) * ratio),
+                          color: AppColors.mainTextDark,
+                          textBaseline: TextBaseline.alphabetic,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: Text(
+                          "${locals.place}: ${(house.location.parentName == house.location.name) ? house.location.parentName : "${house.location.parentName} - ${house.location.name}"}",
+                          style: const TextStyle(
+                            fontFamily: robotoRegular,
+                            fontWeight: FontWeight.w400,
+                            fontSize: AppSizes.pix12 + 3,
+                            color: AppColors.mainTextDark,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
                       Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
+                          Text(
+                            "${locals.description}:",
+                            maxLines: 1,
+                            style: const TextStyle(fontSize: AppSizes.pix12 + 2, fontFamily: robotoRegular),
+                          ),
                           Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(AppSizes.pix4 - 1),
-                              child: Text(
-                                "${locals.place}: ${(house.location.parentName == house.location.name) ? house.location.parentName : "${house.location.parentName} - ${house.location.name}"}",
-                                style: const TextStyle(
-                                  fontFamily: 'Roboto',
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 13,
-                                  color: AppColors.mainTextDark,
+                            child: Text(
+                              ' ${house.description} ',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(fontSize: AppSizes.pix12 + 2, fontFamily: robotoRegular),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  "${locals.dailyPrice}:",
+                                  style: const TextStyle(fontSize: AppSizes.pix16, fontFamily: robotoRegular),
                                 ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                                Text(
+                                  ' ${house.price} TMT',
+                                  style: const TextStyle(fontSize: AppSizes.pix16 + 2, fontFamily: robotoBold),
+                                ),
+                              ],
+                            ),
+                            const Spacer(flex: 1),
+                            Flexible(
+                              flex: 4,
+                              child: InkWell(
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Tex(status ?? '',
+                                          overflow: TextOverflow.ellipsis,
+                                          con: context,
+                                          col: house.status == 'pending'
+                                              ? AppColors.buttons
+                                              : house.status == 'non-active'
+                                                  ? Colors.red
+                                                  : AppColors.green)
+                                      .subtitle,
+                                ),
                               ),
                             ),
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.star_purple500_outlined, size: 20, color: AppColors.yellow),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 2.0),
-                                child: Tex(star(total, house), con: context).subtitle,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      BlocBuilder<LangCubit, Locale>(
-                        builder: (context, locale) {
-                          return Row(
-                            children: [
-                              Tex(
-                                      (house.enterTime.month == house.leaveTime.month)
-                                          ? '${house.enterTime.day} - ${house.leaveTime.day} ${DateFormat.MMMM(locale.languageCode).format(house.leaveTime).capitalizeFirst}'
-                                          : '${house.enterTime.day} ${DateFormat.MMMM(locale.languageCode).format(house.enterTime).capitalizeFirst} - ${house.leaveTime.day} ${DateFormat.MMMM(locale.languageCode).format(house.leaveTime).capitalizeFirst}',
-                                      con: context)
-                                  .subtitle,
-                              const Spacer(),
-                              if (house.status == 'active')
-                                Tex(
-                                  bronStatus ?? '',
-                                  overflow: TextOverflow.ellipsis,
-                                  con: context,
-                                  col: !(house.bronStatus) ? AppColors.green : AppColors.red,
-                                ).subtitle,
-                            ],
-                          );
-                        },
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Tex("${locals.dailyPrice}:", con: context).subtitle,
-                              Text(
-                                ' ${house.price} TMT',
-                                style: const TextStyle(fontSize: AppSizes.pix12, fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          const Spacer(flex: 1),
-                          Flexible(
-                            flex: 4,
-                            child: InkWell(
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Tex(status ?? '',
-                                        overflow: TextOverflow.ellipsis,
-                                        con: context,
-                                        col: house.status == 'pending'
-                                            ? AppColors.buttons
-                                            : house.status == 'non-active'
-                                                ? Colors.red
-                                                : AppColors.green)
-                                    .subtitle,
-                              ),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -163,24 +155,19 @@ class HouseCard extends StatelessWidget {
             if (house.user.id != context.watch<AuthCubit>().repo.user.id)
               Positioned(
                 right: 5,
-                top: 4,
-                child: IconButton(
-                  onPressed: () async {
+                top: 5,
+                child: GestureDetector(
+                  onTap: () async {
                     await favCubit.toggleFavorite(house, locals, context);
                   },
-                  icon: Stack(
-                    children: [
-                      Icon(
-                        favCubit.isItemFavorited(house.id) ? Icons.favorite : Icons.favorite_border,
-                        size: 27,
-                        color: AppColors.red,
-                      ),
-                      const Icon(
-                        Icons.favorite_border,
-                        size: 27,
-                        color: AppColors.mainText,
-                      ),
-                    ],
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(color: Colors.white, borderRadius: borderAll15),
+                    child: Icon(
+                      favCubit.isItemFavorited(house.id) ? IconlyBold.heart : IconlyLight.heart,
+                      size: 24,
+                      color: favCubit.isItemFavorited(house.id) ? AppColors.red : Colors.grey,
+                    ),
                   ),
                 ),
               ),
@@ -248,6 +235,20 @@ class _HouseCardImageState extends State<HouseCardImage> {
               height: width(context) - 55,
             ),
           ),
+          widget.house.luxe == true
+              ? const SizedBox.shrink()
+              : Positioned(
+                  top: 10,
+                  left: 10,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(color: AppColors.secondary, borderRadius: borderAll6),
+                    child: Text(
+                      widget.house.categoryName,
+                      style: const TextStyle(color: Colors.white, fontFamily: robotoSemiBold),
+                    ),
+                  ),
+                ),
           Positioned(
             bottom: AppSizes.pix6,
             child: Row(

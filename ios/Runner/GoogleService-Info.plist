@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyD4sxJlIYimLMil_iOw3IlAkgqJo1sVX0U</string>
+	<string>AIzaSyCSo5yJpxSUZtCavdyMHGrVN6msr3TIhP0</string>
 	<key>GCM_SENDER_ID</key>
-	<string>797677861445</string>
+	<string>848730361934</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.example.mekanlyCom</string>
 	<key>PROJECT_ID</key>
-	<string>mekanly-com</string>
+	<string>mekanly</string>
 	<key>STORAGE_BUCKET</key>
-	<string>mekanly-com.appspot.com</string>
+	<string>mekanly.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:797677861445:ios:9a710235c8162570b2812c</string>
+	<string>1:848730361934:ios:0aecff4d116da7bf24731f</string>
 </dict>
 </plist>

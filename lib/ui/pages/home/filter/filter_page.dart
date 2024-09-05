@@ -1,18 +1,17 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:table_calendar/table_calendar.dart';
+import 'package:iconly/iconly.dart';
 
+import '/config/config.dart';
+import '/logic/cubits/categs/categs_cubit.dart';
+import '/logic/cubits/house/house_cubit.dart';
+import '/ui/widgets/widgets.dart';
 import '../../../../localization/locals.dart';
-import '../../../../logic/cubits/lang/lang_cubit.dart';
 import '../../../../models/models.dart';
 import '../../../style/app_sizes.dart';
 import '../../../style/style.dart';
 import '../../../widgets/sli.dart';
 import '../../add/regions_page.dart';
 import '../widgets/widgets.dart';
-import '/config/config.dart';
-import '/logic/cubits/categs/categs_cubit.dart';
-import '/logic/cubits/house/house_cubit.dart';
-import '/ui/widgets/widgets.dart';
 
 class FilterPage extends StatefulWidget {
   const FilterPage({super.key});
@@ -22,7 +21,7 @@ class FilterPage extends StatefulWidget {
 }
 
 class _FilterPageState extends State<FilterPage> {
-  String selectedSortingOption = 'saýlanmadyk';
+  String selectedSortingOption = 'saýlanmadyk  ';
   TextEditingController minCtrl = TextEditingController();
   TextEditingController maxCtrl = TextEditingController();
   List<int> roomCounts = [];
@@ -31,7 +30,7 @@ class _FilterPageState extends State<FilterPage> {
   List<dynamic> selectedLocations = [];
   List<int> selectedIds = [];
   DateTime? date;
-  DateTime _focusedDay = DateTime.now();
+  final DateTime _focusedDay = DateTime.now();
   List<int> selectedFeaturesIndices = [];
 
   void handleFeaturesSelected(List<int> indices) {
@@ -62,7 +61,7 @@ class _FilterPageState extends State<FilterPage> {
                 padding: const EdgeInsets.only(bottom: AppSizes.pix8),
                 child: SizedBox(
                   height: 45,
-                  width: width(context) - 200,
+                  width: width(context) - 100,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -122,18 +121,21 @@ class _FilterPageState extends State<FilterPage> {
               ),
               divider,
               Pad(
-                v: 0,
+                v: AppSizes.pix10,
                 h: AppSizes.pix10,
                 child: Row(
                   children: [
                     Tex(locals.sort, con: context, padding: 0).title,
                     const Spacer(),
                     DropdownButton<String>(
-                      underline: Container(),
-                      elevation: 16,
                       dropdownColor: Colors.white,
-                      value: selectedSortingOption == 'saýlanmadyk' ? locals.notSelected : selectedSortingOption,
+                      underline: const SizedBox(),
+                      icon: const Icon(IconlyLight.arrow_down_circle),
+                      value: selectedSortingOption == 'saýlanmadyk  ' ? locals.notSelected : selectedSortingOption,
                       focusColor: Colors.transparent,
+                      alignment: Alignment.centerRight,
+                      padding: EdgeInsets.zero,
+                      style: const TextStyle(color: Colors.black, fontFamily: robotoRegular),
                       onChanged: (newValue) {
                         setState(() {
                           selectedSortingOption = newValue!;
@@ -156,9 +158,9 @@ class _FilterPageState extends State<FilterPage> {
               ),
               divider,
               ListTile(
-                contentPadding: const EdgeInsets.symmetric(horizontal: AppSizes.pix10),
+                contentPadding: const EdgeInsets.symmetric(horizontal: AppSizes.pix10, vertical: AppSizes.pix10),
                 dense: true,
-                trailing: const Icon(Icons.arrow_right),
+                trailing: const Icon(IconlyLight.arrow_right_circle),
                 title: Tex(
                   locals.location,
                   con: context,
@@ -226,64 +228,64 @@ class _FilterPageState extends State<FilterPage> {
               ).title,
               FeatureCheckbox(onFeaturesSelected: handleFeaturesSelected),
               const SizedBox(height: AppSizes.pix16),
-              Tex(
-                locals.whenTravel,
-                con: context,
-                padding: AppSizes.pix10,
-                size: 20,
-              ).title,
-              Theme(
-                  data: ThemeData.light().copyWith(
-                    colorScheme: const ColorScheme.light(primary: AppColors.statusBar),
-                    datePickerTheme: DatePickerThemeData(
-                      todayBackgroundColor: toMtrlStColor(date?.day == DateTime.now().day ? AppColors.statusBar : Colors.transparent),
-                      todayBorder: BorderSide.none,
-                      todayForegroundColor: toMtrlStColor(!(date?.day == DateTime.now().day) ? AppColors.mainTextDark : Colors.white),
-                    ),
-                  ),
-                  child: BlocBuilder<LangCubit, Locale>(
-                    builder: (context, state) {
-                      return TableCalendar(
-                        locale: context.read<LangCubit>().localize(state),
-                        focusedDay: _focusedDay,
-                        firstDay: DateTime.now(),
-                        startingDayOfWeek: StartingDayOfWeek.monday,
-                        lastDay: DateTime(2030),
-                        daysOfWeekHeight: 20,
-                        selectedDayPredicate: (day) => isSameDay(date, day),
-                        onDaySelected: (selectedDay, focusedDay) {
-                          setState(() {
-                            if (isSameDay(date, selectedDay)) {
-                              date = null;
-                            } else {
-                              date = selectedDay;
-                            }
-                            _focusedDay = focusedDay;
-                          });
-                        },
-                        calendarStyle: CalendarStyle(
-                          selectedTextStyle: const TextStyle(color: AppColors.mainText),
-                          selectedDecoration: BoxDecoration(
-                            color: AppColors.statusBar,
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: AppColors.statusBar,
-                            ),
-                          ),
-                          isTodayHighlighted: false,
-                          todayTextStyle: const TextStyle(color: AppColors.mainTextDark),
-                          todayDecoration: BoxDecoration(
-                            color: Colors.transparent,
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: AppColors.statusBar,
-                            ),
-                          ),
-                        ),
-                        headerStyle: const HeaderStyle(titleCentered: true, formatButtonVisible: false),
-                      );
-                    },
-                  )),
+              // Tex(
+              //   locals.whenTravel,
+              //   con: context,
+              //   padding: AppSizes.pix10,
+              //   size: 20,
+              // ).title,
+              // Theme(
+              //     data: ThemeData.light().copyWith(
+              //       colorScheme: const ColorScheme.light(primary: AppColors.statusBar),
+              //       datePickerTheme: DatePickerThemeData(
+              //         todayBackgroundColor: toMtrlStColor(date?.day == DateTime.now().day ? AppColors.statusBar : Colors.transparent),
+              //         todayBorder: BorderSide.none,
+              //         todayForegroundColor: toMtrlStColor(!(date?.day == DateTime.now().day) ? AppColors.mainTextDark : Colors.white),
+              //       ),
+              //     ),
+              //     child: BlocBuilder<LangCubit, Locale>(
+              //       builder: (context, state) {
+              //         return TableCalendar(
+              //           locale: context.read<LangCubit>().localize(state),
+              //           focusedDay: _focusedDay,
+              //           firstDay: DateTime.now(),
+              //           startingDayOfWeek: StartingDayOfWeek.monday,
+              //           lastDay: DateTime(2030),
+              //           daysOfWeekHeight: 20,
+              //           selectedDayPredicate: (day) => isSameDay(date, day),
+              //           onDaySelected: (selectedDay, focusedDay) {
+              //             setState(() {
+              //               if (isSameDay(date, selectedDay)) {
+              //                 date = null;
+              //               } else {
+              //                 date = selectedDay;
+              //               }
+              //               _focusedDay = focusedDay;
+              //             });
+              //           },
+              //           calendarStyle: CalendarStyle(
+              //             selectedTextStyle: const TextStyle(color: AppColors.mainText),
+              //             selectedDecoration: BoxDecoration(
+              //               color: AppColors.statusBar,
+              //               shape: BoxShape.circle,
+              //               border: Border.all(
+              //                 color: AppColors.statusBar,
+              //               ),
+              //             ),
+              //             isTodayHighlighted: false,
+              //             todayTextStyle: const TextStyle(color: AppColors.mainTextDark),
+              //             todayDecoration: BoxDecoration(
+              //               color: Colors.transparent,
+              //               shape: BoxShape.circle,
+              //               border: Border.all(
+              //                 color: AppColors.statusBar,
+              //               ),
+              //             ),
+              //           ),
+              //           headerStyle: const HeaderStyle(titleCentered: true, formatButtonVisible: false),
+              //         );
+              //       },
+              //     )),
               const SizedBox(
                 height: 70,
               ),

@@ -1,29 +1,27 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:get/get_utils/get_utils.dart';
-import 'package:intl/intl.dart';
+import 'package:iconly/iconly.dart';
 import 'package:mekanly_com/logic/cubits/comments/comments_cubit.dart';
 import 'package:mekanly_com/logic/cubits/view_count/view_count.dart';
 import 'package:mekanly_com/ui/pages/home/detail/cached_net_image.dart';
 import 'package:mekanly_com/ui/style/app_sizes.dart';
 import 'package:mekanly_com/ui/style/style.dart';
 import 'package:mekanly_com/ui/widgets/widgets.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../comment_terms_page.dart';
 import '/config/config.dart';
 import '/localization/locals.dart';
 import '/logic/cubits/cubits.dart';
 import '/logic/cubits/fav/fav_cubit.dart';
-import '/logic/cubits/house/house_cubit.dart';
 import '/logic/cubits/lang/lang_cubit.dart';
 import '/models/category/category_model.dart';
 import '/models/favorite/favorite_model.dart';
 import '/ui/pages/home/detail/full_screen.dart';
 import '/ui/pages/home/detail/rate_widget.dart';
-import '/ui/pages/profile/auth/logout_dialog.dart';
 import '/ui/widgets/sli.dart';
+import '../../comment_terms_page.dart';
 
 class HouseDetailsPage extends StatefulWidget {
   const HouseDetailsPage({super.key, required this.house});
@@ -83,73 +81,28 @@ class _HouseDetailsPageState extends State<HouseDetailsPage> {
                       children: [
                         Expanded(
                             flex: 4,
-                            child: Tex(
+                            child: Text(
                               "${widget.house.price} TMT",
-                              align: TextAlign.center,
-                              con: context,
-                              col: AppColors.mainTextDark,
-                            ).title),
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(color: Colors.black, fontFamily: robotoSemiBold, fontSize: AppSizes.pix24),
+                            )),
                         const SizedBox(width: AppSizes.pix20),
                         Expanded(
                           flex: 5,
                           child: InkWell(
                             borderRadius: borderAll10,
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    backgroundColor: AppColors.mainText,
-                                    surfaceTintColor: Colors.transparent,
-                                    title: Tex(locals.confirm, con: context),
-                                    insetPadding: const EdgeInsets.symmetric(horizontal: AppSizes.pix20),
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [Tex(locals.dontPayForward, con: context)],
-                                    ),
-                                    actions: [
-                                      DialogActions(
-                                        hasPop: false,
-                                        locals: locals,
-                                        onDeny: () {},
-                                        onSubmit: () async {
-                                          await launchUrl(Uri.parse("tel:${widget.house.bronNumber}"));
-                                        },
-                                      )
-                                    ],
-                                  );
-                                },
-                              );
+                            onTap: () async {
+                              await launchUrl(Uri.parse("tel:${widget.house.bronNumber}"));
                             },
                             child: Container(
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                color: AppColors.green,
+                                color: AppColors.secondary,
                                 borderRadius: borderAll10,
                               ),
-                              child: FittedBox(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Container(
-                                      height: AppSizes.pix20,
-                                      width: AppSizes.pix20,
-                                      decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: AppColors.mainText)),
-                                      child: const Padding(
-                                        padding: EdgeInsets.all(AppSizes.pix4),
-                                        child: SvgAsset(
-                                          'call',
-                                          AppColors.mainText,
-                                        ),
-                                      ),
-                                    ),
-                                    Tex(
-                                      locals.bron,
-                                      con: context,
-                                      size: AppSizes.pix20,
-                                    ).white,
-                                  ],
-                                ),
+                              child: Text(
+                                locals.bron,
+                                style: const TextStyle(fontFamily: robotoSemiBold, color: Colors.white, fontSize: AppSizes.pix20),
                               ),
                             ),
                           ),
@@ -217,268 +170,30 @@ class _DetailsState extends State<Details> {
     final favCubit = context.read<FavCubit>();
 
     var locals = Locals.of(context);
+    print(widget.house.status);
+    //use easy localization date format dd-MM-yyyy
 
     return CustomScrollView(
       controller: _scrollController,
       slivers: [
-        SliverAppBar(
-          backgroundColor: Colors.transparent,
-          expandedHeight: AppSizes.pix250,
-          flexibleSpace: FlexibleSpaceBar(
-            background: CarouselSlider(
-              carouselController: _carouselController,
-              items: widget.imagePaths.map((imagePath) {
-                var img = imagePath;
-                return Container(
-                  color: AppColors.secondaryText.withOpacity(.2),
-                  child: InkWell(
-                    onTap: () => go(context, ImageShowScreen(images: widget.imagePaths)),
-                    child: CachedNetImage(img: img),
-                  ),
-                );
-              }).toList(),
-              options: CarouselOptions(
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    _imageIndex = index;
-                  });
-                },
-                autoPlayCurve: Curves.fastOutSlowIn,
-                enableInfiniteScroll: true,
-                autoPlayAnimationDuration: const Duration(milliseconds: 800),
-                viewportFraction: 1,
-                height: AppSizes.pix250 + 50,
-              ),
-            ),
-          ),
-          leading: Container(),
-          actions: widget.isOriginal
-              ? ([
-                  widget.isOriginal
-                      ? const Padding(
-                          padding: EdgeInsets.only(left: AppSizes.pix8),
-                          child: GoBack(
-                            color: AppColors.mainText,
-                          ),
-                        )
-                      : Container(),
-                  const Spacer(),
-                  if (widget.house.user.id != context.watch<AuthCubit>().repo.user.id)
-                    BlocBuilder<FavCubit, FavModel>(
-                      builder: (context, state) {
-                        return IconButton(
-                          onPressed: () async {
-                            await favCubit.toggleFavorite(widget.house, locals, context);
-                          },
-                          icon: Stack(
-                            children: [
-                              Icon(
-                                favCubit.isItemFavorited(widget.house.id) ? Icons.favorite : Icons.favorite_border,
-                                size: AppSizes.pix28,
-                                color: AppColors.red,
-                              ),
-                              const Icon(
-                                Icons.favorite_border,
-                                size: AppSizes.pix28,
-                                color: AppColors.mainText,
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  const SizedBox(width: AppSizes.pix10)
-                ])
-              : null,
-          bottom: widget.isOriginal
-              ? PreferredSize(
-                  preferredSize: const Size.fromHeight(AppSizes.pix24),
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: Card(
-                      color: Colors.black38,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: AppSizes.pix8),
-                        child: Tex(
-                          "${_imageIndex + 1}/${widget.imagePaths.length}",
-                          con: context,
-                          col: AppColors.mainText,
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              : null,
-        ),
+        appBar(context, favCubit, locals),
+        namePart(context, locals),
         SliverToBoxAdapter(
-          child: Container(
-            decoration: BoxDecoration(
-                gradient: widget.house.luxe
-                    ? const LinearGradient(
-                        begin: Alignment.bottomLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Color(0xffF4E49c),
-                          Color(0xffFefdf7),
-                        ],
-                      )
-                    : null),
-            child: Padding(
-              padding: widget.isOriginal
-                  ? const EdgeInsets.fromLTRB(
-                      AppSizes.pix10,
-                      AppSizes.pix6,
-                      AppSizes.pix10,
-                      AppSizes.pix2,
-                    )
-                  : const EdgeInsets.symmetric(vertical: AppSizes.pix8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (!widget.isOriginal && widget.house.status == 'active')
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: AppSizes.pix8),
-                      child: BlocBuilder<HouseCubit, HouseState>(
-                        builder: (context, state) {
-                          if (state is HouseLoading) {
-                            return const Loading();
-                          } else if (state is HouseSuccess) {
-                            return RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: locals.bronCondition,
-                                    style: const TextStyle(
-                                      fontSize: AppSizes.pix16,
-                                      color: AppColors.mainTextDark,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                      text: widget.house.leaveTime.isBefore(DateTime.now())
-                                          ? locals.expiredPleaseEdit
-                                          : widget.house.status == 'pending'
-                                              ? locals.pending
-                                              : state.houses.houses.firstWhere((element) => element.id == widget.house.id).bronStatus
-                                                  ? locals.bronnedAndDisappeared
-                                                  : locals.unbronnedAndAppeared,
-                                      style: TextStyle(
-                                        color: widget.house.leaveTime.isBefore(DateTime.now())
-                                            ? AppColors.red
-                                            : widget.house.status == 'pending'
-                                                ? AppColors.buttons
-                                                : !(state.houses.houses.firstWhere((element) => element.id == widget.house.id).bronStatus)
-                                                    ? AppColors.green
-                                                    : AppColors.red,
-                                        fontSize: AppSizes.pix16,
-                                      )),
-                                ],
-                              ),
-                            );
-                          } else {
-                            return Container();
-                          }
-                        },
-                      ),
-                    ),
-                  Row(
-                    children: [
-                      Expanded(child: Tex(widget.house.name, con: context).title),
-                    ],
-                  ),
-                  const SizedBox(height: AppSizes.pix6),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 5,
-                        child: Text(
-                          (widget.house.location.parentName == widget.house.location.name) ? widget.house.location.parentName : "${widget.house.location.parentName} - ${widget.house.location.name}",
-                          style: const TextStyle(
-                            fontFamily: 'Roboto',
-                            fontWeight: FontWeight.w400,
-                            fontSize: 13,
-                            color: AppColors.mainTextDark,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      if (widget.house.luxe)
-                        const SvgAsset(
-                          'luxe',
-                          null,
-                          size: AppSizes.pix28,
-                        )
-                    ],
-                  ),
-                  const SizedBox(height: AppSizes.pix6),
-                  BlocBuilder<LangCubit, Locale>(
-                    builder: (context, state) {
-                      return Row(
-                        children: [
-                          Tex(
-                                  (widget.house.enterTime.month == widget.house.leaveTime.month)
-                                      ? '${widget.house.enterTime.day} - ${widget.house.leaveTime.day} ${DateFormat.MMMM(state.languageCode).format(widget.house.leaveTime).capitalizeFirst}'
-                                      : '${widget.house.enterTime.day} ${DateFormat.MMMM(state.languageCode).format(widget.house.enterTime).capitalizeFirst} - ${widget.house.leaveTime.day} ${DateFormat.MMMM(state.languageCode).format(widget.house.leaveTime).capitalizeFirst}',
-                                  con: context)
-                              .subtitle,
-                          const SizedBox(width: AppSizes.pix16),
-                          const Icon(Icons.remove_red_eye_outlined, size: AppSizes.pix20),
-                          Tex(context.watch<ViewCountCubit>().state != 0 ? context.watch<ViewCountCubit>().state.toString() : widget.house.viewed.toString(), con: context).subtitle,
-                          if (!widget.isOriginal) const Spacer(),
-                          if (!widget.isOriginal)
-                            Tex(
-                                    widget.house.leaveTime.isAfter(DateTime.now())
-                                        ? widget.house.status == 'pending'
-                                            ? locals.pending
-                                            : widget.house.status == 'non-active'
-                                                ? locals.notAccepted
-                                                : locals.putted
-                                        : '',
-                                    overflow: TextOverflow.ellipsis,
-                                    con: context,
-                                    col: widget.house.status == 'pending'
-                                        ? AppColors.buttons
-                                        : widget.house.status == 'non-active'
-                                            ? Colors.red
-                                            : AppColors.green)
-                                .subtitle
-                        ],
-                      );
-                    },
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
-        const SliverToBoxAdapter(
           child: Divider(
-            color: AppColors.primary,
+            color: AppColors.secondary.withOpacity(0.5),
             thickness: 6,
             height: 6,
           ),
         ),
         SliverToBoxAdapter(
           child: Padding(
-            padding: widget.isOriginal ? const EdgeInsets.fromLTRB(AppSizes.pix10, 0, AppSizes.pix10, 0) : const EdgeInsets.fromLTRB(0, AppSizes.pix6, 0, AppSizes.pix6),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            padding: widget.isOriginal ? const EdgeInsets.fromLTRB(AppSizes.pix10, 8, AppSizes.pix10, 8) : const EdgeInsets.fromLTRB(0, AppSizes.pix6, 0, AppSizes.pix6),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  children: [
-                    Tex(locals.rating, con: context, size: AppSizes.pix20).title,
-                    const Icon(Icons.star, color: AppColors.yellow, size: AppSizes.pix16),
-                    Tex((star(total, widget.house)), con: context).subtitle,
-                  ],
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SvgAsset('info', AppColors.mainTextDark, size: 20),
-                    const SizedBox(width: AppSizes.pix4),
-                    Tex(locals.allInfo, con: context, size: AppSizes.pix20).title,
-                  ],
-                ),
+                const SvgAsset('info', AppColors.mainTextDark, size: 20),
+                const SizedBox(width: AppSizes.pix4),
+                Tex(locals.allInfo, con: context, size: AppSizes.pix20).title,
               ],
             ),
           ),
@@ -490,11 +205,13 @@ class _DetailsState extends State<Details> {
                 padding: EdgeInsets.all(widget.isOriginal ? AppSizes.pix12 : AppSizes.pix6),
                 child: Column(
                   children: [
+                    Rower(keyy: locals.categType, value: widget.house.categoryName),
                     Rower(keyy: locals.place, value: widget.house.location.name),
                     Rower(keyy: locals.dailyPrice, value: "${widget.house.price} TMT"),
+                    Rower(keyy: locals.kat8, value: widget.house.createdAt.toString().substring(0, 10)),
+                    Rower(keyy: locals.phone, value: widget.house.user.phone.toString()),
                     Rower(keyy: locals.roomCount, value: widget.house.roomNumber.toString()),
                     Rower(keyy: locals.floorCount, value: widget.house.floorNumber.toString()),
-                    Rower(keyy: locals.categType, value: widget.house.categoryName.toString()),
                     Rower(keyy: locals.guestCount, value: widget.house.guestNumber.toString()),
                   ],
                 ),
@@ -537,23 +254,9 @@ class _DetailsState extends State<Details> {
               ],
             ),
           ),
-        SliverPadding(
-          padding: const EdgeInsets.all(AppSizes.pix12),
-          sliver: Sli(children: [
-            Tex(locals.rules, con: context, size: AppSizes.pix20).title,
-            const SizedBox(height: AppSizes.pix6),
-            Column(
-              children: [
-                Rower(keyy: locals.enterTime, value: (widget.house.dayEnterTime == 'null' || widget.house.dayEnterTime == null) ? locals.any : widget.house.dayEnterTime!),
-                Rower(keyy: locals.leaveTime, value: (widget.house.dayLeaveTime == 'null' || widget.house.dayLeaveTime == null) ? locals.any : widget.house.dayLeaveTime!),
-              ],
-            ),
-            const SizedBox(height: AppSizes.pix10),
-          ]),
-        ),
         Sli(children: [
-          const Divider(
-            color: AppColors.primary,
+          Divider(
+            color: AppColors.secondary.withOpacity(0.4),
             thickness: 6,
           ),
           Padding(
@@ -562,7 +265,7 @@ class _DetailsState extends State<Details> {
           ),
           if (widget.house.user.id == context.read<AuthCubit>().repo.user.id && widget.house.status == 'active')
             Container(
-              color: AppColors.primary,
+              color: AppColors.red,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -744,27 +447,30 @@ class _DetailsState extends State<Details> {
                                   ],
                                 ),
                                 if ((state.comment.all.any((element) => element.replyId == thisComment.id)))
-                                  Card(
-                                    color: AppColors.mainText.withOpacity(.9),
-                                    elevation: 0,
-                                    shape: const LinearBorder(),
-                                    margin: const EdgeInsets.only(left: AppSizes.pix16, top: AppSizes.pix10),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Tex(locals.answerer, con: context),
-                                            const Spacer(),
-                                            Tex(toTime(state.comment.all.firstWhere((element) => element.replyId == thisComment.id).createdAt), con: context),
-                                          ],
-                                        ),
-                                        Tex(
-                                          state.comment.all.firstWhere((element) => element.replyId == thisComment.id).description,
-                                          con: context,
-                                          size: 14,
-                                        ).title,
-                                      ],
+                                  Container(
+                                    padding: const EdgeInsets.all(AppSizes.pix10),
+                                    child: Card(
+                                      color: AppColors.mainText.withOpacity(.9),
+                                      elevation: 0,
+                                      shape: RoundedRectangleBorder(borderRadius: borderAll6),
+                                      margin: const EdgeInsets.only(left: AppSizes.pix16, top: AppSizes.pix10),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Tex(locals.answerer, con: context),
+                                              const Spacer(),
+                                              Tex(toTime(state.comment.all.firstWhere((element) => element.replyId == thisComment.id).createdAt), con: context),
+                                            ],
+                                          ),
+                                          Tex(
+                                            state.comment.all.firstWhere((element) => element.replyId == thisComment.id).description,
+                                            con: context,
+                                            size: 14,
+                                          ).title,
+                                        ],
+                                      ),
                                     ),
                                   ),
                               ],
@@ -793,6 +499,244 @@ class _DetailsState extends State<Details> {
     );
   }
 
+  SliverToBoxAdapter namePart(BuildContext context, Locals locals) {
+    return SliverToBoxAdapter(
+      child: Container(
+        decoration: BoxDecoration(
+            gradient: widget.house.luxe
+                ? const LinearGradient(
+                    begin: Alignment.bottomLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Color(0xffF4E49c),
+                      Color(0xffFefdf7),
+                    ],
+                  )
+                : null),
+        child: Padding(
+          padding: widget.isOriginal
+              ? const EdgeInsets.fromLTRB(
+                  AppSizes.pix10,
+                  AppSizes.pix6,
+                  AppSizes.pix10,
+                  AppSizes.pix2,
+                )
+              : const EdgeInsets.symmetric(vertical: AppSizes.pix8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(child: Tex(widget.house.name, con: context).title),
+                  if (widget.house.luxe)
+                    const SvgAsset(
+                      'luxe',
+                      null,
+                      size: AppSizes.pix28,
+                    )
+                ],
+              ),
+              const SizedBox(height: AppSizes.pix6),
+              Row(
+                children: [
+                  const Icon(
+                    IconlyLight.location,
+                    size: AppSizes.pix16 + 2,
+                    color: Colors.black,
+                  ),
+                  Expanded(
+                    child: Text(
+                      (widget.house.location.parentName == widget.house.location.name) ? widget.house.location.parentName : "${widget.house.location.parentName} - ${widget.house.location.name}",
+                      style: const TextStyle(
+                        fontFamily: robotoRegular,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 13,
+                        color: AppColors.mainTextDark,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppSizes.pix6),
+              BlocBuilder<LangCubit, Locale>(
+                builder: (context, state) {
+                  return Row(
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(
+                            IconlyLight.calendar,
+                            size: AppSizes.pix16 + 2,
+                            color: Colors.black,
+                          ),
+                          Tex("${widget.house.enterTime.day.toString()}.${int.parse(widget.house.enterTime.month.toString()) < 10 ? '0${widget.house.enterTime.month.toString()}' : widget.house.enterTime.month.toString()}.${widget.house.enterTime.year}",
+                                  con: context)
+                              .subtitle,
+                        ],
+                      ),
+                      const SizedBox(width: AppSizes.pix16),
+                      const Icon(Icons.remove_red_eye_outlined, size: AppSizes.pix20),
+                      Tex(context.watch<ViewCountCubit>().state != 0 ? context.watch<ViewCountCubit>().state.toString() : widget.house.viewed.toString(), con: context).subtitle,
+                      if (!widget.isOriginal) const Spacer(),
+                      if (!widget.isOriginal)
+                        Tex(
+                                widget.house.leaveTime.isAfter(DateTime.now())
+                                    ? widget.house.status == 'pending'
+                                        ? locals.pending
+                                        : widget.house.status == 'non-active'
+                                            ? locals.notAccepted
+                                            : locals.putted
+                                    : '',
+                                overflow: TextOverflow.ellipsis,
+                                con: context,
+                                col: widget.house.status == 'pending'
+                                    ? AppColors.buttons
+                                    : widget.house.status == 'non-active'
+                                        ? Colors.red
+                                        : AppColors.green)
+                            .subtitle
+                    ],
+                  );
+                },
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  List<XFile> convertToXFileList(List<String> paths) {
+    return paths.map((path) => XFile(path)).toList();
+  }
+
+  SliverAppBar appBar(BuildContext context, FavCubit favCubit, Locals locals) {
+    return SliverAppBar(
+      backgroundColor: Colors.transparent,
+      expandedHeight: AppSizes.pix250,
+      flexibleSpace: FlexibleSpaceBar(
+        background: Stack(
+          children: [
+            CarouselSlider(
+              carouselController: _carouselController,
+              items: widget.imagePaths.map((imagePath) {
+                var img = imagePath;
+                return Container(
+                  color: AppColors.secondaryText.withOpacity(.2),
+                  child: InkWell(
+                    onTap: () => go(context, ImageShowScreen(images: widget.imagePaths)),
+                    child: CachedNetImage(img: img),
+                  ),
+                );
+              }).toList(),
+              options: CarouselOptions(
+                onPageChanged: (index, reason) {
+                  setState(() {
+                    _imageIndex = index;
+                  });
+                },
+                autoPlayCurve: Curves.fastOutSlowIn,
+                enableInfiniteScroll: true,
+                autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                viewportFraction: 1,
+                height: AppSizes.pix250 + 50,
+              ),
+            ),
+            Positioned(
+                bottom: 10,
+                left: 10,
+                child: Image.asset(
+                  'assets/images/mekanly.png',
+                  color: Colors.white,
+                  height: 20,
+                  alignment: Alignment.centerLeft,
+                )),
+          ],
+        ),
+      ),
+      leading: Container(),
+      actions: widget.isOriginal
+          ? ([
+              widget.isOriginal
+                  ? const Padding(
+                      padding: EdgeInsets.only(left: AppSizes.pix8),
+                      child: GoBack(
+                        color: AppColors.mainText,
+                      ),
+                    )
+                  : Container(),
+              const Spacer(),
+              GestureDetector(
+                onTap: () async {
+                  print(widget.imagePaths);
+                  //widget.imagePaths gives error List<String> is not subtype of List<Xfile>
+                  //convert widget.imagePaths to List<XFile>
+
+                  List<XFile> xFiles = convertToXFileList(widget.imagePaths);
+                  print(xFiles);
+                  Share.share(xFiles.first.path);
+                  // Share.shareXFiles(xFiles, text: 'Check out this photo!');
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  margin: const EdgeInsets.only(right: 8),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Image.asset('assets/icons/share1.png', height: AppSizes.pix20 + 2),
+                ),
+              ),
+              if (widget.house.user.id != context.watch<AuthCubit>().repo.user.id)
+                BlocBuilder<FavCubit, FavModel>(
+                  builder: (context, state) {
+                    return GestureDetector(
+                      onTap: () async {
+                        await favCubit.toggleFavorite(widget.house, locals, context);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          favCubit.isItemFavorited(widget.house.id) ? IconlyBold.heart : IconlyLight.heart,
+                          size: AppSizes.pix24,
+                          color: favCubit.isItemFavorited(widget.house.id) ? AppColors.red : AppColors.black,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              const SizedBox(width: AppSizes.pix10)
+            ])
+          : null,
+      bottom: widget.isOriginal
+          ? PreferredSize(
+              preferredSize: const Size.fromHeight(AppSizes.pix24),
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: Card(
+                  color: Colors.black38,
+                  shape: RoundedRectangleBorder(borderRadius: borderAll10),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: AppSizes.pix8),
+                    child: Tex(
+                      "${_imageIndex + 1}/${widget.imagePaths.length}",
+                      con: context,
+                      col: AppColors.mainText,
+                    ),
+                  ),
+                ),
+              ),
+            )
+          : null,
+    );
+  }
+
   void _scrollToEnd() {
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
@@ -815,7 +759,7 @@ class _DetailsState extends State<Details> {
           clipBehavior: Clip.none,
           shape: RoundedRectangleBorder(borderRadius: borderAll10),
           insetPadding: const EdgeInsets.all(AppSizes.pix10),
-          backgroundColor: AppColors.primary,
+          backgroundColor: AppColors.secondary,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -951,7 +895,7 @@ class Rower extends StatelessWidget {
         : Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(child: Tex(keyy, con: context, size: AppSizes.pix16, padding: AppSizes.pix6).subtitle),
+              Expanded(child: Tex(keyy, con: context, size: AppSizes.pix12 + 2, padding: AppSizes.pix6).subtitle),
               const SizedBox(width: AppSizes.pix10),
               Expanded(
                   child: Tex(

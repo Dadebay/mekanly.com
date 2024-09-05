@@ -2,14 +2,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mekanly_com/logic/cubits/house_manager.dart';
 import 'package:mekanly_com/ui/pages/profile/my_houses/my_houses.dart';
 
-import '../../../../localization/locals.dart';
-import '../../../../models/category/category_model.dart';
-import '../../../style/app_sizes.dart';
-import '../../../style/style.dart';
 import '/config/config.dart';
 import '/logic/cubits/house/house_cubit.dart';
 import '/ui/pages/home/home.dart';
 import '/ui/widgets/widgets.dart';
+import '../../../../localization/locals.dart';
+import '../../../../models/category/category_model.dart';
+import '../../../style/app_sizes.dart';
+import '../../../style/style.dart';
 import 'update_house_page.dart';
 
 class EditHousePage extends StatefulWidget {
@@ -149,7 +149,7 @@ class EditHousePageState extends State<EditHousePage> with SingleTickerProviderS
                 ChangingTile(
                   title: locals.moveForward,
                   subtitle: locals.forwardGuide,
-                  onTap: ()  {
+                  onTap: () {
                     if (widget.house.leaveTime.isAfter(DateTime.now())) {
                       _moveForward();
                     } else {
@@ -328,91 +328,91 @@ class EditHousePageState extends State<EditHousePage> with SingleTickerProviderS
                       ),
                     ),
                   ),
-                  BlocBuilder<HouseCubit, HouseState>(
-                    builder: (context, state) {
-                      bool isBroned = false;
-                      if (state is HouseSuccess) {
-                        isBroned = state.houses.houses.firstWhere((element) => element.id == widget.house.id).bronStatus;
-                      }
-                      return IgnorePointer(
-                        ignoring: widget.house.leaveTime.isBefore(DateTime.now()),
-                        child: InkWell(
-                          borderRadius: borderAll10,
-                          onTap: () {
-                            if (widget.house.status != 'active' && widget.house.status == 'pending') {
-                              errorToast(locals.adminChecking);
-                            } else if (widget.house.status == 'non-active') {
-                              errorToast(locals.houseRejected);
-                            } else {
-                              showDialog(
-                                context: context,
-                                builder: (dialogContext) {
-                                  return AlertDialog(
-                                    backgroundColor: AppColors.background,
-                                    title: isBroned ? null : Tex(locals.isYourHBronned, con: context),
-                                    content: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        Tex(isBroned ? locals.yourHousewillbeVisible : locals.yourHousewillbeInvisible, con: context),
-                                      ],
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                          child: Tex(locals.no, con: context),
-                                          onPressed: () {
-                                            Navigator.of(dialogContext).pop();
-                                          }),
-                                      TextButton(
-                                          child: Tex(locals.yes, con: context),
-                                          onPressed: () {
-                                            if (widget.house.status == 'pending') {
-                                              errorToast(locals.adminChecking);
-                                            } else {
-                                              showDialog(
-                                                barrierDismissible: false,
-                                                barrierColor: Colors.transparent,
-                                                context: context,
-                                                builder: (context) {
-                                                  return alert();
-                                                },
-                                              ).then((v) => Navigator.of(context).pop());
+                  //   BlocBuilder<HouseCubit, HouseState>(
+                  //     builder: (context, state) {
+                  //       bool isBroned = false;
+                  //       if (state is HouseSuccess) {
+                  //         isBroned = state.houses.houses.firstWhere((element) => element.id == widget.house.id).bronStatus;
+                  //       }
+                  //       return IgnorePointer(
+                  //         ignoring: widget.house.leaveTime.isBefore(DateTime.now()),
+                  //         child: InkWell(
+                  //           borderRadius: borderAll10,
+                  //           onTap: () {
+                  //             if (widget.house.status != 'active' && widget.house.status == 'pending') {
+                  //               errorToast(locals.adminChecking);
+                  //             } else if (widget.house.status == 'non-active') {
+                  //               errorToast(locals.houseRejected);
+                  //             } else {
+                  //               showDialog(
+                  //                 context: context,
+                  //                 builder: (dialogContext) {
+                  //                   return AlertDialog(
+                  //                     backgroundColor: AppColors.background,
+                  //                     title: isBroned ? null : Tex(locals.isYourHBronned, con: context),
+                  //                     content: Stack(
+                  //                       alignment: Alignment.center,
+                  //                       children: [
+                  //                         Tex(isBroned ? locals.yourHousewillbeVisible : locals.yourHousewillbeInvisible, con: context),
+                  //                       ],
+                  //                     ),
+                  //                     actions: [
+                  //                       TextButton(
+                  //                           child: Tex(locals.no, con: context),
+                  //                           onPressed: () {
+                  //                             Navigator.of(dialogContext).pop();
+                  //                           }),
+                  //                       TextButton(
+                  //                           child: Tex(locals.yes, con: context),
+                  //                           onPressed: () {
+                  //                             if (widget.house.status == 'pending') {
+                  //                               errorToast(locals.adminChecking);
+                  //                             } else {
+                  //                               showDialog(
+                  //                                 barrierDismissible: false,
+                  //                                 barrierColor: Colors.transparent,
+                  //                                 context: context,
+                  //                                 builder: (context) {
+                  //                                   return alert();
+                  //                                 },
+                  //                               ).then((v) => Navigator.of(context).pop());
 
-                                              successToast(locals.workinOn);
-                                              context.read<HouseCubit>().bronHouse(widget.house.id).whenComplete(
-                                                    () => context.read<HouseCubit>().getAllHouses().whenComplete(
-                                                          () => Navigator.of(context).pop(),
-                                                        ),
-                                                  );
-                                            }
-                                          }),
-                                    ],
-                                  );
-                                },
-                              );
-                            }
-                          },
-                          child: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: widget.house.leaveTime.isBefore(DateTime.now())
-                                    ? AppColors.secondaryTextDark
-                                    : isBroned
-                                        ? AppColors.red
-                                        : AppColors.green,
-                                borderRadius: borderAll10),
-                            height: 34,
-                            width: width(context) / 2.5,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Tex(isBroned ? locals.bronned : locals.unbronned, con: context).white,
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                  //                               successToast(locals.workinOn);
+                  //                               context.read<HouseCubit>().bronHouse(widget.house.id).whenComplete(
+                  //                                     () => context.read<HouseCubit>().getAllHouses().whenComplete(
+                  //                                           () => Navigator.of(context).pop(),
+                  //                                         ),
+                  //                                   );
+                  //                             }
+                  //                           }),
+                  //                     ],
+                  //                   );
+                  //                 },
+                  //               );
+                  //             }
+                  //           },
+                  //           child: Container(
+                  //             alignment: Alignment.center,
+                  //             decoration: BoxDecoration(
+                  //                 color: widget.house.leaveTime.isBefore(DateTime.now())
+                  //                     ? AppColors.secondaryTextDark
+                  //                     : isBroned
+                  //                         ? AppColors.red
+                  //                         : AppColors.green,
+                  //                 borderRadius: borderAll10),
+                  //             height: 34,
+                  //             width: width(context) / 2.5,
+                  //             child: Row(
+                  //               mainAxisAlignment: MainAxisAlignment.center,
+                  //               children: [
+                  //                 Tex(isBroned ? locals.bronned : locals.unbronned, con: context).white,
+                  //               ],
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       );
+                  //     },
+                  //   ),
                 ],
               ),
             ),

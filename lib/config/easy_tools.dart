@@ -2,12 +2,13 @@
 
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:iconly/iconly.dart';
 import 'package:mekanly_com/localization/locals.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '/ui/style/app_sizes.dart';
 import '../models/category/category_model.dart';
 import '../ui/style/style.dart';
-import '/ui/style/app_sizes.dart';
 import 'config.dart';
 
 String formatDuration(Duration duration, BuildContext context) {
@@ -45,11 +46,16 @@ class GoBack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.arrow_back_rounded),
-      style: IconButton.styleFrom(backgroundColor: AppColors.white),
-      color: AppColors.mainTextDark,
-      onPressed: () => Navigator.of(context).pop(),
+    return GestureDetector(
+      onTap: (){
+        
+      },
+      child: IconButton(
+        icon: const Icon(IconlyLight.arrow_left_circle),
+        style: IconButton.styleFrom(backgroundColor: AppColors.white),
+        color: AppColors.mainTextDark,
+        onPressed: () => Navigator.of(context).pop(),
+      ),
     );
   }
 }
@@ -176,6 +182,7 @@ class SvgAsset extends StatelessWidget {
       height: size ?? AppSizes.pix24,
       width: size ?? AppSizes.pix24,
       color: c,
+      fit: BoxFit.cover,
     );
   }
 }

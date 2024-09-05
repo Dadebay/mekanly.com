@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../core/errors/failure.dart';
 import '/config/config.dart';
-import '../../repos/i_main_repo.dart';
 import '/logic/services/i_main_service.dart';
 import '/models/category/category_model.dart';
+import '../../core/errors/failure.dart';
+import '../../repos/i_main_repo.dart';
 
 part 'categs_state.dart';
 
@@ -20,7 +20,8 @@ class CategsCubit extends Cubit<CategsState> {
       logger('Fetching categs');
 
       final result = await service.getCategories();
-
+      print(result);
+      print(repo.cats.all[5].id);
       result.fold(
         (failure) => emit(CategsError(failure)),
         (_) {

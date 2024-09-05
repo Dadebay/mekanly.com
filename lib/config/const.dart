@@ -1,10 +1,11 @@
 import 'package:chalkdart/chalk.dart';
 import 'package:flutter/material.dart';
+import 'package:mekanly_com/ui/style/colors.dart';
 
-import '../localization/locals.dart';
-import '../models/category/category_model.dart';
 import '/ui/style/app_sizes.dart';
 import '/ui/style/style.dart';
+import '../localization/locals.dart';
+import '../models/category/category_model.dart';
 import 'responsive.dart';
 
 final BorderRadius borderAll = BorderRadius.circular(18);
@@ -12,6 +13,13 @@ final BorderRadius borderAll10 = BorderRadius.circular(9);
 final BorderRadius borderAll15 = BorderRadius.circular(13);
 final BorderRadius borderAll3 = BorderRadius.circular(3);
 final BorderRadius borderAll6 = BorderRadius.circular(6);
+final BorderRadius borderAll8 = BorderRadius.circular(8);
+
+const String robotoBold = 'ManropeBold';
+const String robotoSemiBold = 'manropeSemiBold';
+const String robotoMedium = 'ManropeMedium';
+const String robotoRegular = 'ManropeRegular';
+
 bool isTablet(BuildContext context) => Responsive.isTablet(context);
 void logger(dynamic text) => debugPrint(chalk.greenBright.bgBlack(" $text"));
 const appBarRadius = RoundedRectangleBorder(borderRadius: BorderRadius.vertical(bottom: Radius.circular(0)));
@@ -47,13 +55,13 @@ List<String> categNames(BuildContext context) {
   final local = Locals.of(context);
 
   return [
-    local.all,
-    local.city,
-    local.cottage,
-    local.avaza,
-    local.room,
-    local.mountain,
-    local.plan,
+    local.kat1,
+    local.kat3,
+    local.kat2,
+    local.kat4,
+    local.kat5,
+    local.kat6,
+    local.kat7,
   ];
 }
 

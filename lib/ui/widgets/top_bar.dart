@@ -1,5 +1,5 @@
-import '../style/style.dart';
 import '/config/config.dart';
+import '../style/style.dart';
 
 class TopBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -17,10 +17,11 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      elevation: 4,
+      elevation: 0.0,
+      scrolledUnderElevation: 0.0,
       leading: leading,
       centerTitle: true,
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.secondary,
       surfaceTintColor: Colors.transparent,
       shadowColor: AppColors.statusBar.withOpacity(.5),
       title: Tex(

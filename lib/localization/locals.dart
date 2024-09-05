@@ -16,7 +16,18 @@ class Locals {
 
   static const _localizedValues = <String, Map<String, String>>{
     'tk': {
+      'kat1': 'Satlyk jaýlar',
+      'kat2': 'Kireýne jaýlar',
+      'kat3': 'Kireýne otaglar',
+      'kat4': 'Kireýne ofisler',
+      'kat5': 'Kireýne söwda emläkleri',
+      'kat6': 'Satlyk söwda emläkleri',
+      'kat7': 'Beýleki emläkler',
+      'kat8': 'Goýlan senesi',
+      'kat9': 'Goşan emläkleriňizi bu ýerden görüň !',
+      'kat10': 'Emlägiňizi mekanly.com bilen mahabatlandyryň we girdeji gazanyň.\nBu Aňsat',
       'all': 'Ählisi',
+      'phoneNumber': 'Nomeri',
       'city': 'Şäher içi',
       'add': 'Goşmak',
       'home': 'Baş sahypa',
@@ -41,7 +52,7 @@ class Locals {
       'minPrice': 'iň arzan',
       'maxPrice': 'iň gymmat',
       'sort': 'Tertipleme',
-      'notSelected': 'saýlanmandyk',
+      'notSelected': 'Ählisi',
       'cheapToExp': 'Arzandan - gymmada',
       'expToCheap': 'Gymmatdan - arzana',
       'location': 'Ýerleşýän ýeri',
@@ -93,7 +104,7 @@ class Locals {
       'checkingComment': 'Teswir barlanylýar',
       'comments': 'Bahalandyrmalar we teswirler',
       'seeAll': 'Ählisini gör',
-      'bron': 'Bron etmek',
+      'bron': 'Jaň etmek',
       'rate': 'Baha ber',
       'retry': 'Täzeden synanyşyň',
       'writeComment': 'Teswir ýazyň...',
@@ -137,14 +148,13 @@ class Locals {
       'reallyGoBack': 'Siz hakykatdanam yza çykmakçymy?',
       'ifYouGoBack': 'Eger bu sahypadan çyksaňyz siziň girizen ähli maglumatlaryňyz ýiter. Indiki gezek täzeden görkezmeli bolarsyňyz',
       'username': 'Ulanyjy ady',
-      'phoneNumber': 'Telefon Belgiňiz',
       'phone': 'Telefon',
       'email': 'Email',
       'passCode': 'Parol',
       'reTypePass': 'Parol täzeden ýazyň',
       'forgottenPass': 'Paroly ýatdan çykardyňmy?',
       'register': 'Agza bol',
-      'readAndAccept': 'Düzgünnamany we Ulanyjy ylalaşygyny okadym we kabul etdim',
+      'readAndAccept': 'Düzgünnamany okadym we kabul etýärin',
       'insertPhoeOTP': 'Siziň telefon nomeriňize ugradylan san belgini ýazyň',
       'insertEmailOTP': 'Siziň poçtaňyza gelen san belgini ýazyň',
       'arrivalOtp': 'Size gelen belgi',
@@ -199,6 +209,16 @@ class Locals {
       'choose': 'Saýla',
     },
     'en': {
+      'kat9': 'Просмотрите добавленные вами свойства здесь!',
+      'kat10': 'Рекламируйте свою недвижимость на mecanly.com и зарабатывайте.\nЭто легко',
+      'kat8': 'Date posted',
+      'kat1': 'Houses for sale',
+      'kat2': 'Houses for rent',
+      'kat3': 'Rooms for Rent',
+      'kat4': 'Offices for rent',
+      'kat5': 'Commercial Properties for Rent',
+      'kat6': 'Commercial Properties For Sale',
+      'kat7': 'Other Properties',
       'all': 'All',
       'city': 'City',
       'add': 'Add',
@@ -224,7 +244,7 @@ class Locals {
       'minPrice': 'min',
       'maxPrice': 'max',
       'sort': 'Sorting',
-      'notSelected': 'unselected',
+      'notSelected': 'All',
       'cheapToExp': 'Price ascending',
       'expToCheap': 'Descending price',
       'location': 'Location',
@@ -276,7 +296,7 @@ class Locals {
       'checkingComment': 'Comment is being checked',
       'comments': 'Ratings and reviews',
       'seeAll': 'See all',
-      'bron': 'Booking',
+      'bron': 'Call',
       'rate': 'Rate',
       'retry': 'Retry',
       'writeComment': 'Write a review...',
@@ -320,7 +340,6 @@ class Locals {
       'reallyGoBack': 'Are you sure you want to go back?',
       'ifYouGoBack': 'If you go back from this page, all the info you\'ve inserted will cleared. Next time you will have to re-insert again',
       'username': 'Username',
-      'phoneNumber': 'Your Phone',
       'phone': 'Phone',
       'email': 'Email',
       'passCode': 'Password',
@@ -383,6 +402,16 @@ class Locals {
       'choose': 'Choose',
     },
     'ru': {
+      'kat9': 'View your added properties here!',
+      'kat10': 'Advertise your property with mecanly.com and earn.\nIt is Easy',
+      'kat8': 'Дата публикации',
+      'kat1': 'Дома на продажу',
+      'kat2': 'Дома в аренду',
+      'kat3': 'Комнаты в аренду',
+      'kat4': 'Офисы в аренду',
+      'kat5': 'Коммерческая недвижимость в аренду',
+      'kat6': 'Коммерческая недвижимость на продажу',
+      'kat7': 'Другие свойства',
       'all': 'Все',
       'city': 'Город',
       'add': 'Добавить',
@@ -408,7 +437,7 @@ class Locals {
       'minPrice': 'мин',
       'maxPrice': 'макс',
       'sort': 'Сортировка',
-      'notSelected': 'не выбрано',
+      'notSelected': 'Все',
       'cheapToExp': 'Цена по возрастанию',
       'expToCheap': 'Цена по убыванию',
       'location': 'Расположение',
@@ -460,7 +489,7 @@ class Locals {
       'checkingComment': 'Коммент проверяется',
       'comments': 'Оценки и отзывы',
       'seeAll': 'Показать все',
-      'bron': 'Забронировать ',
+      'bron': 'Позвонить ',
       'rate': 'Оценить',
       'retry': 'Повторить',
       'writeComment': 'Напишите отзыв...',
@@ -568,6 +597,16 @@ class Locals {
   };
 
   static List<String> languages() => _localizedValues.keys.toList();
+  String get kat1 => _localizedValues[locale.languageCode]!['kat1']!;
+  String get kat2 => _localizedValues[locale.languageCode]!['kat2']!;
+  String get kat3 => _localizedValues[locale.languageCode]!['kat3']!;
+  String get kat4 => _localizedValues[locale.languageCode]!['kat4']!;
+  String get kat5 => _localizedValues[locale.languageCode]!['kat5']!;
+  String get kat6 => _localizedValues[locale.languageCode]!['kat6']!;
+  String get kat7 => _localizedValues[locale.languageCode]!['kat7']!;
+  String get kat8 => _localizedValues[locale.languageCode]!['kat8']!;
+  String get kat9 => _localizedValues[locale.languageCode]!['kat9']!;
+  String get kat10 => _localizedValues[locale.languageCode]!['kat10']!;
   String get all => _localizedValues[locale.languageCode]!['all']!;
   String get city => _localizedValues[locale.languageCode]!['city']!;
   String get add => _localizedValues[locale.languageCode]!['add']!;

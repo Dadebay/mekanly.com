@@ -43,6 +43,14 @@ dependencies:
   flutter_image_compress: ^2.2.0
   path: ^1.8.3
   cached_network_image: ^3.3.1
+  iconly:
+  share_plus: 
+  firebase_messaging: 
+  awesome_notifications: ^0.9.3+1
+  cloud_firestore: 
+  firebase_core: any
+  firebase_core_platform_interface: 4.5.1
+
 
 dev_dependencies:
   flutter_test:
@@ -60,12 +68,18 @@ flutter:
     - assets/comment.txt
     - assets/legals.txt
   fonts:
-    - family: Roboto
+    - family: ManropeBold
       fonts:
-        - asset: assets/fonts/Roboto-Bold.ttf
-          weight: 700
-        - asset: assets/fonts/Roboto-Regular.ttf
-          weight: 500
+        - asset: assets/fonts/manrope-bold.otf
+    - family: manropeSemiBold
+      fonts:
+        - asset: assets/fonts/manrope-semibold.otf
+    - family: ManropeMedium
+      fonts:
+        - asset: assets/fonts/manrope-medium.otf
+    - family: ManropeRegular
+      fonts:
+        - asset: assets/fonts/manrope-regular.otf
 
 flutter_native_splash:
   background_image: "assets/images/screen.png"

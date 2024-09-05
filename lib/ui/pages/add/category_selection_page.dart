@@ -1,5 +1,6 @@
 import 'package:mekanly_com/config/config.dart';
 import 'package:mekanly_com/localization/locals.dart';
+import 'package:mekanly_com/ui/pages/add/post_house.dart';
 import 'package:mekanly_com/ui/style/style.dart';
 import 'package:mekanly_com/ui/widgets/widgets.dart';
 
@@ -26,7 +27,11 @@ class CategorySelectionPage extends StatelessWidget {
                 leading: SvgAsset(svgs[index + 1], AppColors.mainTextDark),
                 title: Text(category),
                 onTap: () {
-                  Navigator.pop(context, [category, categId]);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => PostHousePage(category: category, categoryID: categId)),
+                  );
+
                   logger(categId);
                 },
               ),

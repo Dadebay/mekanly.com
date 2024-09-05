@@ -1,7 +1,7 @@
 // ignore_for_file: must_be_immutable
 
-import '../../config/config.dart';
 import '/ui/style/style.dart';
+import '../../config/config.dart';
 
 class ActionButton extends StatelessWidget {
   ActionButton({super.key, this.label = '', this.size, this.onTap, this.radius = 17, this.isTransparent = false, this.icon, this.color, this.textColor});

@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mekanly_com/config/const.dart';
+import 'package:mekanly_com/config/config.dart';
 import 'package:mekanly_com/logic/services/i_main_service.dart';
 
 class ViewCountCubit extends Cubit<int> {

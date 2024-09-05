@@ -46,7 +46,7 @@ class Tex extends StatelessWidget {
         textAlign: align,
         style: TextStyle(
           fontWeight: weight,
-          fontFamily: 'Roboto',
+          fontFamily: robotoRegular,
           fontSize: size ?? ((Responsive.isTablet(con) ? AppSizes.pix12 : AppSizes.pix16) * ratio),
           color: col ?? AppColors.mainText,
         ),
@@ -62,7 +62,7 @@ class Tex extends StatelessWidget {
         text ?? '',
         textAlign: align,
         style: TextStyle(
-          fontFamily: 'Roboto',
+          fontFamily: robotoRegular,
           fontSize: size ?? ((Responsive.isTablet(con) ? AppSizes.pix24 : 30) * ratio),
           color: col ?? AppColors.primary,
         ),
@@ -78,7 +78,7 @@ class Tex extends StatelessWidget {
         text ?? '',
         textAlign: align,
         style: TextStyle(
-          fontFamily: 'Roboto',
+          fontFamily: robotoRegular,
           fontSize: size ?? ((Responsive.isTablet(con) ? AppSizes.pix12 : AppSizes.pix16) * ratio),
           color: col ?? AppColors.primary,
           decoration: TextDecoration.underline,
@@ -97,7 +97,7 @@ class Tex extends StatelessWidget {
         text ?? '',
         textAlign: align,
         style: TextStyle(
-          fontFamily: 'Roboto',
+          fontFamily: robotoRegular,
           fontWeight: weight ?? FontWeight.w400,
           fontSize: size ?? ((Responsive.isTablet(con) ? 13 : AppSizes.pix16) * ratio),
           color: col ?? Colors.white,
@@ -114,7 +114,7 @@ class Tex extends StatelessWidget {
         text ?? '',
         textAlign: align,
         style: TextStyle(
-          fontFamily: 'Roboto',
+          fontFamily: robotoRegular,
           fontWeight: weight ?? FontWeight.w700,
           fontSize: size ?? ((Responsive.isTablet(con) ? 14 : 18) * ratio),
           color: col ?? AppColors.mainTextDark,
@@ -131,7 +131,7 @@ class Tex extends StatelessWidget {
         text ?? '',
         textAlign: align,
         style: TextStyle(
-          fontFamily: 'Roboto',
+          fontFamily: robotoRegular,
           fontWeight: weight ?? FontWeight.w600,
           fontSize: size ?? ((Responsive.isTablet(con) ? AppSizes.pix12 : AppSizes.pix16) * ratio),
           color: col ?? AppColors.mainTextDark,
@@ -143,6 +143,22 @@ class Tex extends StatelessWidget {
     );
   }
 
+  Widget get title2 {
+    double ratio = MediaQuery.of(con).size.width / 360;
+    return Text(
+      text ?? '',
+      textAlign: align,
+      style: TextStyle(
+        fontFamily: robotoRegular,
+        fontSize: size ?? ((Responsive.isTablet(con) ? AppSizes.pix12 : AppSizes.pix16) * ratio),
+        color: Colors.grey,
+        textBaseline: TextBaseline.alphabetic,
+      ),
+      maxLines: 4,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+
   Widget get linkedText {
     double ratio = MediaQuery.of(con).size.width / 360;
     return Padding(
@@ -151,7 +167,7 @@ class Tex extends StatelessWidget {
         text ?? '',
         textAlign: align,
         style: TextStyle(
-            fontFamily: 'Roboto',
+            fontFamily: robotoRegular,
             fontWeight: weight ?? FontWeight.w600,
             fontSize: size ?? ((Responsive.isTablet(con) ? AppSizes.pix10 : AppSizes.pix12 + 2) * ratio),
             color: col ?? AppColors.mainTextDark.withOpacity(.9),
@@ -172,7 +188,7 @@ class Tex extends StatelessWidget {
         text ?? '',
         textAlign: align,
         style: TextStyle(
-          fontFamily: 'Roboto',
+          fontFamily: robotoRegular,
           fontWeight: weight ?? FontWeight.w400,
           fontSize: size ?? ((Responsive.isTablet(con) ? AppSizes.pix10 : AppSizes.pix12) * ratio),
           color: col ?? AppColors.mainTextDark,
@@ -191,7 +207,7 @@ class Tex extends StatelessWidget {
         text ?? '',
         textAlign: align,
         style: TextStyle(
-          fontFamily: 'Roboto',
+          fontFamily: robotoRegular,
           fontWeight: weight ?? FontWeight.w500,
           fontSize: size ?? ((Responsive.isTablet(con) ? 8 : 11) * ratio),
           color: col ?? AppColors.mainTextDark,
@@ -208,7 +224,7 @@ class Tex extends StatelessWidget {
         text ?? '',
         textAlign: align,
         style: TextStyle(
-          fontFamily: 'Roboto',
+          fontFamily: robotoRegular,
           fontWeight: weight ?? FontWeight.w500,
           fontSize: size ?? ((Responsive.isTablet(con) ? 11 : 14) * ratio),
           color: col ?? AppColors.mainText,
