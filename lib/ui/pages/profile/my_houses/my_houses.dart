@@ -1,15 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mekanly_com/logic/cubits/region/region_cubit.dart';
 
-import '../../../../config/config.dart';
-import '../../../../logic/cubits/categs/categs_cubit.dart';
-import '../../../style/style.dart';
 import '/localization/locals.dart';
 import '/logic/cubits/cubits.dart';
 import '/logic/cubits/house/house_cubit.dart';
 import '/ui/pages/home/house_card.dart';
 import '/ui/style/app_sizes.dart';
 import '/ui/widgets/widgets.dart';
+import '../../../../config/config.dart';
+import '../../../../logic/cubits/categs/categs_cubit.dart';
+import '../../../style/style.dart';
 import 'edit_house.dart';
 
 class MyHouses extends StatefulWidget {
@@ -21,19 +21,18 @@ class MyHouses extends StatefulWidget {
 
 class _MyHousesState extends State<MyHouses> {
   @override
-  void initState() {
-    super.initState();
-    context.read<HouseCubit>().getAllHouses();
-    context.read<RegionsCubit>().fetchRgions();
-  }
-
-  @override
   void didUpdateWidget(covariant MyHouses oldWidget) {
     if (oldWidget.key != widget.key) {
       context.read<HouseCubit>().getAllHouses();
     }
-
     super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<HouseCubit>().getAllHouses();
+    context.read<RegionsCubit>().fetchRgions();
   }
 
   Future<void> _onRefresh() async {
@@ -47,7 +46,7 @@ class _MyHousesState extends State<MyHouses> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: TopBar(title: locals.myPosts),
+      appBar: TopBar(title: locals.kat16),
       body: RefreshIndicator(
         onRefresh: () => _onRefresh(),
         child: BlocBuilder<HouseCubit, HouseState>(
@@ -73,35 +72,32 @@ class _MyHousesState extends State<MyHouses> {
                           );
                         },
                         itemCount: userHouses.length,
-                        padding: const EdgeInsets.symmetric(horizontal: AppSizes.pix10),
                         itemBuilder: (context, i) {
                           return InkWell(
                             borderRadius: borderAll,
-                            onTap: () => go(context, EditHousePage(house: userHouses[i])),
+                            onTap: () {
+                              go(context, EditHousePage(house: userHouses[i]));
+                            },
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 IgnorePointer(
-                                    child: HouseCard(
-                                        house: userHouses[i],
-                                        bronStatus: userHouses[i].leaveTime.isAfter(DateTime.now())
-                                            ? state.houses.houses.firstWhere((element) => element.id == userHouses[i].id).bronStatus
-                                                ? locals.bronnedAndDisappeared.split('.')[1]
-                                                : locals.unbronnedAndAppeared.split('.')[1]
-                                            : '',
-                                        status: userHouses[i].leaveTime.isAfter(DateTime.now())
-                                            ? userHouses[i].status == 'pending'
-                                                ? locals.pending
-                                                : userHouses[i].status == 'non-active'
-                                                    ? locals.notAccepted
-                                                    : locals.putted
-                                            : '')),
-                                if (userHouses[i].leaveTime.isBefore(DateTime.now()))
-                                  Tex(
-                                    locals.expired,
-                                    con: context,
-                                    col: AppColors.red,
-                                  ).title
+                                    child: HouseCardEDIT(
+                                  house: userHouses[i],
+                                  bronStatus: userHouses[i].leaveTime.isAfter(DateTime.now())
+                                      ? state.houses.houses.firstWhere((element) => element.id == userHouses[i].id).bronStatus
+                                          ? locals.bronnedAndDisappeared.split('.')[1]
+                                          : locals.unbronnedAndAppeared.split('.')[1]
+                                      : '',
+                                  status: userHouses[i].leaveTime.isAfter(DateTime.now())
+                                      ? userHouses[i].status == 'pending'
+                                          ? locals.pending
+                                          : userHouses[i].status == 'non-active'
+                                              ? locals.notAccepted
+                                              : locals.putted
+                                      : '',
+                                  leaveTime: userHouses[i].leaveTime,
+                                )),
                               ],
                             ),
                           );

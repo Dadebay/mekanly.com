@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
+import 'package:mekanly_com/ui/pages/profile/auth/register_page.dart';
 
 import '/config/config.dart';
 import '/localization/locals.dart';
@@ -35,7 +36,6 @@ class _ProfilePageState extends State<ProfilePage> {
         backgroundColor: AppColors.background,
         body: SingleChildScrollView(
           child: Column(mainAxisSize: MainAxisSize.min, children: [
-            const SizedBox(height: AppSizes.pix10),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
               child: Row(
@@ -44,22 +44,14 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   Expanded(
                       child: Image.asset(
-                    'assets/images/mekanly.png',
+                    'assets/icons/mekanly_blue.png',
                     height: 35,
                     alignment: Alignment.centerLeft,
                   )),
-                  GestureDetector(
-                    onTap: () {},
-                    child: const Icon(
-                      IconlyLight.notification,
-                      color: Colors.black,
-                      size: 24,
-                    ),
-                  ),
+                  GestureDetector(onTap: () {}, child: const SvgAsset('notification', size: AppSizes.pix28, Colors.black)),
                 ],
               ),
             ),
-            const SizedBox(height: AppSizes.pix10),
             Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -77,7 +69,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           Container(
                             margin: const EdgeInsets.only(right: 15, left: 8),
                             padding: const EdgeInsets.all(8),
-                            decoration: const BoxDecoration(color: Colors.grey, shape: BoxShape.circle),
+                            decoration: const BoxDecoration(color: Color(0xff7E8C90), shape: BoxShape.circle),
                             child: const Icon(
                               IconlyBold.profile,
                               size: AppSizes.pix40,
@@ -96,44 +88,56 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ],
                   ),
-                  Container(
-                    margin: const EdgeInsets.all(8),
-                    padding: const EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      borderRadius: borderAll15,
-                      color: Colors.white,
-                      boxShadow: [BoxShadow(color: Colors.grey.shade200, spreadRadius: 3, blurRadius: 3)],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Divider(
+                      color: Colors.grey.shade300,
+                      thickness: 1,
                     ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                            flex: 4,
-                            child: Column(
-                              children: [
-                                Text(
-                                  locals.kat9,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(color: Colors.black, fontFamily: robotoSemiBold, fontSize: AppSizes.pix16 + 2),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  locals.kat10,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 4,
-                                  style: const TextStyle(color: Colors.black, fontFamily: robotoRegular, fontSize: AppSizes.pix12 + 2),
-                                ),
-                              ],
-                            )),
-                        Expanded(
-                            flex: 3,
-                            child: Image.asset(
-                              'assets/icons/Vector_2.png',
-                              fit: BoxFit.cover,
-                            )),
-                      ],
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      go(context, getRoutes(getProfileTitles(1, context), context));
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+                      decoration: BoxDecoration(
+                        borderRadius: borderAll15,
+                        color: Colors.white,
+                        boxShadow: [BoxShadow(color: Colors.grey.shade200, spreadRadius: 2, blurRadius: 2)],
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                              flex: 4,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    locals.kat9,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(color: Colors.black, fontFamily: robotoSemiBold, fontSize: AppSizes.pix16 + 2),
+                                  ),
+                                  const SizedBox(
+                                    height: 15,
+                                  ),
+                                  Text(
+                                    locals.kat10,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 4,
+                                    style: const TextStyle(color: Color(0xff717171), fontFamily: robotoMedium, fontSize: AppSizes.pix12 + 2),
+                                  ),
+                                ],
+                              )),
+                          Expanded(
+                              flex: 3,
+                              child: Image.asset(
+                                'assets/icons/Vector_2.png',
+                                fit: BoxFit.cover,
+                              )),
+                        ],
+                      ),
                     ),
                   ),
                   divider(),
@@ -141,36 +145,38 @@ class _ProfilePageState extends State<ProfilePage> {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: 7,
+                    padding: EdgeInsets.zero,
                     itemBuilder: (context, index) {
-                      List icons = [Icons.language, IconlyLight.home, IconlyLight.chat, IconlyLight.heart, IconlyLight.document, IconlyLight.message, IconlyLight.logout];
+                      List icons = [Icons.language, IconlyLight.home, IconlyLight.heart, IconlyLight.chat, IconlyLight.message, IconlyLight.document, IconlyLight.logout];
 
-                      return SettingsTile(
-                        icon: icons[index],
-                        title: getProfileTitles(index, context),
-                        onTap: () {
-                          if (index != 6) {
-                            go(context, getRoutes(getProfileTitles(index, context), context));
-                          } else {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return const LogoutDialog();
+                      return index == 1
+                          ? const SizedBox.shrink()
+                          : SettingsTile(
+                              icon: icons[index],
+                              title: getProfileTitles(index, context),
+                              onTap: () {
+                                if (index != 6) {
+                                  go(context, getRoutes(getProfileTitles(index, context), context));
+                                } else {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return const LogoutDialog();
+                                    },
+                                  );
+                                }
                               },
                             );
-                          }
-                        },
-                      );
                     },
                     separatorBuilder: (BuildContext context, int index) {
-                      return divider();
+                      return index == 1 ? const SizedBox.shrink() : divider();
                     },
                   ),
                 ] else ...[
-                  ListView.builder(
+                  ListView.separated(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: 6,
-                    itemExtent: 50,
                     itemBuilder: (context, index) {
                       List icons = [Icons.language, IconlyLight.heart, IconlyLight.chat, IconlyLight.message, IconlyLight.document, IconlyLight.info_circle, IconlyLight.logout];
 
@@ -182,6 +188,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         },
                       );
                     },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return divider();
+                    },
                   ),
                 ],
               ],
@@ -189,18 +198,32 @@ class _ProfilePageState extends State<ProfilePage> {
             const SizedBox(height: AppSizes.pix130),
             if (state is! AuthSuccess)
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 68.0),
+                padding: const EdgeInsets.only(left: 68, right: 68, bottom: 25),
                 child: SizedBox(
                   height: 45,
                   width: double.infinity,
                   child: ActionButton(
                     size: 17,
+                    color: Colors.black,
                     radius: 5,
                     onTap: () => go(context, const LoginPage()),
                     label: locals.login,
                   ),
                 ),
               ),
+            if (state is! AuthSuccess)
+              ElevatedButton(
+                  onPressed: () => go(context, const RegisterPage()),
+                  style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 50),
+                      backgroundColor: Colors.white,
+                      minimumSize: const Size(200, 30),
+                      shape: RoundedRectangleBorder(borderRadius: borderAll10, side: const BorderSide(width: 2, color: Colors.black))),
+                  child: Text(
+                    locals.register,
+                    style: const TextStyle(color: Colors.black, fontFamily: robotoBold),
+                  ))
           ]),
         ),
       ),
@@ -222,17 +245,17 @@ class _ProfilePageState extends State<ProfilePage> {
     switch (i) {
       case 0:
         return locals.language;
-      case 3:
+      case 2:
         return locals.myFavs;
-      case 4:
-        return locals.terms;
       case 5:
+        return locals.terms;
+      case 4:
         return locals.contactMe;
       case 6:
         return locals.logout;
       case 1:
         return locals.myPosts;
-      case 2:
+      case 3:
         return locals.myComments;
       default:
         return '';
@@ -248,7 +271,7 @@ class _ProfilePageState extends State<ProfilePage> {
       case 1:
         return locals.myFavs;
       case 2:
-        return locals.terms;
+        return locals.myComments;
       case 3:
         return locals.contactMe;
       case 4:
@@ -298,8 +321,8 @@ class SettingsTile extends StatelessWidget {
       leading: Icon(icon),
       dense: true,
       onTap: onTap,
-      hoverColor: Colors.white,
-      contentPadding: const EdgeInsets.symmetric(vertical: AppSizes.pix4, horizontal: AppSizes.pix16),
+      minVerticalPadding: 0.0,
+      contentPadding: const EdgeInsets.symmetric(horizontal: AppSizes.pix16),
       minLeadingWidth: AppSizes.pix10,
       title: Tex(
         title,
@@ -307,7 +330,10 @@ class SettingsTile extends StatelessWidget {
         con: context,
         col: AppColors.mainTextDark,
       ).title,
-      trailing: const Icon(IconlyLight.arrow_right_circle),
+      trailing: const Icon(
+        IconlyLight.arrow_right_2,
+        size: 18,
+      ),
     );
   }
 }

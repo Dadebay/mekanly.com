@@ -30,7 +30,6 @@ class _FilterPageState extends State<FilterPage> {
   List<dynamic> selectedLocations = [];
   List<int> selectedIds = [];
   DateTime? date;
-  final DateTime _focusedDay = DateTime.now();
   List<int> selectedFeaturesIndices = [];
 
   void handleFeaturesSelected(List<int> indices) {
@@ -47,7 +46,18 @@ class _FilterPageState extends State<FilterPage> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: TopBar(title: locals.filters),
+      appBar: TopBar(
+        title: locals.filters,
+        leading: IconButton(
+            onPressed: () {
+              //go back
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            )),
+      ),
       body: CustomScrollView(
         slivers: [
           Sli(
@@ -77,14 +87,25 @@ class _FilterPageState extends State<FilterPage> {
                             controller: minCtrl,
                             decoration: InputDecoration(
                               filled: true,
-                              fillColor: AppColors.background,
+                              fillColor: const Color(0xffD9D9D9),
                               labelText: locals.minPrice,
                               isDense: true,
                               hintStyle: TextStyle(color: AppColors.secondaryText.withOpacity(.7)),
                               labelStyle: TextStyle(color: AppColors.statusBar.withOpacity(.9)),
-                              floatingLabelStyle: const TextStyle(color: AppColors.buttons),
+                              floatingLabelStyle: const TextStyle(color: AppColors.black),
                               alignLabelWithHint: true,
-                              border: border(),
+                              border: OutlineInputBorder(
+                                borderRadius: borderAll6,
+                                borderSide: const BorderSide(
+                                  color: Color(0xff8F969E),
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: borderAll6,
+                                borderSide: const BorderSide(
+                                  color: Color(0xff8F969E),
+                                ),
+                              ),
                               focusedBorder: focusedBorder(),
                             ),
                           ),
@@ -104,13 +125,24 @@ class _FilterPageState extends State<FilterPage> {
                             decoration: InputDecoration(
                                 hintStyle: TextStyle(color: AppColors.secondaryText.withOpacity(.7)),
                                 labelStyle: TextStyle(color: AppColors.statusBar.withOpacity(.9)),
-                                floatingLabelStyle: const TextStyle(color: AppColors.buttons),
+                                floatingLabelStyle: const TextStyle(color: AppColors.black),
                                 alignLabelWithHint: true,
                                 filled: true,
-                                fillColor: AppColors.background,
+                                fillColor: const Color(0xffD9D9D9),
                                 isDense: true,
                                 labelText: locals.maxPrice,
-                                border: border(),
+                                border: OutlineInputBorder(
+                                  borderRadius: borderAll6,
+                                  borderSide: const BorderSide(
+                                    color: Color(0xff8F969E),
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: borderAll6,
+                                  borderSide: const BorderSide(
+                                    color: Color(0xff8F969E),
+                                  ),
+                                ),
                                 focusedBorder: focusedBorder()),
                           ),
                         ),
@@ -120,54 +152,18 @@ class _FilterPageState extends State<FilterPage> {
                 ),
               ),
               divider,
-              Pad(
-                v: AppSizes.pix10,
-                h: AppSizes.pix10,
-                child: Row(
-                  children: [
-                    Tex(locals.sort, con: context, padding: 0).title,
-                    const Spacer(),
-                    DropdownButton<String>(
-                      dropdownColor: Colors.white,
-                      underline: const SizedBox(),
-                      icon: const Icon(IconlyLight.arrow_down_circle),
-                      value: selectedSortingOption == 'saýlanmadyk  ' ? locals.notSelected : selectedSortingOption,
-                      focusColor: Colors.transparent,
-                      alignment: Alignment.centerRight,
-                      padding: EdgeInsets.zero,
-                      style: const TextStyle(color: Colors.black, fontFamily: robotoRegular),
-                      onChanged: (newValue) {
-                        setState(() {
-                          selectedSortingOption = newValue!;
-                        });
-                      },
-                      items: [
-                        locals.notSelected,
-                        locals.cheapToExp,
-                        locals.expToCheap,
-                      ].map((String value) {
-                        return DropdownMenuItem<String>(
-                          alignment: Alignment.centerLeft,
-                          value: value,
-                          child: Tex(value, con: context, padding: 0).title,
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
-              ),
-              divider,
+
               ListTile(
                 contentPadding: const EdgeInsets.symmetric(horizontal: AppSizes.pix10, vertical: AppSizes.pix10),
                 dense: true,
-                trailing: const Icon(IconlyLight.arrow_right_circle),
+                trailing: const Icon(IconlyLight.arrow_right_2, color: Colors.black, size: 18),
                 title: Tex(
                   locals.location,
                   con: context,
                   padding: 0,
                 ).title,
                 subtitle: Text(
-                  selectedLocations.isNotEmpty ? selectedLocations.join(', ') : locals.notSelected,
+                  selectedLocations.isNotEmpty ? selectedLocations.join(', ') : locals.kat22,
                   maxLines: 1,
                   style: const TextStyle(overflow: TextOverflow.ellipsis),
                 ),
@@ -212,14 +208,14 @@ class _FilterPageState extends State<FilterPage> {
                   }),
               const SizedBox(height: AppSizes.pix16),
               divider,
-              GuestCountWidget(
-                  guestNumber: guestNumber,
-                  onGuestNumberChanged: (newCount) {
-                    setState(() {
-                      guestNumber = newCount;
-                    });
-                  }),
-              divider,
+              // GuestCountWidget(
+              //     guestNumber: guestNumber,
+              //     onGuestNumberChanged: (newCount) {
+              //       setState(() {
+              //         guestNumber = newCount;
+              //       });
+              //     }),
+              // divider,
               Tex(
                 locals.possibilities,
                 con: context,
@@ -227,7 +223,47 @@ class _FilterPageState extends State<FilterPage> {
                 size: 20,
               ).title,
               FeatureCheckbox(onFeaturesSelected: handleFeaturesSelected),
+              divider,
+
+              Pad(
+                v: AppSizes.pix10,
+                h: AppSizes.pix10,
+                child: Row(
+                  children: [
+                    Tex(locals.sort, con: context, padding: 0).title,
+                    const Spacer(),
+                    DropdownButton<String>(
+                      dropdownColor: Colors.white,
+                      underline: const SizedBox(),
+                      icon: const Icon(IconlyLight.arrow_down_circle),
+                      value: selectedSortingOption == 'saýlanmadyk  ' ? locals.notSelected : selectedSortingOption,
+                      focusColor: Colors.transparent,
+                      alignment: Alignment.centerRight,
+                      padding: EdgeInsets.zero,
+                      style: const TextStyle(color: Colors.black, fontFamily: robotoRegular),
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedSortingOption = newValue!;
+                        });
+                      },
+                      items: [
+                        locals.notSelected,
+                        locals.cheapToExp,
+                        locals.expToCheap,
+                      ].map((String value) {
+                        return DropdownMenuItem<String>(
+                          alignment: Alignment.centerLeft,
+                          value: value,
+                          child: Tex(value, con: context, padding: 0).title,
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              ),
+              divider,
               const SizedBox(height: AppSizes.pix16),
+
               // Tex(
               //   locals.whenTravel,
               //   con: context,
@@ -286,24 +322,18 @@ class _FilterPageState extends State<FilterPage> {
               //         );
               //       },
               //     )),
-              const SizedBox(
-                height: 70,
-              ),
-            ],
-          ),
-        ],
-      ),
-      floatingActionButton: SizedBox(
-        width: width(context) - 60,
-        height: 34,
-        child: FloatingActionButton(
-          shape: RoundedRectangleBorder(borderRadius: borderAll10),
-          backgroundColor: AppColors.buttons,
-          onPressed: _isClicked
-              ? null
-              : () async {
-                  setState(() => _isClicked = true);
-                  logger('''
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 10),
+                width: width(context),
+                height: 45,
+                child: FloatingActionButton(
+                  shape: RoundedRectangleBorder(borderRadius: borderAll),
+                  backgroundColor: AppColors.buttons,
+                  onPressed: _isClicked
+                      ? null
+                      : () async {
+                          setState(() => _isClicked = true);
+                          logger('''
                         minCtrl.text:  "${minCtrl.text}"
                         maxCtrl.text:  "${maxCtrl.text}"
                         selectedIds:  "$selectedIds"
@@ -314,34 +344,40 @@ class _FilterPageState extends State<FilterPage> {
                         date:  "${toSendDate(date)}"
                     ''');
 
-                  await context
-                      .read<HouseCubit>()
-                      .filterBy(
-                        minCtrl.text,
-                        maxCtrl.text,
-                        selectedIds,
-                        roomCounts,
-                        floorCounts,
-                        guestNumber == 1 ? null : guestNumber,
-                        selectedFeaturesIndices,
-                        date != null ? toSendDate(date) : null,
-                      )
-                      .then((value) async {
-                    await context.read<CategsCubit>().fetchCategsorites().then((value) => Navigator.pop(context, selectedSortingOption));
-                    setState(() => _isClicked = false);
-                  });
-                },
-          child: _isClicked
-              ? const CircularProgressIndicator(color: AppColors.white)
-              : Tex(
-                  locals.find,
-                  con: context,
-                  col: AppColors.background,
-                ).white,
-        ),
+                          await context
+                              .read<HouseCubit>()
+                              .filterBy(
+                                minCtrl.text,
+                                maxCtrl.text,
+                                selectedIds,
+                                roomCounts,
+                                floorCounts,
+                                guestNumber == 1 ? null : guestNumber,
+                                selectedFeaturesIndices,
+                                date != null ? toSendDate(date) : null,
+                              )
+                              .then((value) async {
+                            await context.read<CategsCubit>().fetchCategsorites().then((value) => Navigator.pop(context, selectedSortingOption));
+                            setState(() => _isClicked = false);
+                          });
+                        },
+                  child: _isClicked
+                      ? const CircularProgressIndicator(color: AppColors.white)
+                      : Tex(
+                          locals.find,
+                          con: context,
+                          col: AppColors.background,
+                        ).white,
+                ),
+              ),
+
+              const SizedBox(
+                height: 70,
+              ),
+            ],
+          ),
+        ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
-      resizeToAvoidBottomInset: false,
     );
   }
 }

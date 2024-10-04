@@ -22,7 +22,6 @@ import 'logic/cubits/lang/lang_cubit.dart';
 import 'logic/cubits/region/region_cubit.dart';
 import 'logic/cubits/theme/theme_cubit.dart';
 import 'ui/navigation/navigation.dart';
-import 'ui/style/colors.dart';
 import 'ui/widgets/widgets.dart';
 
 class MyHttpOverrides extends HttpOverrides {
@@ -86,24 +85,14 @@ class MyAppState extends State<MyApp> {
   }
 
   dynamic firebaseTask() async {
-    await FirebaseMessaging.instance.getToken().then(
-      (value) {
-        print(value);
-      },
-    );
-    // await FCMConfig().requestPermission();
+    await FirebaseMessaging.instance.getToken();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print(message);
-      print(message);
-      print(message.notification);
-      print(message.notification!.body);
       FCMConfig().sendNotification(body: message.notification!.body!, title: message.notification!.title!);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: AppColors.statusBar));
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => sl<NavCubit>()),
@@ -127,7 +116,7 @@ class MyAppState extends State<MyApp> {
               builder: ((context, child) => MediaQuery(data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)), child: child!)),
               scrollBehavior: CustomScrollBehavior(),
               navigatorKey: NavKey.mainKey,
-              title: 'Mekanly',
+              title: 'Mekanly.com',
               theme: theme.themeData,
               locale: locale,
               initialRoute: Routes.main,
@@ -144,6 +133,7 @@ class MyAppState extends State<MyApp> {
                 Locale('tk'),
                 Locale('ru'),
                 Locale('en'),
+                Locale('en', 'US'),
               ],
             );
           });

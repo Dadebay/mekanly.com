@@ -2,7 +2,6 @@
 
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:iconly/iconly.dart';
 import 'package:mekanly_com/localization/locals.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -47,12 +46,10 @@ class GoBack extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        
-      },
+      onTap: () {},
       child: IconButton(
-        icon: const Icon(IconlyLight.arrow_left_circle),
-        style: IconButton.styleFrom(backgroundColor: AppColors.white),
+        icon: const Icon(Icons.arrow_back),
+        style: IconButton.styleFrom(backgroundColor: color),
         color: AppColors.mainTextDark,
         onPressed: () => Navigator.of(context).pop(),
       ),

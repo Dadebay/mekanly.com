@@ -34,7 +34,15 @@ class HouseCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-          borderRadius: borderAll6,
+          borderRadius: borderAll8,
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.shade200,
+              blurRadius: 3,
+              spreadRadius: 3,
+            )
+          ],
           gradient: house.luxe
               ? const LinearGradient(
                   begin: Alignment.bottomLeft,
@@ -46,7 +54,7 @@ class HouseCard extends StatelessWidget {
                 )
               : null),
       child: InkWell(
-        borderRadius: borderAll15,
+        borderRadius: borderAll8,
         onTap: () {
           go(context, HouseDetailsPage(house: house));
         },
@@ -78,34 +86,22 @@ class HouseCard extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5),
                         child: Text(
-                          "${locals.place}: ${(house.location.parentName == house.location.name) ? house.location.parentName : "${house.location.parentName} - ${house.location.name}"}",
+                          " ${(house.location.parentName == house.location.name) ? house.location.parentName : "${house.location.parentName} - ${house.location.name}"}",
                           style: const TextStyle(
                             fontFamily: robotoRegular,
                             fontWeight: FontWeight.w400,
                             fontSize: AppSizes.pix12 + 3,
-                            color: AppColors.mainTextDark,
+                            color: Color(0xff717171),
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            "${locals.description}:",
-                            maxLines: 1,
-                            style: const TextStyle(fontSize: AppSizes.pix12 + 2, fontFamily: robotoRegular),
-                          ),
-                          Expanded(
-                            child: Text(
-                              ' ${house.description} ',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontSize: AppSizes.pix12 + 2, fontFamily: robotoRegular),
-                            ),
-                          ),
-                        ],
+                      Text(
+                        ' ${house.description} ',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: AppSizes.pix12 + 2, color: Color(0xff717171), fontFamily: robotoRegular),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5),
@@ -113,18 +109,9 @@ class HouseCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  "${locals.dailyPrice}:",
-                                  style: const TextStyle(fontSize: AppSizes.pix16, fontFamily: robotoRegular),
-                                ),
-                                Text(
-                                  ' ${house.price} TMT',
-                                  style: const TextStyle(fontSize: AppSizes.pix16 + 2, fontFamily: robotoBold),
-                                ),
-                              ],
+                            Text(
+                              ' ${house.price} TMT',
+                              style: const TextStyle(fontSize: AppSizes.pix16 + 2, fontFamily: robotoBold),
                             ),
                             const Spacer(flex: 1),
                             Flexible(
@@ -154,21 +141,18 @@ class HouseCard extends StatelessWidget {
             ),
             if (house.user.id != context.watch<AuthCubit>().repo.user.id)
               Positioned(
-                right: 5,
-                top: 5,
+                right: 15,
+                top: 15,
                 child: GestureDetector(
                   onTap: () async {
                     await favCubit.toggleFavorite(house, locals, context);
                   },
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(color: Colors.white, borderRadius: borderAll15),
-                    child: Icon(
-                      favCubit.isItemFavorited(house.id) ? IconlyBold.heart : IconlyLight.heart,
-                      size: 24,
-                      color: favCubit.isItemFavorited(house.id) ? AppColors.red : Colors.grey,
-                    ),
-                  ),
+                  child: SvgAsset('heart', favCubit.isItemFavorited(house.id) ? AppColors.red : null, size: 30),
+                  // Icon(
+                  //   favCubit.isItemFavorited(house.id) ? IconlyBold.heart : IconlyLight.heart,
+                  //   size: 24,
+                  //   color: favCubit.isItemFavorited(house.id) ? AppColors.red : Colors.white,
+                  // ),
                 ),
               ),
             if (house.luxe)
@@ -197,6 +181,214 @@ class HouseCardImage extends StatefulWidget {
 }
 
 class _HouseCardImageState extends State<HouseCardImage> {
+  int _imageIndex = 0;
+  final CarouselController _carouselController = CarouselController();
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: borderAll10,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          CarouselSlider(
+            carouselController: _carouselController,
+            items: widget.house.images.map((imagePath) {
+              var img = imagePath.url;
+              return Builder(
+                builder: (BuildContext context) {
+                  return Container(
+                    color: AppColors.secondaryText.withOpacity(.4),
+                    height: width(context) - 55,
+                    width: MediaQuery.of(context).size.width,
+                    child: CachedNetImage(img: img),
+                  );
+                },
+              );
+            }).toList(),
+            options: CarouselOptions(
+              onPageChanged: (index, reason) {
+                setState(() {
+                  _imageIndex = index;
+                });
+              },
+              autoPlayCurve: Curves.fastOutSlowIn,
+              enableInfiniteScroll: true,
+              autoPlayAnimationDuration: const Duration(milliseconds: 500),
+              viewportFraction: 1,
+              height: width(context) - 55,
+            ),
+          ),
+          widget.house.luxe == true
+              ? const SizedBox.shrink()
+              : Positioned(
+                  top: 10,
+                  left: 10,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(color: const Color(0xff00BEA7).withOpacity(0.4), borderRadius: borderAll6),
+                    child: Text(
+                      widget.house.categoryName,
+                      style: const TextStyle(color: Colors.white, fontFamily: robotoSemiBold),
+                    ),
+                  ),
+                ),
+          Positioned(
+            bottom: AppSizes.pix6,
+            child: Row(
+              children: [...indicators(widget.house.images.length, _imageIndex, context)],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class HouseCardEDIT extends StatelessWidget {
+  const HouseCardEDIT({
+    super.key,
+    required this.house,
+    this.status,
+    this.bronStatus,
+    required this.leaveTime,
+  });
+
+  final House house;
+  final DateTime leaveTime;
+  final double total = 0;
+  final String? status;
+  final String? bronStatus;
+
+  @override
+  Widget build(BuildContext context) {
+    final favCubit = context.read<FavCubit>();
+
+    var locals = Locals.of(context);
+    double ratio = MediaQuery.of(context).size.width / 360;
+
+    return Container(
+      height: 150,
+      decoration: BoxDecoration(
+          borderRadius: borderAll8,
+          color: Colors.grey.shade200,
+          gradient: house.luxe
+              ? const LinearGradient(
+                  begin: Alignment.bottomLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xffF4E49c),
+                    Color(0xffFefdf7),
+                  ],
+                )
+              : null),
+      child: Stack(
+        children: [
+          Row(
+            children: [
+              Expanded(child: HouseCardImageEDIT(house: house)),
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 5, left: 8),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        house.name.characters.take(30).toString(),
+                        style: TextStyle(
+                          fontFamily: robotoBold,
+                          fontSize: ((Responsive.isTablet(context) ? AppSizes.pix12 : AppSizes.pix16) * ratio),
+                          color: AppColors.mainTextDark,
+                          textBaseline: TextBaseline.alphabetic,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        (house.location.parentName == house.location.name) ? house.location.parentName : "${house.location.parentName} - ${house.location.name}",
+                        style: const TextStyle(
+                          fontFamily: robotoRegular,
+                          fontWeight: FontWeight.w400,
+                          fontSize: AppSizes.pix12 + 3,
+                          color: Color(0xff717171),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        ' ${house.description} ',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: AppSizes.pix12 + 2, color: Color(0xff717171), fontFamily: robotoRegular),
+                      ),
+                      Text(
+                        ' ${house.price} TMT',
+                        style: const TextStyle(fontSize: AppSizes.pix16 + 2, fontFamily: robotoBold),
+                      ),
+                      if (leaveTime.isBefore(DateTime.now()))
+                        Tex(
+                          locals.expired,
+                          con: context,
+                          col: AppColors.red,
+                        ).subtitle
+                      else
+                        Tex(status ?? '',
+                                overflow: TextOverflow.ellipsis,
+                                con: context,
+                                col: house.status == 'pending'
+                                    ? AppColors.buttons
+                                    : house.status == 'non-active'
+                                        ? Colors.red
+                                        : AppColors.green)
+                            .subtitle,
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          if (house.user.id != context.watch<AuthCubit>().repo.user.id)
+            Positioned(
+              right: 15,
+              top: 15,
+              child: GestureDetector(
+                onTap: () async {
+                  await favCubit.toggleFavorite(house, locals, context);
+                },
+                child: Icon(
+                  favCubit.isItemFavorited(house.id) ? IconlyBold.heart : IconlyLight.heart,
+                  size: 24,
+                  color: favCubit.isItemFavorited(house.id) ? AppColors.red : Colors.white,
+                ),
+              ),
+            ),
+          if (house.luxe)
+            const Positioned(
+              left: AppSizes.pix10,
+              top: AppSizes.pix10,
+              child: SvgAsset('luxe', null, size: 30),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class HouseCardImageEDIT extends StatefulWidget {
+  const HouseCardImageEDIT({
+    super.key,
+    required this.house,
+  });
+
+  final House house;
+
+  @override
+  State<HouseCardImageEDIT> createState() => _HouseCardImageEDITState();
+}
+
+class _HouseCardImageEDITState extends State<HouseCardImageEDIT> {
   int _imageIndex = 0;
   final CarouselController _carouselController = CarouselController();
 

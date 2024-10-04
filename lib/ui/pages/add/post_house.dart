@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
@@ -31,50 +33,52 @@ import 'regions_page.dart';
 
 class PostHousePage extends StatefulWidget {
   const PostHousePage({super.key, required this.category, required this.categoryID});
+
   final String category;
   final int categoryID;
+
   @override
   PostHousePageState createState() => PostHousePageState();
 }
 
 class PostHousePageState extends State<PostHousePage> {
-  final _formKey = GlobalKey<FormState>();
-
+  int? chosenCityId;
+  String chosenRegion = '';
+  List<File?> compressedImages = [];
+  TextEditingController descriptionCtrl = TextEditingController();
+  TimeOfDay enterTime = const TimeOfDay(hour: 6, minute: 0);
+  int floorCount = 0;
+  int guestNumber = 0;
+  List<File> houseImages = [];
+  bool ignEnterTime = false;
+  bool ignLeaveTime = false;
+  List<File> imageFiles = [];
+  bool isClicked = false;
+  TimeOfDay leaveTime = const TimeOfDay(hour: 23, minute: 0);
+  TextEditingController name = TextEditingController();
+  TextEditingController phoneCtrl = TextEditingController();
+  TextEditingController priceCtrl = TextEditingController();
+  int roomCount = 0;
+  List<int> selectedFeaturesIndices = [];
   // String selectedCategory = '';
 
   String selectedLocation = '';
-  int? chosenCityId;
-
-  String chosenRegion = '';
-
-  int roomCount = 0;
-  int floorCount = 0;
-  int guestNumber = 0;
-
-  List<int> selectedFeaturesIndices = [];
-
-  TimeOfDay enterTime = const TimeOfDay(hour: 6, minute: 0);
-  TimeOfDay leaveTime = const TimeOfDay(hour: 23, minute: 0);
-
-  bool ignEnterTime = false;
-  bool ignLeaveTime = false;
-
-  DateTime? _rangeStart;
-  DateTime? _rangeEnd;
-
-  DateTime _focusedDay = DateTime.now();
-  DateTime? _selectedDay;
-
-  List<File> houseImages = [];
-  List<File?> compressedImages = [];
-  TextEditingController descriptionCtrl = TextEditingController();
-  TextEditingController priceCtrl = TextEditingController();
-  TextEditingController phoneCtrl = TextEditingController();
-  TextEditingController name = TextEditingController();
 
   bool _acceptTerms = false;
+  DateTime _focusedDay = DateTime.now();
+  final _formKey = GlobalKey<FormState>();
   List<double> _progressList = [];
-  List<File> imageFiles = [];
+  DateTime? _rangeEnd;
+  DateTime? _rangeStart;
+  DateTime? _selectedDay;
+  final bool _value = true;
+
+  @override
+  void initState() {
+    _selectedDay = _focusedDay;
+
+    super.initState();
+  }
 
   Future<void> pickImages() async {
     var limitReached = Locals.of(context).limitImages;
@@ -226,13 +230,6 @@ class PostHousePageState extends State<PostHousePage> {
     }
   }
 
-  @override
-  void initState() {
-    _selectedDay = _focusedDay;
-
-    super.initState();
-  }
-
   void handleFeaturesSelected(List<int> indices) {
     setState(() {
       selectedFeaturesIndices = indices;
@@ -341,16 +338,47 @@ class PostHousePageState extends State<PostHousePage> {
         // chosenCategId != 0 ||
         chosenCityId != null ||
         roomCount != 0 ||
-        guestNumber != 0 ||
+        // guestNumber != 0 ||
         _rangeEnd != null ||
         _rangeStart != null ||
         houseImages.isNotEmpty ||
-        priceCtrl.text.isNotEmpty ||
+        // priceCtrl.text.isNotEmpty ||
         _acceptTerms == true;
   }
 
-  bool isClicked = false;
-  final bool _value = true;
+  Row pickTime(BuildContext context, TimeOfDay time, bool preventPicking, VoidCallback onTap) {
+    var locals = Locals.of(context);
+    return Row(
+      children: [
+        TextButton(
+          onPressed: preventPicking ? null : onTap,
+          child: Tex(preventPicking ? " ___ : ___ " : '   ${time.format(context)}   ', con: context, size: AppSizes.pix16).title,
+        ),
+        InkWell(
+          onTap: () {
+            setState(() {
+              if (time == enterTime) {
+                ignEnterTime = !ignEnterTime;
+              } else if (time == leaveTime) {
+                ignLeaveTime = !ignLeaveTime;
+              }
+              time = TimeOfDay.now();
+            });
+          },
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(AppSizes.pix4),
+                child: Icon(preventPicking ? Icons.check_box_outlined : Icons.check_box_outline_blank_outlined),
+              ),
+              Tex(locals.any, con: context, size: AppSizes.pix16).title,
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var divider = Padding(
@@ -370,7 +398,7 @@ class PostHousePageState extends State<PostHousePage> {
         backgroundColor: AppColors.background,
         appBar: TopBar(
           title: locals.addingHouse,
-          color: Colors.transparent,
+          color: Colors.white,
         ),
         body: context.watch<AuthCubit>().state is! AuthSuccess
             ? Column(
@@ -387,10 +415,10 @@ class PostHousePageState extends State<PostHousePage> {
                     Sli(children: [
                       Padding(
                         padding: const EdgeInsets.only(top: AppSizes.pix10, left: AppSizes.pix12),
-                        child: Tex(
+                        child: Text(
                           locals.houseName,
-                          con: context,
-                        ).title2,
+                          style: const TextStyle(color: Colors.black, fontFamily: robotoRegular, fontSize: AppSizes.pix20),
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: AppSizes.pix16),
@@ -431,11 +459,10 @@ class PostHousePageState extends State<PostHousePage> {
                         minVerticalPadding: 0,
                         visualDensity: VisualDensity.compact,
                         dense: true,
-                        title: Tex(
+                        title: Text(
                           locals.location,
-                          padding: 0,
-                          con: context,
-                        ).title2,
+                          style: const TextStyle(color: Colors.black, fontFamily: robotoRegular, fontSize: AppSizes.pix20),
+                        ),
                         subtitle: Tex(
                           selectedLocation.isNotEmpty
                               ? (chosenRegion == selectedLocation)
@@ -448,52 +475,71 @@ class PostHousePageState extends State<PostHousePage> {
                       ),
                       divider,
                     ]),
-                    Sli(children: [
-                      SizedBox(height: isTablet(context) ? AppSizes.pix32 : AppSizes.pix10),
-                      RoomCountAddHouse(
-                          isAdding: true,
-                          roomCount: roomCount,
-                          onRoomCountChanged: (newCount) {
-                            setState(() {
-                              if (roomCount == newCount) {
-                                roomCount = 0;
-                              } else {
-                                roomCount = newCount;
-                              }
-                            });
-                          }),
-                      const SizedBox(height: AppSizes.pix16),
-                      FloorCountWidget(
-                          isAdding: true,
-                          floorCount: floorCount,
-                          onFloorCountChanged: (newCount) {
-                            setState(() {
-                              if (floorCount == newCount) {
-                                floorCount = 0;
-                              } else {
-                                floorCount = newCount;
-                              }
-                            });
-                          }),
-                      const SizedBox(
-                        height: AppSizes.pix20,
+                    Theme(
+                      data: ThemeData(
+                        dividerColor: Colors.white, // Set your desired color here
                       ),
-                      divider,
-                      GuestCountWidget(
-                          guestNumber: guestNumber,
-                          onGuestNumberChanged: (newCount) {
-                            setState(() {
-                              guestNumber = newCount;
-                            });
-                          }),
-                      divider,
-                      Tex(
-                        locals.possibilities,
-                        con: context,
-                        padding: AppSizes.pix16,
-                      ).title,
-                      FeatureCheckbox(onFeaturesSelected: handleFeaturesSelected),
-                    ]),
+                      child: Sli(children: [
+                        SizedBox(height: isTablet(context) ? AppSizes.pix32 : AppSizes.pix10),
+                        ExpansionTile(
+                          initiallyExpanded: true,
+                          title: Tex(
+                            locals.roomCount,
+                            con: context,
+                            padding: 0,
+                          ).title,
+                          children: [
+                            RoomCountAddHouse(
+                                isAdding: true,
+                                roomCount: roomCount,
+                                onRoomCountChanged: (newCount) {
+                                  setState(() {
+                                    if (roomCount == newCount) {
+                                      roomCount = 0;
+                                    } else {
+                                      roomCount = newCount;
+                                    }
+                                  });
+                                }),
+                          ],
+                        ),
+                        const SizedBox(height: AppSizes.pix16),
+                        ExpansionTile(
+                          initiallyExpanded: true,
+                          title: Tex(
+                            locals.floorCount,
+                            con: context,
+                            padding: 0,
+                          ).title,
+                          children: [
+                            FloorCountWidget(
+                                isAdding: true,
+                                floorCount: floorCount,
+                                onFloorCountChanged: (newCount) {
+                                  setState(() {
+                                    if (floorCount == newCount) {
+                                      floorCount = 0;
+                                    } else {
+                                      floorCount = newCount;
+                                    }
+                                  });
+                                }),
+                          ],
+                        ),
+
+                        const SizedBox(
+                          height: AppSizes.pix20,
+                        ),
+                        divider,
+                        // Gues er,
+                        Tex(
+                          locals.possibilities,
+                          con: context,
+                          padding: AppSizes.pix16,
+                        ).title,
+                        FeatureCheckbox(onFeaturesSelected: handleFeaturesSelected),
+                      ]),
+                    ),
                     Sli(
                       children: [
                         // Padding(
@@ -628,36 +674,34 @@ class PostHousePageState extends State<PostHousePage> {
                         ),
                         const SizedBox(height: AppSizes.pix10),
                         houseImages.isNotEmpty
-                            ? Column(
-                                children: [
-                                  GridView.builder(
-                                    shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      mainAxisSpacing: AppSizes.pix16,
-                                      crossAxisSpacing: AppSizes.pix16,
-                                    ),
-                                    padding: const EdgeInsets.all(AppSizes.pix20),
-                                    itemCount: imageFiles.length,
-                                    itemBuilder: (context, index) {
-                                      return ClipRRect(
+                            ? SizedBox(
+                                height: 170,
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemExtent: 170,
+                                  physics: const BouncingScrollPhysics(),
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: imageFiles.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(left: 15, top: 10),
+                                      child: ClipRRect(
                                         borderRadius: borderAll10,
                                         clipBehavior: Clip.hardEdge,
-                                        child: GridTile(
-                                          child: Stack(
-                                            alignment: Alignment.center,
-                                            fit: StackFit.expand,
-                                            children: [
-                                              Image.file(
+                                        child: Stack(
+                                          children: [
+                                            Positioned.fill(
+                                              child: Image.file(
                                                 imageFiles[index],
                                                 fit: BoxFit.cover,
                                               ),
-                                              Container(
-                                                decoration: BoxDecoration(color: AppColors.black.withOpacity(.4), borderRadius: borderAll10),
-                                                padding: const EdgeInsets.all(AppSizes.pix70),
-                                                height: AppSizes.pix32,
-                                                width: AppSizes.pix32,
+                                            ),
+                                            Center(
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    // color: AppColors.black.withOpacity(.4),
+                                                    // color: AppColors.secondary.withOpacity(0.8),
+                                                    borderRadius: borderAll),
                                                 child: _progressList[index] == 1
                                                     ? const Icon(
                                                         Icons.check_circle_outline_rounded,
@@ -669,55 +713,57 @@ class PostHousePageState extends State<PostHousePage> {
                                                         color: AppColors.white,
                                                       ),
                                               ),
-                                              if (_progressList[index] < 1)
-                                                Center(
-                                                    child: Tex(
-                                                  '${(_progressList[index] * 100).toStringAsFixed(0)}%',
-                                                  con: context,
-                                                  col: AppColors.white,
-                                                )),
-                                              Positioned(
-                                                top: -AppSizes.pix2,
-                                                right: -AppSizes.pix2,
-                                                child: IconButton(
+                                            ),
+                                            if (_progressList[index] < 1)
+                                              Center(
+                                                  child: Tex(
+                                                '${(_progressList[index] * 100).toStringAsFixed(0)}%',
+                                                con: context,
+                                                col: AppColors.white,
+                                              )),
+                                            Positioned(
+                                              top: -AppSizes.pix2,
+                                              right: -AppSizes.pix2,
+                                              child: IconButton(
+                                                padding: const EdgeInsets.all(1),
+                                                constraints: const BoxConstraints(),
+                                                style: IconButton.styleFrom(
+                                                  backgroundColor: AppColors.black.withOpacity(.8),
                                                   padding: const EdgeInsets.all(1),
-                                                  constraints: const BoxConstraints(),
-                                                  style: IconButton.styleFrom(
-                                                    backgroundColor: AppColors.black.withOpacity(.8),
-                                                    padding: const EdgeInsets.all(1),
-                                                  ),
-                                                  color: AppColors.mainText,
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      final originalFileName = path.basenameWithoutExtension(imageFiles[index].path);
-                                                      final compressedFileName = '${originalFileName}_out';
-                                                      compressedImages.removeWhere((element) {
-                                                        final elementFileName = path.basenameWithoutExtension(element!.path);
-                                                        logger("CONTAINS: ${elementFileName == compressedFileName}");
-                                                        return elementFileName == compressedFileName;
-                                                      });
-                                                      imageFiles.removeAt(index);
+                                                ),
+                                                color: AppColors.mainText,
+                                                onPressed: () {
+                                                  setState(() {
+                                                    final originalFileName = path.basenameWithoutExtension(imageFiles[index].path);
+                                                    final compressedFileName = '${originalFileName}_out';
+                                                    compressedImages.removeWhere((element) {
+                                                      final elementFileName = path.basenameWithoutExtension(element!.path);
+                                                      logger("CONTAINS: ${elementFileName == compressedFileName}");
+                                                      return elementFileName == compressedFileName;
                                                     });
-                                                    logger("COMPRESSED: ${compressedImages.length}");
-                                                  },
-                                                  icon: const Icon(
-                                                    Icons.close,
-                                                    weight: 10,
-                                                    size: AppSizes.pix28,
-                                                  ),
+                                                    imageFiles.removeAt(index);
+                                                  });
+                                                  logger("COMPRESSED: ${compressedImages.length}");
+                                                },
+                                                icon: const Icon(
+                                                  Icons.close,
+                                                  weight: 10,
+                                                  size: AppSizes.pix28,
                                                 ),
                                               ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
-                                      );
-                                    },
-                                  ),
-                                ],
+                                      ),
+                                    );
+                                  },
+                                ),
                               )
                             : const SizedBox.shrink(),
                         Container(
-                          decoration: BoxDecoration(borderRadius: borderAll, border: Border.all(color: Colors.black)),
+                          decoration: BoxDecoration(
+                            borderRadius: borderAll10,
+                          ),
                           margin: const EdgeInsets.fromLTRB(AppSizes.pix16, AppSizes.pix10, AppSizes.pix16, AppSizes.pix8),
                           child: TextField(
                             onTapOutside: (event) {
@@ -731,29 +777,29 @@ class PostHousePageState extends State<PostHousePage> {
                               filled: true,
                               fillColor: AppColors.secondaryText.withOpacity(.3),
                               border: OutlineInputBorder(
-                                borderRadius: borderAll,
+                                borderRadius: borderAll10,
                                 borderSide: const BorderSide(color: Colors.grey, width: 2),
                               ),
                               enabledBorder: OutlineInputBorder(
-                                borderRadius: borderAll,
-                                borderSide: BorderSide(color: Colors.grey.shade200, width: 2),
+                                borderRadius: borderAll10,
+                                borderSide: const BorderSide(color: Colors.black, width: 1),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius: borderAll,
+                                borderRadius: borderAll10,
                                 borderSide: const BorderSide(
                                   color: AppColors.primary,
                                   width: 2,
                                 ),
                               ),
                               focusedErrorBorder: OutlineInputBorder(
-                                borderRadius: borderAll,
+                                borderRadius: borderAll10,
                                 borderSide: const BorderSide(
                                   color: Colors.red,
                                   width: 2,
                                 ),
                               ),
                               errorBorder: OutlineInputBorder(
-                                borderRadius: borderAll,
+                                borderRadius: borderAll10,
                                 borderSide: const BorderSide(color: Colors.red, width: 2),
                               ),
                             ),
@@ -900,11 +946,11 @@ class PostHousePageState extends State<PostHousePage> {
         floatingActionButton: Visibility(
           visible: MediaQuery.of(context).viewInsets.bottom == 0.0,
           child: SizedBox(
-            width: width(context) - 60,
-            // height: AppSizes.pix32,
+            width: width(context) - 40,
             child: FloatingActionButton(
+              mini: true,
               shape: RoundedRectangleBorder(borderRadius: borderAll10),
-              backgroundColor: AppColors.buttons,
+              backgroundColor: AppColors.black,
               onPressed: () {
                 if (_formKey.currentState != null && validateAndSaveForm()) {
                   showDialog(
@@ -966,12 +1012,12 @@ class PostHousePageState extends State<PostHousePage> {
                                               // "enter_time": toSendDate(_rangeStart),
                                               "enter_time": toSendDate(DateTime.now()),
                                               // "leave_time": toSendDate(_rangeEnd),
-                                              "leave_time": toSendDate(DateTime.now()),
+                                              //add one year leave_Time
+                                              "leave_time": toSendDate(DateTime.now().add(const Duration(days: 365))),
                                               "description": descriptionCtrl.text,
                                               "price": priceCtrl.text,
                                               "bron_number": "+993${phoneCtrl.text}",
                                             };
-
                                             if (dayEnterTime != null) {
                                               data["day_enter_time"] = dayEnterTime;
                                             }
@@ -1072,7 +1118,7 @@ class PostHousePageState extends State<PostHousePage> {
                 }
               },
               child: Text(
-                locals.addTheHouse,
+                locals.confirm,
                 style: const TextStyle(color: Colors.white, fontFamily: robotoBold, fontSize: 24),
               ),
             ),
@@ -1080,39 +1126,6 @@ class PostHousePageState extends State<PostHousePage> {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
       ),
-    );
-  }
-
-  Row pickTime(BuildContext context, TimeOfDay time, bool preventPicking, VoidCallback onTap) {
-    var locals = Locals.of(context);
-    return Row(
-      children: [
-        TextButton(
-          onPressed: preventPicking ? null : onTap,
-          child: Tex(preventPicking ? " ___ : ___ " : '   ${time.format(context)}   ', con: context, size: AppSizes.pix16).title,
-        ),
-        InkWell(
-          onTap: () {
-            setState(() {
-              if (time == enterTime) {
-                ignEnterTime = !ignEnterTime;
-              } else if (time == leaveTime) {
-                ignLeaveTime = !ignLeaveTime;
-              }
-              time = TimeOfDay.now();
-            });
-          },
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(AppSizes.pix4),
-                child: Icon(preventPicking ? Icons.check_box_outlined : Icons.check_box_outline_blank_outlined),
-              ),
-              Tex(locals.any, con: context, size: AppSizes.pix16).title,
-            ],
-          ),
-        )
-      ],
     );
   }
 }

@@ -18,23 +18,38 @@ class BottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<NavCubit, NavState>(
       builder: (context, state) {
+        print(controller.page);
         var bloc = context.watch<NavCubit>();
-        return BottomNavigationBar(
-          backgroundColor: AppColors.secondary,
-          iconSize: 20,
-          currentIndex: state.i,
-          items: List.generate(
-            3,
-            (i) => builBottomNavBar(i, context, state.i, controller),
+        return Container(
+          decoration: BoxDecoration(
+            // color: Colors.white : Colors.red,
+            gradient: LinearGradient(
+              colors: controller.page == 2.0 ? [Colors.white, Colors.white] : [AppColors.primary, AppColors.secondary],
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+            ),
           ),
-          unselectedItemColor: AppColors.white.withOpacity(.7),
-          fixedColor: AppColors.white,
-          selectedLabelStyle: const TextStyle(fontSize: AppSizes.pix12 + 1, fontFamily: robotoBold, color: AppColors.white),
-          unselectedLabelStyle: TextStyle(
-            fontSize: AppSizes.pix12,
-            color: AppColors.white.withOpacity(.7),
+          child: BottomNavigationBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0.0,
+            iconSize: 20,
+            currentIndex: state.i,
+            items: List.generate(
+              3,
+              (i) => builBottomNavBar(i, context, state.i, controller),
+            ),
+            unselectedItemColor: AppColors.white.withOpacity(.7),
+            fixedColor: controller.page == 2.0 ? Colors.black : AppColors.white,
+            type: BottomNavigationBarType.fixed,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            selectedLabelStyle: TextStyle(fontSize: AppSizes.pix12 + 1, fontFamily: robotoBold, color: controller.page == 2.0 ? Colors.black : AppColors.white),
+            unselectedLabelStyle: TextStyle(
+              fontSize: AppSizes.pix12,
+              color: controller.page == 2.0 ? Colors.black : AppColors.white.withOpacity(.7),
+            ),
+            onTap: (u) => changeNav(u, bloc, context),
           ),
-          onTap: (u) => changeNav(u, bloc, context),
         );
       },
     );
@@ -56,7 +71,13 @@ class BottomNavBar extends StatelessWidget {
         child: getIcons(
           i,
           blocIndex,
-          blocIndex == i ? AppColors.white : AppColors.white.withOpacity(.7),
+          blocIndex == i
+              ? controller.page == 2.0
+                  ? Colors.black
+                  : AppColors.white
+              : controller.page == 2.0
+                  ? Colors.black
+                  : AppColors.white.withOpacity(.7),
         ),
       ),
       label: getLabels(i, context),

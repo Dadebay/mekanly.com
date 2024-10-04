@@ -50,7 +50,6 @@ class CategoryViewPage extends StatelessWidget {
                 houses.sort(
                   (a, b) => b.createdAt.compareTo(a.createdAt),
                 );
-                print(houses.length);
                 if (houses.isEmpty) {
                   return InkWell(
                     onTap: () {},

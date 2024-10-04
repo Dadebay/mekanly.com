@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iconly/iconly.dart';
 import 'package:mekanly_com/config/config.dart';
 import 'package:mekanly_com/ui/style/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,7 +44,7 @@ class ThemeCubit extends Cubit<AppThemeState> {
     ),
     appBarTheme: const AppBarTheme(
       systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarColor: AppColors.secondary,
+        statusBarColor: Colors.transparent,
         statusBarBrightness: Brightness.light,
       ),
       elevation: 0,
@@ -56,7 +55,7 @@ class ThemeCubit extends Cubit<AppThemeState> {
     ),
     actionIconTheme: ActionIconThemeData(
       backButtonIconBuilder: (BuildContext context) => const Icon(
-        IconlyLight.arrow_left_circle,
+        Icons.arrow_back,
         color: Colors.black,
       ),
     ),

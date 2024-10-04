@@ -4,12 +4,12 @@ import 'package:mekanly_com/logic/cubits/comments/comments_cubit.dart';
 import 'package:mekanly_com/ui/pages/comment_terms_page.dart';
 import 'package:mekanly_com/ui/pages/profile/auth/login_page.dart';
 
-import '../../../../logic/cubits/auth/auth_cubit.dart';
-import '../../../style/style.dart';
-import '../../profile/auth/logout_dialog.dart';
 import '/config/config.dart';
 import '/localization/locals.dart';
 import '/ui/style/app_sizes.dart';
+import '../../../../logic/cubits/auth/auth_cubit.dart';
+import '../../../style/style.dart';
+import '../../profile/auth/logout_dialog.dart';
 
 class RateWidget extends StatefulWidget {
   const RateWidget({
@@ -34,28 +34,35 @@ class RateWidgetState extends State<RateWidget> {
   @override
   Widget build(BuildContext context) {
     var locals = Locals.of(context);
-    var cmCubit = context.read<CommentsCubit>();
     var isLogedin = context.read<AuthCubit>().state is AuthSuccess;
-
+    var cmCubit = context.read<CommentsCubit>();
     return Container(
-      color: AppColors.primary,
+      margin: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        borderRadius: borderAll10,
+        color: const Color(0xff7E8C90).withOpacity(.2),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
+              const Padding(
+                padding: EdgeInsets.only(left: 8),
+                child: SvgAsset('messageMinus', AppColors.black),
+              ),
               Expanded(
                 child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: AppSizes.pix12),
                     child: Tex(
-                      '${locals.comments} (${widget.rateCount})',
+                      '${locals.myComments} (${widget.rateCount})',
                       con: context,
-                      col: AppColors.mainText,
+                      col: AppColors.black,
                       size: AppSizes.pix16,
                     ).title),
               ),
               IconButton(
-                icon: const SvgAsset('comment', AppColors.mainText),
+                icon: const SvgAsset('messagePlus', AppColors.black),
                 onPressed: () {
                   showDialog(
                     context: context,
@@ -114,7 +121,7 @@ class RateWidgetState extends State<RateWidget> {
                                         ).white,
                                         RatingBar.builder(
                                           initialRating: rating,
-                                          unratedColor: AppColors.mainText,
+                                          unratedColor: AppColors.black,
                                           minRating: 1,
                                           direction: Axis.horizontal,
                                           allowHalfRating: true,
@@ -225,7 +232,7 @@ class RateWidgetState extends State<RateWidget> {
                                       child: Tex(
                                         locals.accept.toUpperCase(),
                                         con: context,
-                                        col: AppColors.mainText,
+                                        col: AppColors.black,
                                       ),
                                     ),
                                     const SizedBox(width: 13)

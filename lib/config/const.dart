@@ -32,7 +32,7 @@ const divider = Padding(
 focusedBorder({BorderRadius? rad}) => OutlineInputBorder(
       borderRadius: rad ?? borderAll6,
       borderSide: const BorderSide(
-        color: AppColors.buttons,
+        color: AppColors.black,
       ),
     );
 border({BorderRadius? rad}) => OutlineInputBorder(
@@ -56,8 +56,8 @@ List<String> categNames(BuildContext context) {
 
   return [
     local.kat1,
-    local.kat3,
     local.kat2,
+    local.kat3,
     local.kat4,
     local.kat5,
     local.kat6,

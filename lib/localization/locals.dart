@@ -24,8 +24,20 @@ class Locals {
       'kat6': 'Satlyk söwda emläkleri',
       'kat7': 'Beýleki emläkler',
       'kat8': 'Goýlan senesi',
-      'kat9': 'Goşan emläkleriňizi bu ýerden görüň !',
-      'kat10': 'Emlägiňizi mekanly.com bilen mahabatlandyryň we girdeji gazanyň.\nBu Aňsat',
+      'kat9': 'Goşan emläkleriňizi bu ýerden görüň!',
+      'kat10': 'Emlägiňizi mekanly.com bilen mahabatlandyryň we girdeji gazanyň. Bu aňsat',
+      'kat11': 'Gözleg',
+      'kat12': 'EMLÄKLER',
+      'kat13': 'KATEGORIÝA',
+      'kat14': 'Bölümi',
+      'kat15': 'Esasy maglumatlar',
+      'kat16': 'Emläklerim',
+      'kat17': 'MUGT',
+      'kat18': 'Mugt we tölegli hyzmatlar',
+      'kat19': 'Bildirişi LUXE etmek',
+      'kat20': 'LUXE etmek',
+      'kat22': 'saýlanmadyk',
+      'kat21': 'LUXE derejeli jaylar tiz satylmak mümkinçiligi yokarydyr. LUXE derejelil jaýlar 3 günün dowamynda yerini üýtgedip duryar hem-de reñki we görnüsi boyunça tapawutlanýar.',
       'all': 'Ählisi',
       'phoneNumber': 'Nomeri',
       'city': 'Şäher içi',
@@ -184,7 +196,7 @@ class Locals {
       'yes': 'Hawa',
       'houseMovedForward': 'Jaý öňe süýşürildi',
       'dontPayForward': 'Jaýy kireýne alanyňyzda, görmän hiç kime öňünden bölek ýa-da doly töleg (telefon arkaly we ş.m) geçiriji bolmaň. Diňe öý eýesini özüňiz görüp hakykylyga göz ýetirip ediň',
-      'confirm': 'Tassyklama',
+      'confirm': 'Tassyklamak',
       'yourHousewillbeInvisible': 'Eger jaýyňyz bron edilen bolsa, baş sahypadan aýrylar',
       'yourHousewillbeVisible': 'Siziň jaýyňyz baş sahypada bron etmek üçin açyk bolar',
       'isYourHBronned': 'Siziň jaýyňyz bron edildimi?',
@@ -209,8 +221,20 @@ class Locals {
       'choose': 'Saýla',
     },
     'en': {
-      'kat9': 'Просмотрите добавленные вами свойства здесь!',
-      'kat10': 'Рекламируйте свою недвижимость на mecanly.com и зарабатывайте.\nЭто легко',
+      'kat22': 'not selected',
+      'kat21': 'LUXE apartments have a high chance of being sold quickly. LUXE-class houses will change their location during 3 days and differ in color and appearance.',
+      'kat17': 'FREE',
+      'kat18': 'Free and paid services',
+      'kat19': 'Make your home LUX',
+      'kat20': 'Make it LUX',
+      'kat16': 'My Properties',
+      'kat14': 'Department',
+      'kat15': 'Basic information',
+      'kat13': 'CATEGORIES',
+      'kat12': 'REAL ESTATES',
+      'kat11': 'Search',
+      'kat9': 'View your added properties here!',
+      'kat10': 'Advertise your property on mecanly.com and earn money. It is easy',
       'kat8': 'Date posted',
       'kat1': 'Houses for sale',
       'kat2': 'Houses for rent',
@@ -402,8 +426,20 @@ class Locals {
       'choose': 'Choose',
     },
     'ru': {
-      'kat9': 'View your added properties here!',
-      'kat10': 'Advertise your property with mecanly.com and earn.\nIt is Easy',
+      'kat22': 'не выбрано',
+      'kat21': 'LUXE apartments have a high chance of being sold quickly. LUXE-class houses will change their location during 3 days and differ in color and appearance.',
+      'kat17': 'БЕСПЛАТНО',
+      'kat18': 'Бесплатные и платные услуги',
+      'kat19': 'Сделать дом ЛЮКСОМ',
+      'kat20': 'Сделай это ЛЮКСОМ',
+      'kat16': 'Мои объекты',
+      'kat14': 'Отделение',
+      'kat15': 'Основная информация',
+      'kat13': 'КАТЕГОРИИ',
+      'kat12': 'НЕДВИЖИМОСТЬ',
+      'kat11': 'Поиск',
+      'kat9': 'Посмотрите добавленные вами объекты недвижимости здесь!',
+      'kat10': 'Рекламируйте свою недвижимость с помощью mekanly.com и зарабатывайте. Это просто',
       'kat8': 'Дата публикации',
       'kat1': 'Дома на продажу',
       'kat2': 'Дома в аренду',
@@ -607,6 +643,19 @@ class Locals {
   String get kat8 => _localizedValues[locale.languageCode]!['kat8']!;
   String get kat9 => _localizedValues[locale.languageCode]!['kat9']!;
   String get kat10 => _localizedValues[locale.languageCode]!['kat10']!;
+  String get kat11 => _localizedValues[locale.languageCode]!['kat11']!;
+  String get kat12 => _localizedValues[locale.languageCode]!['kat12']!;
+  String get kat13 => _localizedValues[locale.languageCode]!['kat13']!;
+  String get kat14 => _localizedValues[locale.languageCode]!['kat14']!;
+  String get kat15 => _localizedValues[locale.languageCode]!['kat15']!;
+  String get kat16 => _localizedValues[locale.languageCode]!['kat16']!;
+  String get kat17 => _localizedValues[locale.languageCode]!['kat17']!;
+  String get kat18 => _localizedValues[locale.languageCode]!['kat18']!;
+  String get kat19 => _localizedValues[locale.languageCode]!['kat19']!;
+  String get kat20 => _localizedValues[locale.languageCode]!['kat20']!;
+  String get kat21 => _localizedValues[locale.languageCode]!['kat21']!;
+  String get kat22 => _localizedValues[locale.languageCode]!['kat22']!;
+
   String get all => _localizedValues[locale.languageCode]!['all']!;
   String get city => _localizedValues[locale.languageCode]!['city']!;
   String get add => _localizedValues[locale.languageCode]!['add']!;

@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
@@ -12,10 +14,6 @@ import 'package:mekanly_com/ui/pages/profile/auth/logout_dialog.dart';
 import 'package:path/path.dart' as path;
 import 'package:table_calendar/table_calendar.dart';
 
-import '../../../../logic/repos/i_main_repo.dart';
-import '../../../widgets/top_bar.dart';
-import '../../add/regions_page.dart';
-import '../../home/widgets/widgets.dart';
 import '/config/config.dart';
 import '/localization/locals.dart';
 import '/logic/cubits/categs/categs_cubit.dart';
@@ -27,6 +25,10 @@ import '/ui/pages/profile/terms_and_conditions.dart';
 import '/ui/style/app_sizes.dart';
 import '/ui/style/style.dart';
 import '/ui/widgets/sli.dart';
+import '../../../../logic/repos/i_main_repo.dart';
+import '../../../widgets/top_bar.dart';
+import '../../add/regions_page.dart';
+import '../../home/widgets/widgets.dart';
 
 class UpdateHousePage extends StatefulWidget {
   const UpdateHousePage({super.key, required this.house});

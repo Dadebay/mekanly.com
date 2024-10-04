@@ -1,3 +1,5 @@
+import 'package:mekanly_com/localization/locals.dart';
+
 import '/config/config.dart';
 import '../style/style.dart';
 
@@ -16,16 +18,21 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    var locals = Locals.of(context);
+
     return AppBar(
       elevation: 0.0,
       scrolledUnderElevation: 0.0,
       leading: leading,
+      // auto impleasding button color change
+      iconTheme: IconThemeData(color: color ?? AppColors.white),
       centerTitle: true,
-      backgroundColor: AppColors.secondary,
+      backgroundColor: AppColors.secondary1,
       surfaceTintColor: Colors.transparent,
       shadowColor: AppColors.statusBar.withOpacity(.5),
       title: Tex(
         title,
+        col: AppColors.white,
         con: context,
       ).appBar,
       bottom: bottom,

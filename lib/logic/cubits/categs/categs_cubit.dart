@@ -20,8 +20,6 @@ class CategsCubit extends Cubit<CategsState> {
       logger('Fetching categs');
 
       final result = await service.getCategories();
-      print(result);
-      print(repo.cats.all[5].id);
       result.fold(
         (failure) => emit(CategsError(failure)),
         (_) {

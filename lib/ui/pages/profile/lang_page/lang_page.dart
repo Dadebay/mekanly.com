@@ -1,14 +1,16 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '/config/config.dart';
+import '/logic/cubits/lang/lang_cubit.dart';
 import '../../../../localization/locals.dart';
 import '../../../../logic/cubits/categs/categs_cubit.dart';
 import '../../../../logic/repos/i_main_repo.dart';
 import '../../../style/app_sizes.dart';
 import '../../../style/style.dart';
 import '../../../widgets/top_bar.dart';
-import '/config/config.dart';
-import '/logic/cubits/lang/lang_cubit.dart';
 
 class LanguagePage extends StatefulWidget {
   const LanguagePage({super.key});

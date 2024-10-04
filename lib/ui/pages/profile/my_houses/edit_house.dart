@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mekanly_com/logic/cubits/house_manager.dart';
 import 'package:mekanly_com/ui/pages/profile/my_houses/my_houses.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '/config/config.dart';
 import '/logic/cubits/house/house_cubit.dart';
@@ -76,11 +77,6 @@ class EditHousePageState extends State<EditHousePage> with SingleTickerProviderS
   Widget build(BuildContext context) {
     var locals = Locals.of(context);
 
-    var div = const Divider(
-      color: AppColors.secondaryTextDark,
-      height: 20,
-    );
-
     return Scaffold(
       key: _scaffoldKey,
       floatingActionButton: _bottomButtons(),
@@ -102,9 +98,10 @@ class EditHousePageState extends State<EditHousePage> with SingleTickerProviderS
               },
               isScrollable: false,
               physics: const NeverScrollableScrollPhysics(),
-              labelColor: AppColors.mainTextDark,
+              labelColor: AppColors.white,
               indicatorSize: TabBarIndicatorSize.tab,
               indicatorWeight: 3,
+              labelStyle: const TextStyle(fontFamily: robotoBold, fontSize: 18),
               indicatorColor: AppColors.statusBar.withOpacity(.6),
               indicatorPadding: const EdgeInsets.symmetric(horizontal: 40),
               controller: _tabController,
@@ -122,14 +119,14 @@ class EditHousePageState extends State<EditHousePage> with SingleTickerProviderS
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppSizes.pix10, vertical: AppSizes.pix10),
-        child: TabBarView(
-          physics: const NeverScrollableScrollPhysics(),
-          key: UniqueKey(),
-          controller: _tabController,
-          children: [
-            StatefulBuilder(builder: (context, st) {
+      body: TabBarView(
+        physics: const NeverScrollableScrollPhysics(),
+        key: UniqueKey(),
+        controller: _tabController,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSizes.pix10, vertical: AppSizes.pix10),
+            child: StatefulBuilder(builder: (context, st) {
               return Details(
                 isOriginal: false,
                 imagePaths: widget.house.images.map((e) => e.url).toList(),
@@ -142,26 +139,66 @@ class EditHousePageState extends State<EditHousePage> with SingleTickerProviderS
                 showAllComments: showAllComments,
               );
             }),
-            Column(
-              children: [
-                ChangingTile(title: locals.edit, subtitle: locals.editGuide, onTap: _editHouse),
-                div,
-                ChangingTile(
-                  title: locals.moveForward,
-                  subtitle: locals.forwardGuide,
-                  onTap: () {
-                    if (widget.house.leaveTime.isAfter(DateTime.now())) {
-                      _moveForward();
-                    } else {
-                      errorToast(locals.expiredPleaseEdit.split('.')[0]);
-                    }
-                  },
+          ),
+          ListView(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 10, top: 10, bottom: 10),
+                child: Text(
+                  locals.kat18,
+                  style: const TextStyle(color: Colors.black, fontFamily: robotoBold, fontSize: 20),
                 ),
-                div
-              ],
-            )
-          ],
-        ),
+              ),
+              ChangingTile(title: locals.edit, money: '', luks: false, subtitle: locals.editGuide, onTap: _editHouse),
+              ChangingTile(
+                title: locals.moveForward,
+                money: '',
+                luks: false,
+                subtitle: locals.forwardGuide,
+                onTap: () {
+                  if (widget.house.leaveTime.isAfter(DateTime.now())) {
+                    _moveForward();
+                  } else {
+                    errorToast(locals.expiredPleaseEdit.split('.')[0]);
+                  }
+                },
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              ChangingTile(
+                  title: locals.kat19,
+                  luks: true,
+                  money: '20 TMT',
+                  subtitle: locals.kat21,
+                  onTap: () async {
+                    Uri sms = Uri.parse('sms:+0804?body=99364652712  20');
+                    await launchUrl(sms).then((isLauch) async {
+                      if (isLauch) {
+                        await Future.delayed(const Duration(seconds: 3));
+                      } else {}
+                    });
+                  }),
+              ChangingTile(
+                title: locals.moveForward,
+                money: '3 TMT',
+                luks: true,
+                subtitle: locals.forwardGuide,
+                onTap: () async {
+                  Uri sms = Uri.parse('sms:+0804?body=99364652712  3');
+                  await launchUrl(sms).then((isLauch) async {
+                    if (isLauch) {
+                      await Future.delayed(const Duration(seconds: 3));
+                    } else {}
+                  });
+                },
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+            ],
+          )
+        ],
       ),
     );
   }
@@ -269,7 +306,6 @@ class EditHousePageState extends State<EditHousePage> with SingleTickerProviderS
 
   Widget? _bottomButtons() {
     var locals = Locals.of(context);
-
     return _currentIndex == 1
         ? null
         : Container(
@@ -288,46 +324,58 @@ class EditHousePageState extends State<EditHousePage> with SingleTickerProviderS
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  InkWell(
-                    borderRadius: borderAll10,
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(backgroundColor: AppColors.background, title: Tex(locals.remove, con: context), content: Tex(locals.uSureRemoveHouse, con: context), actions: [
-                            TextButton(
-                                child: Tex(locals.deny, con: context),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                }),
-                            TextButton(
-                                child: Tex(locals.yes, con: context),
-                                onPressed: () async {
-                                  await context.read<HouseCubit>().deleteHouse(widget.house.id).then((value) async {
-                                    await context.read<HouseCubit>().getAllHouses().then((value) {
-                                      Navigator.of(context).popUntil((route) => route.isFirst);
-                                      successToast(locals.deletedSuccessfully);
-                                      go(context, const MyHouses());
-                                    });
-                                  });
-                                }),
-                          ]);
+                  // show house price
+                  Expanded(
+                      child: Text(
+                    '${widget.house.price} TMT',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.black, fontFamily: robotoSemiBold, fontSize: 20),
+                  )),
+                  Expanded(
+                    child: Center(
+                      child: InkWell(
+                        borderRadius: borderAll10,
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(backgroundColor: AppColors.background, title: Tex(locals.remove, con: context), content: Tex(locals.uSureRemoveHouse, con: context), actions: [
+                                TextButton(
+                                    child: Tex(locals.deny, con: context),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    }),
+                                TextButton(
+                                    child: Tex(locals.yes, con: context),
+                                    onPressed: () async {
+                                      await context.read<HouseCubit>().deleteHouse(widget.house.id).then((value) async {
+                                        await context.read<HouseCubit>().getAllHouses().then((value) {
+                                          Navigator.of(context).popUntil((route) => route.isFirst);
+                                          successToast(locals.deletedSuccessfully);
+                                          go(context, const MyHouses());
+                                        });
+                                      });
+                                    }),
+                              ]);
+                            },
+                          );
                         },
-                      );
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(color: AppColors.buttons, borderRadius: borderAll10),
-                      height: 34,
-                      width: width(context) / 2.5,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Tex(locals.remove, con: context).white,
-                        ],
+                        child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(color: AppColors.buttons, borderRadius: borderAll10),
+                          height: 34,
+                          width: width(context) / 2.5,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Tex(locals.remove, con: context).white,
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
+
                   //   BlocBuilder<HouseCubit, HouseState>(
                   //     builder: (context, state) {
                   //       bool isBroned = false;
@@ -425,35 +473,67 @@ class ChangingTile extends StatelessWidget {
     super.key,
     required this.title,
     required this.subtitle,
+    this.luks,
+    this.money,
     this.onTap,
   });
   final String title;
   final String subtitle;
+  final bool? luks;
+  final String? money;
   final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     var locals = Locals.of(context);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Tex(title, con: context, size: AppSizes.pix16).title,
-            Tex(subtitle, con: context, col: AppColors.secondaryTextDark).subtitle,
-          ],
-        ),
-        const SizedBox(height: AppSizes.pix10),
-        ActionButton(
-          radius: 4,
-          size: title == locals.moveForward ? 15 : AppSizes.pix16,
-          color: AppColors.buttons.withOpacity(.7),
-          label: title.toUpperCase(),
-          onTap: onTap,
-        ),
-      ],
+    return Container(
+      decoration: BoxDecoration(borderRadius: borderAll10, boxShadow: [BoxShadow(color: Colors.grey.shade200, blurRadius: 3, spreadRadius: 3)], color: Colors.white),
+      padding: const EdgeInsets.all(15),
+      margin: const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Tex(title, con: context, size: AppSizes.pix16).title,
+              Tex(subtitle, con: context, col: AppColors.secondaryTextDark).subtitle,
+            ],
+          ),
+          const SizedBox(height: AppSizes.pix10),
+          Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Text(
+                    money!.isNotEmpty ? money! : locals.kat17,
+                    style: const TextStyle(color: Colors.green, fontFamily: robotoBold, fontSize: 20),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: luks == true
+                    ? ActionButtonGradient(
+                        radius: 8,
+                        size: title == locals.moveForward ? 15 : AppSizes.pix16,
+                        color: AppColors.secondary,
+                        label: money.toString() == '20 TMT' ? locals.kat20 : title.toUpperCase(),
+                        onTap: onTap,
+                      )
+                    : ActionButton(
+                        radius: 8,
+                        size: title == locals.moveForward ? 15 : AppSizes.pix16,
+                        color: AppColors.secondary,
+                        label: money.toString() == '20 TMT' ? locals.kat20 : title.toUpperCase(),
+                        onTap: onTap,
+                      ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

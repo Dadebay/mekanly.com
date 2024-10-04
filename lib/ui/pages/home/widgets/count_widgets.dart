@@ -22,51 +22,83 @@ class RoomCountAddHouse extends StatelessWidget {
     return Pad(
       h: AppSizes.pix10,
       v: 3,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Tex(
-            locals.roomCount,
-            con: context,
-            padding: 0,
-          ).title,
-          const SizedBox(
-            height: 10,
-          ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: List.generate(10, (index) {
-                return GestureDetector(
-                  onTap: () => onRoomCountChanged(index + 1),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                    margin: const EdgeInsets.only(right: AppSizes.pix10),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      borderRadius: (index + 1) == roomCount ? borderAll15 : borderAll8,
-                      border: Border.all(
-                        color: (index + 1) == roomCount ? AppColors.mainTextDark : AppColors.secondaryText,
+      child: isAdding == true
+          ? SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: List.generate(10, (index) {
+                  return GestureDetector(
+                    onTap: () => onRoomCountChanged(index + 1),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 18),
+                      margin: const EdgeInsets.only(right: AppSizes.pix10),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        borderRadius: (index + 1) == roomCount ? borderAll : borderAll,
+                        border: Border.all(
+                          color: (index + 1) == roomCount ? AppColors.mainTextDark : AppColors.secondaryText,
+                        ),
+                        color: (index + 1) == roomCount ? AppColors.mainTextDark : Colors.transparent,
                       ),
-                      color: (index + 1) == roomCount ? AppColors.mainTextDark : Colors.transparent,
-                    ),
-                    child: Center(
-                      child: Text(
-                        index == 9 ? '10+' : '${index + 1}',
-                        style: TextStyle(
-                          color: (index + 1) == roomCount ? AppColors.mainText : AppColors.mainTextDark,
-                          fontWeight: FontWeight.bold,
+                      child: Center(
+                        child: Text(
+                          index == 9 ? '10+' : '${index + 1}',
+                          style: TextStyle(
+                            color: (index + 1) == roomCount ? AppColors.mainText : AppColors.mainTextDark,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
+                  );
+                }),
+              ),
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Tex(
+                  locals.roomCount,
+                  con: context,
+                  padding: 0,
+                ).title,
+                const SizedBox(
+                  height: 10,
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: List.generate(10, (index) {
+                      return GestureDetector(
+                        onTap: () => onRoomCountChanged(index + 1),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 18),
+                          margin: const EdgeInsets.only(right: AppSizes.pix10),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            borderRadius: (index + 1) == roomCount ? borderAll : borderAll,
+                            border: Border.all(
+                              color: (index + 1) == roomCount ? AppColors.mainTextDark : AppColors.secondaryText,
+                            ),
+                            color: (index + 1) == roomCount ? AppColors.mainTextDark : Colors.transparent,
+                          ),
+                          child: Center(
+                            child: Text(
+                              index == 9 ? '10+' : '${index + 1}',
+                              style: TextStyle(
+                                color: (index + 1) == roomCount ? AppColors.mainText : AppColors.mainTextDark,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
                   ),
-                );
-              }),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -90,48 +122,80 @@ class FloorCountWidget extends StatelessWidget {
     return Pad(
       h: AppSizes.pix10,
       v: 3,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Tex(
-            locals.floorCount,
-            con: context,
-            padding: 0,
-          ).title,
-          const SizedBox(height: AppSizes.pix8),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: List.generate(15, (index) {
-                return GestureDetector(
-                  onTap: () => onFloorCountChanged(index + 1),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                    margin: const EdgeInsets.only(right: AppSizes.pix10),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      borderRadius: (index + 1) == floorCount ? borderAll15 : borderAll8,
-                      border: Border.all(
-                        color: (index + 1) == floorCount ? AppColors.mainTextDark : AppColors.secondaryText,
+      child: isAdding == true
+          ? SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: List.generate(15, (index) {
+                  return GestureDetector(
+                    onTap: () => onFloorCountChanged(index + 1),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 18),
+                      margin: const EdgeInsets.only(right: AppSizes.pix10),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        borderRadius: (index + 1) == floorCount ? borderAll : borderAll,
+                        border: Border.all(
+                          color: (index + 1) == floorCount ? AppColors.mainTextDark : AppColors.secondaryText,
+                        ),
+                        color: (index + 1) == floorCount ? AppColors.mainTextDark : Colors.transparent,
                       ),
-                      color: (index + 1) == floorCount ? AppColors.mainTextDark : Colors.transparent,
-                    ),
-                    child: Center(
-                      child: Text(
-                        '${index + 1}',
-                        style: TextStyle(
-                          color: (index + 1) == floorCount ? AppColors.mainText : AppColors.mainTextDark,
-                          fontWeight: FontWeight.bold,
+                      child: Center(
+                        child: Text(
+                          '${index + 1}',
+                          style: TextStyle(
+                            color: (index + 1) == floorCount ? AppColors.mainText : AppColors.mainTextDark,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
+                  );
+                }),
+              ),
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Tex(
+                  locals.floorCount,
+                  con: context,
+                  padding: 0,
+                ).title,
+                const SizedBox(height: AppSizes.pix8),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: List.generate(15, (index) {
+                      return GestureDetector(
+                        onTap: () => onFloorCountChanged(index + 1),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 18),
+                          margin: const EdgeInsets.only(right: AppSizes.pix10),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            borderRadius: (index + 1) == floorCount ? borderAll : borderAll,
+                            border: Border.all(
+                              color: (index + 1) == floorCount ? AppColors.mainTextDark : AppColors.secondaryText,
+                            ),
+                            color: (index + 1) == floorCount ? AppColors.mainTextDark : Colors.transparent,
+                          ),
+                          child: Center(
+                            child: Text(
+                              '${index + 1}',
+                              style: TextStyle(
+                                color: (index + 1) == floorCount ? AppColors.mainText : AppColors.mainTextDark,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
                   ),
-                );
-              }),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -173,13 +237,13 @@ class RoomCountFilterPage extends StatelessWidget {
                   onTap: onCleared,
                   child: Container(
                     margin: const EdgeInsets.only(right: AppSizes.pix10),
-                    padding: const EdgeInsets.symmetric(horizontal: AppSizes.pix6),
+                    padding: const EdgeInsets.symmetric(horizontal: AppSizes.pix16 + 2),
                     height: 33.0,
                     decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
-                      borderRadius: borderAll6,
+                      borderRadius: borderAll,
                       border: Border.all(
-                        color: roomCount.isEmpty ? AppColors.mainTextDark : AppColors.secondaryText,
+                        color: roomCount.isEmpty ? AppColors.mainTextDark : const Color(0xffdcdcdc),
                       ),
                       color: roomCount.isEmpty ? AppColors.mainTextDark : Colors.transparent,
                     ),
@@ -197,14 +261,14 @@ class RoomCountFilterPage extends StatelessWidget {
                   return GestureDetector(
                     onTap: () => onRoomCountChanged(index + 1),
                     child: Container(
-                      width: 38.0,
+                      width: 42.0,
                       margin: const EdgeInsets.only(right: AppSizes.pix10),
                       height: 33.0,
                       decoration: BoxDecoration(
                         shape: BoxShape.rectangle,
-                        borderRadius: borderAll6,
+                        borderRadius: borderAll,
                         border: Border.all(
-                          color: roomCount.contains(index + 1) ? AppColors.mainTextDark : AppColors.secondaryText,
+                          color: roomCount.contains(index + 1) ? AppColors.mainTextDark : const Color(0xffdcdcdc),
                         ),
                         color: roomCount.contains(index + 1) ? AppColors.mainTextDark : Colors.transparent,
                       ),
@@ -265,13 +329,13 @@ class FloorCountFilterPage extends StatelessWidget {
                   onTap: onCleared,
                   child: Container(
                     margin: const EdgeInsets.only(right: AppSizes.pix10),
-                    padding: const EdgeInsets.symmetric(horizontal: AppSizes.pix6),
+                    padding: const EdgeInsets.symmetric(horizontal: AppSizes.pix16 + 2),
                     height: 33.0,
                     decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
-                      borderRadius: borderAll6,
+                      borderRadius: borderAll,
                       border: Border.all(
-                        color: floorCount.isEmpty ? AppColors.mainTextDark : AppColors.secondaryText,
+                        color: floorCount.isEmpty ? AppColors.mainTextDark : const Color(0xffdcdcdc),
                       ),
                       color: floorCount.isEmpty ? AppColors.mainTextDark : Colors.transparent,
                     ),
@@ -289,14 +353,14 @@ class FloorCountFilterPage extends StatelessWidget {
                   return GestureDetector(
                     onTap: () => onFloorCountChanged(index + 1),
                     child: Container(
-                      width: 38.0,
-                      margin: const EdgeInsets.only(right: AppSizes.pix10),
+                      width: 44.0,
+                      margin: const EdgeInsets.only(right: AppSizes.pix12),
                       height: 33.0,
                       decoration: BoxDecoration(
                         shape: BoxShape.rectangle,
-                        borderRadius: borderAll6,
+                        borderRadius: borderAll,
                         border: Border.all(
-                          color: floorCount.contains(index + 1) ? AppColors.mainTextDark : AppColors.secondaryText,
+                          color: floorCount.contains(index + 1) ? AppColors.mainTextDark : const Color(0xffdcdcdc),
                         ),
                         color: floorCount.contains(index + 1) ? AppColors.mainTextDark : Colors.transparent,
                       ),
@@ -547,16 +611,18 @@ class FeatureCheckboxState extends State<FeatureCheckbox> with AutomaticKeepAliv
                 children: [
                   SvgAsset(
                     feats(context).keys.elementAt(i),
-                    AppColors.mainTextDark,
+                    const Color(0xff717171),
                     size: 22,
                   ),
-                  const SizedBox(width: 5),
-                  Tex(
-                    feats(context)[feats(context).keys.elementAt(i)],
-                    con: context,
-                    weight: FontWeight.w400,
-                    size: AppSizes.pix16,
-                  ).title,
+                  const SizedBox(width: 20),
+                  Text(
+                    feats(context)[feats(context).keys.elementAt(i)].toString(),
+                    textAlign: TextAlign.start,
+                    style: const TextStyle(color: Color(0xff565656), fontFamily: robotoMedium, fontSize: AppSizes.pix16),
+                    // con: context,
+                    // weight: FontWeight.w400,
+                    // size: AppSizes.pix16,
+                  ),
                   const Spacer(),
                   if (widget.hasCheckBox)
                     Align(
@@ -566,7 +632,7 @@ class FeatureCheckboxState extends State<FeatureCheckbox> with AutomaticKeepAliv
                         child: Icon(
                           isCheckedList[i] ? Icons.check_box_outlined : Icons.check_box_outline_blank_outlined,
                           size: 30,
-                          color: isCheckedList[i] ? AppColors.buttons : Colors.grey.shade400,
+                          color: isCheckedList[i] ? AppColors.black : Colors.grey.shade400,
                         ),
                       ),
                     ),
