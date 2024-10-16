@@ -101,9 +101,10 @@ class EditHousePageState extends State<EditHousePage> with SingleTickerProviderS
               labelColor: AppColors.white,
               indicatorSize: TabBarIndicatorSize.tab,
               indicatorWeight: 3,
+              unselectedLabelColor: Colors.white,
               labelStyle: const TextStyle(fontFamily: robotoBold, fontSize: 18),
-              indicatorColor: AppColors.statusBar.withOpacity(.6),
-              indicatorPadding: const EdgeInsets.symmetric(horizontal: 40),
+              indicatorColor: AppColors.white,
+              // indicatorPadding: const EdgeInsets.symmetric(horizontal: 40),
               controller: _tabController,
               tabs: [
                 Tab(
@@ -140,66 +141,73 @@ class EditHousePageState extends State<EditHousePage> with SingleTickerProviderS
               );
             }),
           ),
-          ListView(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10, top: 10, bottom: 10),
-                child: Text(
-                  locals.kat18,
-                  style: const TextStyle(color: Colors.black, fontFamily: robotoBold, fontSize: 20),
-                ),
-              ),
-              ChangingTile(title: locals.edit, money: '', luks: false, subtitle: locals.editGuide, onTap: _editHouse),
-              ChangingTile(
-                title: locals.moveForward,
-                money: '',
-                luks: false,
-                subtitle: locals.forwardGuide,
-                onTap: () {
-                  if (widget.house.leaveTime.isAfter(DateTime.now())) {
-                    _moveForward();
-                  } else {
-                    errorToast(locals.expiredPleaseEdit.split('.')[0]);
-                  }
-                },
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              ChangingTile(
-                  title: locals.kat19,
-                  luks: true,
-                  money: '20 TMT',
-                  subtitle: locals.kat21,
-                  onTap: () async {
-                    Uri sms = Uri.parse('sms:+0804?body=99364652712  20');
-                    await launchUrl(sms).then((isLauch) async {
-                      if (isLauch) {
-                        await Future.delayed(const Duration(seconds: 3));
-                      } else {}
-                    });
-                  }),
-              ChangingTile(
-                title: locals.moveForward,
-                money: '3 TMT',
-                luks: true,
-                subtitle: locals.forwardGuide,
-                onTap: () async {
-                  Uri sms = Uri.parse('sms:+0804?body=99364652712  3');
-                  await launchUrl(sms).then((isLauch) async {
-                    if (isLauch) {
-                      await Future.delayed(const Duration(seconds: 3));
-                    } else {}
-                  });
-                },
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-            ],
-          )
+          services(locals)
         ],
       ),
+    );
+  }
+
+  ListView services(Locals locals) {
+    return ListView(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 10, top: 10, bottom: 10),
+          child: Text(
+            locals.kat18,
+            style: const TextStyle(color: Colors.black, fontFamily: robotoSemiBold, fontSize: 20),
+          ),
+        ),
+        ChangingTile(title: locals.edit, money: '', luks: false, subtitle: locals.editGuide, onTap: _editHouse),
+        ChangingTile(
+          title: locals.moveForward,
+          money: '',
+          luks: false,
+          subtitle: locals.forwardGuide,
+          onTap: () {
+            if (widget.house.leaveTime.isAfter(DateTime.now())) {
+              _moveForward();
+            } else {
+              errorToast(locals.expiredPleaseEdit.split('.')[0]);
+            }
+          },
+        ),
+        const SizedBox(
+          height: 30,
+        ),
+        ChangingTile(
+            title: locals.kat19,
+            luks: true,
+            money: '20 TMT',
+            subtitle: locals.kat21,
+            onTap: () async {
+              String number = " +99364652712   20";
+              Uri sms = Uri.parse('sms:0804?body=$number');
+              await launchUrl(sms).then((isLauch) async {
+                if (isLauch) {
+                  await Future.delayed(const Duration(seconds: 3));
+                } else {}
+              });
+            }),
+        ChangingTile(
+          title: locals.moveForward,
+          money: '3 TMT',
+          luks: true,
+          subtitle: locals.forwardGuide,
+          onTap: () async {
+            String number222 = " +99364652712   3";
+
+            Uri sms = Uri.parse('sms:0804?body=$number222');
+            await launchUrl(sms).then((isLauch) async {
+              if (isLauch) {
+                await Future.delayed(const Duration(seconds: 3));
+              } else {}
+            });
+          },
+        ),
+        const SizedBox(
+          height: 30,
+        ),
+      ],
     );
   }
 
@@ -488,9 +496,12 @@ class ChangingTile extends StatelessWidget {
     var locals = Locals.of(context);
 
     return Container(
-      decoration: BoxDecoration(borderRadius: borderAll10, boxShadow: [BoxShadow(color: Colors.grey.shade200, blurRadius: 3, spreadRadius: 3)], color: Colors.white),
+      decoration: BoxDecoration(borderRadius: borderAll3, boxShadow: kElevationToShadow[1], color: Colors.white),
       padding: const EdgeInsets.all(15),
-      margin: const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
+      margin: const EdgeInsets.only(
+        left: 12,
+        right: 12,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -509,7 +520,7 @@ class ChangingTile extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 8),
                   child: Text(
                     money!.isNotEmpty ? money! : locals.kat17,
-                    style: const TextStyle(color: Colors.green, fontFamily: robotoBold, fontSize: 20),
+                    style: TextStyle(color: money!.isNotEmpty ? Colors.black : Colors.green, fontFamily: robotoSemiBold, fontSize: 20),
                   ),
                 ),
               ),
@@ -518,14 +529,14 @@ class ChangingTile extends StatelessWidget {
                     ? ActionButtonGradient(
                         radius: 8,
                         size: title == locals.moveForward ? 15 : AppSizes.pix16,
-                        color: AppColors.secondary,
+                        color: const Color(0xff00A3FF),
                         label: money.toString() == '20 TMT' ? locals.kat20 : title.toUpperCase(),
                         onTap: onTap,
                       )
-                    : ActionButton(
+                    : ActionButtonMINE(
                         radius: 8,
                         size: title == locals.moveForward ? 15 : AppSizes.pix16,
-                        color: AppColors.secondary,
+                        color: const Color(0xff00A3FF),
                         label: money.toString() == '20 TMT' ? locals.kat20 : title.toUpperCase(),
                         onTap: onTap,
                       ),

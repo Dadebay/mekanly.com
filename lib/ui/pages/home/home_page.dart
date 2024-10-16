@@ -88,9 +88,22 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   houses.sort((a, b) => double.parse(b.price).compareTo(double.parse(a.price)));
                 }
                 if (houses.isEmpty) {
-                  return InkWell(
-                    onTap: () {},
-                    child: EmptyWidget(locals.notFoundInfo, icon: IconlyLight.info_square),
+                  return Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        EmptyWidget(locals.notFoundInfo, icon: IconlyLight.info_square),
+                        const SizedBox(
+                          height: AppSizes.pix24,
+                        ),
+                        ActionButton(
+                            label: locals.retry,
+                            onTap: () {
+                              onRefresh();
+                            })
+                      ],
+                    ),
                   );
                 }
                 return ListView.separated(
@@ -106,12 +119,26 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 );
               } else if (state is HouseError) {
                 if (state.errorType == ErrorType.houseEmpty) {
-                  return InkWell(
-                    onTap: () => onRefresh(),
-                    child: EmptyWidget(locals.notFoundInfo, icon: IconlyLight.info_square),
+                  return Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        EmptyWidget(locals.notFoundInfo, icon: IconlyLight.info_square),
+                        const SizedBox(
+                          height: AppSizes.pix24,
+                        ),
+                        ActionButton(
+                            label: locals.retry,
+                            onTap: () {
+                              onRefresh();
+                            })
+                      ],
+                    ),
                   );
                 } else {
-                  return Padding(
+                  return Container(
+                    color: Colors.amber,
                     padding: const EdgeInsets.all(8.0),
                     child: EmptyWidget(locals.checkYourInternetRetry, icon: Icons.error_outline_rounded),
                   );
@@ -140,28 +167,32 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               return GestureDetector(
                 onTap: () {
                   selectedIndex = index + 1;
+                  print(selectedIndex);
                   _controller.animateTo(0);
                   setState(() {});
                 },
-                child: Row(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(right: 15, left: 8, top: 5, bottom: 5),
-                      height: 35,
-                      width: 35,
-                      padding: const EdgeInsets.all(5),
-                      child: SvgAsset(
-                        svgs[index],
-                        const Color(0xff306CA3),
+                child: Container(
+                  color: Colors.white,
+                  child: Row(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(right: 15, left: 8, top: 5, bottom: 5),
+                        height: 35,
+                        width: 35,
+                        padding: const EdgeInsets.all(5),
+                        child: SvgAsset(
+                          svgs[index],
+                          const Color(0xff306CA3),
+                        ),
                       ),
-                    ),
-                    Text(
-                      categNames(context)[index],
-                      style: const TextStyle(color: Color(0xff375570), fontSize: 16, overflow: TextOverflow.ellipsis, fontFamily: robotoSemiBold),
-                      maxLines: 1,
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+                      Text(
+                        categNames(context)[index],
+                        style: const TextStyle(color: Color(0xff375570), fontSize: 16, overflow: TextOverflow.ellipsis, fontFamily: robotoSemiBold),
+                        maxLines: 1,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
@@ -306,16 +337,17 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Expanded(
-                          child: Image.asset(
-                        'assets/images/mekanly.png',
-                        height: 35,
-                        alignment: Alignment.centerLeft,
-                      )),
+                        child: Image.asset(
+                          'assets/images/mekanly.png',
+                          height: 35,
+                          alignment: Alignment.centerLeft,
+                        ),
+                      ),
                       GestureDetector(
                           onTap: () {
                             go(context, const NotifcationPageView());
                           },
-                          child: const SvgAsset('notifcation', Colors.white)),
+                          child: const SvgAsset('notification', Colors.white)),
                     ],
                   ),
                 ),

@@ -7,7 +7,7 @@ import 'dart:math';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:get/get_utils/get_utils.dart';
+import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mekanly_com/logic/cubits/navigator/nav_cubit.dart';
@@ -174,6 +174,16 @@ class PostHousePageState extends State<PostHousePage> {
     final FormState form = _formKey.currentState!;
     form.save();
 
+    print(form);
+    print(_acceptTerms);
+    print(name.text);
+    print(chosenCityId);
+    print(roomCount);
+    print(houseImages.length);
+    print(descriptionCtrl.text);
+    print(phoneCtrl.text);
+    print(_acceptTerms);
+
     if (form.validate() &&
         _acceptTerms &&
         name.text.isNotEmpty &&
@@ -182,7 +192,7 @@ class PostHousePageState extends State<PostHousePage> {
         // _rangeEnd !=  &&
         // _rangeStart != null &&
         houseImages.isNotEmpty &&
-        priceCtrl.text.isNotEmpty &&
+        // priceCtrl.text.isNotEmpty &&
         descriptionCtrl.text.isNotEmpty &&
         phoneCtrl.text.isNotEmpty &&
         _acceptTerms == true) {
@@ -468,7 +478,7 @@ class PostHousePageState extends State<PostHousePage> {
                               ? (chosenRegion == selectedLocation)
                                   ? selectedLocation
                                   : '$chosenRegion - $selectedLocation'
-                              : locals.notSelected,
+                              : locals.kat22,
                           con: context,
                         ).subtitle,
                         onTap: chooseLocation,
@@ -623,34 +633,63 @@ class PostHousePageState extends State<PostHousePage> {
                               dashPattern: const [AppSizes.pix10, AppSizes.pix6],
                               child: Container(
                                 color: AppColors.background,
-                                height: AppSizes.pix150,
+                                height: houseImages.isNotEmpty ? AppSizes.pix56 : AppSizes.pix150,
+                                padding: EdgeInsets.symmetric(horizontal: houseImages.isNotEmpty ? 8 : 0),
                                 width: width(context) - 45,
                                 child: houseImages.isNotEmpty
-                                    ? Stack(
-                                        fit: StackFit.expand,
-                                        children: [
-                                          ClipRRect(
-                                            borderRadius: borderAll10,
-                                            child: Image.file(
-                                              houseImages[0],
-                                              fit: BoxFit.fitWidth,
+                                    ? Center(
+                                        child: Row(
+                                          children: [
+                                            const SizedBox(
+                                              width: 5,
                                             ),
-                                          ),
-                                          Positioned(
-                                            top: 1,
-                                            right: 1,
-                                            child: Container(
-                                              color: AppColors.green.withOpacity(.8),
-                                              child: Tex(
-                                                locals.mainImage,
-                                                con: context,
-                                                col: AppColors.white,
-                                                size: AppSizes.pix16,
+                                            Expanded(
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  const Icon(
+                                                    Icons.camera_alt_outlined,
+                                                    color: Colors.grey,
+                                                  ),
+                                                  Text(
+                                                    '  ${houseImages.length} ${locals.kat23}',
+                                                    style: const TextStyle(color: Colors.black, fontFamily: robotoMedium, fontSize: 16),
+                                                  ),
+                                                ],
                                               ),
                                             ),
-                                          )
-                                        ],
+                                            Text(
+                                              '  ${houseImages.length}/${12}',
+                                              style: const TextStyle(color: Colors.black, fontFamily: robotoMedium, fontSize: 16),
+                                            )
+                                          ],
+                                        ),
                                       )
+                                    // Stack(
+                                    //     fit: StackFit.expand,
+                                    //     children: [
+                                    //       ClipRRect(
+                                    //         borderRadius: borderAll10,
+                                    //         child: Image.file(
+                                    //           houseImages[0],
+                                    //           fit: BoxFit.fitWidth,
+                                    //         ),
+                                    //       ),
+                                    //       Positioned(
+                                    //         top: 1,
+                                    //         right: 1,
+                                    //         child: Container(
+                                    //           color: AppColors.green.withOpacity(.8),
+                                    //           child: Tex(
+                                    //             locals.mainImage,
+                                    //             con: context,
+                                    //             col: AppColors.white,
+                                    //             size: AppSizes.pix16,
+                                    //           ),
+                                    //         ),
+                                    //       )
+                                    //     ],
+                                    //   )
                                     : Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
@@ -696,12 +735,24 @@ class PostHousePageState extends State<PostHousePage> {
                                                 fit: BoxFit.cover,
                                               ),
                                             ),
+                                            Positioned(
+                                              top: 1,
+                                              left: 1,
+                                              child: index == 0
+                                                  ? Container(
+                                                      color: AppColors.green,
+                                                      child: Tex(
+                                                        locals.mainImage,
+                                                        con: context,
+                                                        col: AppColors.white,
+                                                        size: AppSizes.pix16 - 2,
+                                                      ),
+                                                    )
+                                                  : const SizedBox.shrink(),
+                                            ),
                                             Center(
                                               child: Container(
-                                                decoration: BoxDecoration(
-                                                    // color: AppColors.black.withOpacity(.4),
-                                                    // color: AppColors.secondary.withOpacity(0.8),
-                                                    borderRadius: borderAll),
+                                                decoration: BoxDecoration(borderRadius: borderAll),
                                                 child: _progressList[index] == 1
                                                     ? const Icon(
                                                         Icons.check_circle_outline_rounded,
@@ -773,8 +824,9 @@ class PostHousePageState extends State<PostHousePage> {
                             controller: descriptionCtrl,
                             decoration: InputDecoration(
                               hintText: locals.description,
-                              hintStyle: const TextStyle(color: Colors.grey, fontFamily: robotoBold, fontSize: 18),
+                              hintStyle: const TextStyle(color: Colors.black54, fontFamily: robotoRegular, fontSize: 14),
                               filled: true,
+                              contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                               fillColor: AppColors.secondaryText.withOpacity(.3),
                               border: OutlineInputBorder(
                                 borderRadius: borderAll10,
@@ -803,7 +855,7 @@ class PostHousePageState extends State<PostHousePage> {
                                 borderSide: const BorderSide(color: Colors.red, width: 2),
                               ),
                             ),
-                            maxLines: 4,
+                            maxLines: 6,
                           ),
                         ),
                         SizedBox(
@@ -844,7 +896,7 @@ class PostHousePageState extends State<PostHousePage> {
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Tex('${locals.yourPhone} :  ', con: context, padding: AppSizes.pix2).title,
+                              Tex('${locals.yourPhone}  ', con: context, padding: AppSizes.pix2).title,
                               Expanded(
                                 flex: 5,
                                 child: TextFormField(
@@ -853,7 +905,8 @@ class PostHousePageState extends State<PostHousePage> {
                                   textAlignVertical: TextAlignVertical.center,
                                   decoration: InputDecoration(
                                     isDense: true,
-                                    hintText: 'xx - xx - xx - xx',
+                                    hintText: 'xxxxxxxx',
+                                    hintStyle: const TextStyle(color: Colors.black45, fontFamily: robotoRegular, fontSize: 16),
                                     border: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.statusBar)),
                                     focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.statusBar)),
                                     contentPadding: const EdgeInsets.only(bottom: AppSizes.pix2),
@@ -887,7 +940,7 @@ class PostHousePageState extends State<PostHousePage> {
                           padding: const EdgeInsets.only(
                             left: AppSizes.pix10,
                             top: AppSizes.pix30,
-                            bottom: AppSizes.pix100,
+                            bottom: AppSizes.pix10,
                           ),
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -903,12 +956,12 @@ class PostHousePageState extends State<PostHousePage> {
                                     locals.readAndAccept,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(color: Colors.black, fontFamily: robotoSemiBold, fontSize: AppSizes.pix16),
+                                    style: const TextStyle(color: Colors.black, fontFamily: robotoMedium, fontSize: AppSizes.pix16 - 1),
                                   ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 8),
-                                  child: Switch.adaptive(
+                                  child: Switch(
                                     value: _acceptTerms,
                                     activeColor: AppColors.buttons,
                                     onChanged: (newValue) => setState(() => _acceptTerms = newValue),
@@ -938,193 +991,191 @@ class PostHousePageState extends State<PostHousePage> {
                             ),
                           ),
                         ),
+                        Container(
+                          width: double.infinity,
+                          margin: const EdgeInsets.only(left: 15, right: 15, bottom: 30),
+                          child: FloatingActionButton(
+                            mini: true,
+                            elevation: 0.0,
+                            shape: RoundedRectangleBorder(borderRadius: borderAll10),
+                            backgroundColor: AppColors.black,
+                            onPressed: () {
+                              if (_formKey.currentState != null && validateAndSaveForm()) {
+                                showDialog(
+                                  barrierDismissible: false,
+                                  context: context,
+                                  builder: (ctx) {
+                                    return StatefulBuilder(builder: (context, useState) {
+                                      return PopScope(
+                                        canPop: false,
+                                        child: AlertDialog(
+                                          insetPadding: const EdgeInsets.all(20),
+                                          actionsPadding: const EdgeInsets.all(AppSizes.pix10),
+                                          actionsAlignment: MainAxisAlignment.center,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(AppSizes.pix10),
+                                          ),
+                                          title: Tex(
+                                            isClicked ? locals.pleaseWait : locals.confirm,
+                                            con: ctx,
+                                          ),
+                                          content: Row(
+                                            children: [
+                                              if (isClicked)
+                                                const CircularProgressIndicator(
+                                                  color: AppColors.mainTextDark,
+                                                ),
+                                              Expanded(
+                                                child: Tex(
+                                                  isClicked ? "${locals.workinOn} ${locals.pleaseWait}" : locals.doUWantToAdd,
+                                                  con: ctx,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          actions: [
+                                            isClicked
+                                                ? Container()
+                                                : DialogActions(
+                                                    locals: locals,
+                                                    onDeny: () => Navigator.of(ctx).pop(),
+                                                    onSubmit: () {
+                                                      Net.checkInternet().then((value) {
+                                                        if (value) {
+                                                          successToast(locals.workinOn);
+                                                          useState(() {
+                                                            isClicked = true;
+                                                          });
+
+                                                          String? dayEnterTime = ignEnterTime ? null : enterTime.format(context);
+                                                          String? dayLeaveTime = ignLeaveTime ? null : leaveTime.format(context);
+
+                                                          Map<String, dynamic> data = {
+                                                            "name": name.text,
+                                                            "category_id": widget.categoryID.toString(),
+                                                            "location_id": chosenCityId.toString(),
+                                                            "room_number": roomCount.toString(),
+                                                            "floor_number": floorCount.toString(),
+                                                            "guest_number": guestNumber.toString(),
+                                                            // "enter_time": toSendDate(_rangeStart),
+                                                            "enter_time": toSendDate(DateTime.now()),
+                                                            // "leave_time": toSendDate(_rangeEnd),
+                                                            //add one year leave_Time
+                                                            "leave_time": toSendDate(DateTime.now().add(const Duration(days: 365))),
+                                                            "description": descriptionCtrl.text,
+                                                            "price": priceCtrl.text.isEmpty ? "0" : priceCtrl.text,
+                                                            "bron_number": "+993${phoneCtrl.text}",
+                                                          };
+                                                          if (dayEnterTime != null) {
+                                                            data["day_enter_time"] = dayEnterTime;
+                                                          }
+
+                                                          if (dayLeaveTime != null) {
+                                                            data["day_leave_time"] = dayLeaveTime;
+                                                          }
+                                                          if (selectedFeaturesIndices.isNotEmpty) {
+                                                            data["possibilities"] = selectedFeaturesIndices.toString();
+                                                          }
+
+                                                          logger(mapToString(data));
+
+                                                          context
+                                                              .read<HouseCubit>()
+                                                              .tryAddHouse(
+                                                                data: data,
+                                                                imagePaths: compressedImages.map((e) {
+                                                                  if (e != null) {
+                                                                    return e.path;
+                                                                  } else {
+                                                                    logger('ELSED');
+                                                                    return e!.path;
+                                                                  }
+                                                                }).toList(),
+                                                              )
+                                                              .then((value) async {
+                                                            if (value) {
+                                                              useState(() {
+                                                                isClicked = false;
+                                                              });
+
+                                                              showDialog(
+                                                                barrierDismissible: false,
+                                                                context: ctx,
+                                                                builder: (cntxt) {
+                                                                  return PopScope(
+                                                                    canPop: false,
+                                                                    child: AlertDialog(
+                                                                      insetPadding: const EdgeInsets.all(20),
+                                                                      actionsPadding: const EdgeInsets.all(AppSizes.pix10),
+                                                                      actionsAlignment: MainAxisAlignment.center,
+                                                                      shape: RoundedRectangleBorder(
+                                                                        borderRadius: BorderRadius.circular(AppSizes.pix10),
+                                                                      ),
+                                                                      title: Tex(
+                                                                        locals.habarnama,
+                                                                        con: cntxt,
+                                                                      ),
+                                                                      content: Tex(
+                                                                        locals.houseAddedAndSaved,
+                                                                        con: cntxt,
+                                                                      ),
+                                                                      actions: [
+                                                                        if (isClicked)
+                                                                          const CircularProgressIndicator(
+                                                                            color: AppColors.mainTextDark,
+                                                                          )
+                                                                        else
+                                                                          DialogActions(
+                                                                            applyText: 'OK',
+                                                                            locals: locals,
+                                                                            hasPop: false,
+                                                                            onDeny: () => Navigator.of(cntxt).pop(false),
+                                                                            onSubmit: () async {
+                                                                              context.read<NavCubit>().navKey.currentState?.popUntil((route) => route.isFirst);
+                                                                              go(context, const MyHouses());
+                                                                              cntxt.read<CategsCubit>().fetchCategsorites();
+                                                                              await cntxt.read<HouseCubit>().getAllHouses();
+                                                                            },
+                                                                          ),
+                                                                      ],
+                                                                    ),
+                                                                  );
+                                                                },
+                                                              );
+                                                            } else {
+                                                              useState(() {
+                                                                isClicked = false;
+                                                              });
+                                                              errorToast(locals.sthWentWrong);
+                                                            }
+                                                          });
+                                                        } else {
+                                                          errorToast(locals.noInternet);
+                                                        }
+                                                      });
+                                                    },
+                                                  ),
+                                          ],
+                                        ),
+                                      );
+                                    });
+                                  },
+                                );
+                              } else {
+                                errorToast(locals.fillAllBlanks);
+                              }
+                            },
+                            child: Text(
+                              locals.confirm,
+                              style: const TextStyle(color: Colors.white, fontFamily: robotoBold, fontSize: 24),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ],
                 ),
               ),
-        floatingActionButton: Visibility(
-          visible: MediaQuery.of(context).viewInsets.bottom == 0.0,
-          child: SizedBox(
-            width: width(context) - 40,
-            child: FloatingActionButton(
-              mini: true,
-              shape: RoundedRectangleBorder(borderRadius: borderAll10),
-              backgroundColor: AppColors.black,
-              onPressed: () {
-                if (_formKey.currentState != null && validateAndSaveForm()) {
-                  showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (ctx) {
-                      return StatefulBuilder(builder: (context, useState) {
-                        return PopScope(
-                          canPop: false,
-                          child: AlertDialog(
-                            insetPadding: const EdgeInsets.all(20),
-                            actionsPadding: const EdgeInsets.all(AppSizes.pix10),
-                            actionsAlignment: MainAxisAlignment.center,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(AppSizes.pix10),
-                            ),
-                            title: Tex(
-                              isClicked ? locals.pleaseWait : locals.confirm,
-                              con: ctx,
-                            ),
-                            content: Row(
-                              children: [
-                                if (isClicked)
-                                  const CircularProgressIndicator(
-                                    color: AppColors.mainTextDark,
-                                  ),
-                                Expanded(
-                                  child: Tex(
-                                    isClicked ? "${locals.workinOn} ${locals.pleaseWait}" : locals.doUWantToAdd,
-                                    con: ctx,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            actions: [
-                              isClicked
-                                  ? Container()
-                                  : DialogActions(
-                                      locals: locals,
-                                      onDeny: () => Navigator.of(ctx).pop(),
-                                      onSubmit: () {
-                                        Net.checkInternet().then((value) {
-                                          if (value) {
-                                            successToast(locals.workinOn);
-                                            useState(() {
-                                              isClicked = true;
-                                            });
-
-                                            String? dayEnterTime = ignEnterTime ? null : enterTime.format(context);
-                                            String? dayLeaveTime = ignLeaveTime ? null : leaveTime.format(context);
-
-                                            Map<String, dynamic> data = {
-                                              "name": name.text,
-                                              "category_id": widget.categoryID.toString(),
-                                              "location_id": chosenCityId.toString(),
-                                              "room_number": roomCount.toString(),
-                                              "floor_number": floorCount.toString(),
-                                              "guest_number": guestNumber.toString(),
-                                              // "enter_time": toSendDate(_rangeStart),
-                                              "enter_time": toSendDate(DateTime.now()),
-                                              // "leave_time": toSendDate(_rangeEnd),
-                                              //add one year leave_Time
-                                              "leave_time": toSendDate(DateTime.now().add(const Duration(days: 365))),
-                                              "description": descriptionCtrl.text,
-                                              "price": priceCtrl.text,
-                                              "bron_number": "+993${phoneCtrl.text}",
-                                            };
-                                            if (dayEnterTime != null) {
-                                              data["day_enter_time"] = dayEnterTime;
-                                            }
-
-                                            if (dayLeaveTime != null) {
-                                              data["day_leave_time"] = dayLeaveTime;
-                                            }
-                                            if (selectedFeaturesIndices.isNotEmpty) {
-                                              data["possibilities"] = selectedFeaturesIndices.toString();
-                                            }
-
-                                            logger(mapToString(data));
-
-                                            context
-                                                .read<HouseCubit>()
-                                                .tryAddHouse(
-                                                  data: data,
-                                                  imagePaths: compressedImages.map((e) {
-                                                    if (e != null) {
-                                                      return e.path;
-                                                    } else {
-                                                      logger('ELSED');
-                                                      return e!.path;
-                                                    }
-                                                  }).toList(),
-                                                )
-                                                .then((value) async {
-                                              if (value) {
-                                                useState(() {
-                                                  isClicked = false;
-                                                });
-
-                                                showDialog(
-                                                  barrierDismissible: false,
-                                                  context: ctx,
-                                                  builder: (cntxt) {
-                                                    return PopScope(
-                                                      canPop: false,
-                                                      child: AlertDialog(
-                                                        insetPadding: const EdgeInsets.all(20),
-                                                        actionsPadding: const EdgeInsets.all(AppSizes.pix10),
-                                                        actionsAlignment: MainAxisAlignment.center,
-                                                        shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.circular(AppSizes.pix10),
-                                                        ),
-                                                        title: Tex(
-                                                          locals.habarnama,
-                                                          con: cntxt,
-                                                        ),
-                                                        content: Tex(
-                                                          locals.houseAddedAndSaved,
-                                                          con: cntxt,
-                                                        ),
-                                                        actions: [
-                                                          if (isClicked)
-                                                            const CircularProgressIndicator(
-                                                              color: AppColors.mainTextDark,
-                                                            )
-                                                          else
-                                                            DialogActions(
-                                                              applyText: 'OK',
-                                                              locals: locals,
-                                                              hasPop: false,
-                                                              onDeny: () => Navigator.of(cntxt).pop(false),
-                                                              onSubmit: () async {
-                                                                context.read<NavCubit>().navKey.currentState?.popUntil((route) => route.isFirst);
-                                                                go(context, const MyHouses());
-                                                                cntxt.read<CategsCubit>().fetchCategsorites();
-                                                                await cntxt.read<HouseCubit>().getAllHouses();
-                                                              },
-                                                            ),
-                                                        ],
-                                                      ),
-                                                    );
-                                                  },
-                                                );
-                                              } else {
-                                                useState(() {
-                                                  isClicked = false;
-                                                });
-                                                errorToast(locals.sthWentWrong);
-                                              }
-                                            });
-                                          } else {
-                                            errorToast(locals.noInternet);
-                                          }
-                                        });
-                                      },
-                                    ),
-                            ],
-                          ),
-                        );
-                      });
-                    },
-                  );
-                } else {
-                  errorToast(locals.fillAllBlanks);
-                }
-              },
-              child: Text(
-                locals.confirm,
-                style: const TextStyle(color: Colors.white, fontFamily: robotoBold, fontSize: 24),
-              ),
-            ),
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
       ),
     );
   }

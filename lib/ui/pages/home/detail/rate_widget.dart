@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:mekanly_com/logic/cubits/comments/comments_cubit.dart';
 import 'package:mekanly_com/ui/pages/comment_terms_page.dart';
 import 'package:mekanly_com/ui/pages/profile/auth/login_page.dart';
@@ -28,7 +27,7 @@ class RateWidget extends StatefulWidget {
 
 class RateWidgetState extends State<RateWidget> {
   final TextEditingController descrCtrl = TextEditingController();
-  double rating = 0;
+  // double rating = 0;
   bool acceptedTerms = false;
 
   @override
@@ -99,7 +98,7 @@ class RateWidgetState extends State<RateWidget> {
                           clipBehavior: Clip.none,
                           shape: RoundedRectangleBorder(borderRadius: borderAll10),
                           insetPadding: const EdgeInsets.all(AppSizes.pix10),
-                          backgroundColor: AppColors.primary,
+                          backgroundColor: const Color(0xff5F6B73),
                           child: Padding(
                             padding: const EdgeInsets.all(AppSizes.pix12),
                             child: Column(
@@ -110,33 +109,33 @@ class RateWidgetState extends State<RateWidget> {
                                   widget.userName,
                                   con: context,
                                 ).white,
-                                if (context.watch<AuthCubit>().state is AuthSuccess)
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: AppSizes.pix8),
-                                    child: Row(
-                                      children: [
-                                        Tex(
-                                          '${locals.rate}:   ',
-                                          con: context,
-                                        ).white,
-                                        RatingBar.builder(
-                                          initialRating: rating,
-                                          unratedColor: AppColors.black,
-                                          minRating: 1,
-                                          direction: Axis.horizontal,
-                                          allowHalfRating: true,
-                                          itemCount: 5,
-                                          itemSize: AppSizes.pix16,
-                                          itemBuilder: (context, _) => const Icon(Icons.star, color: AppColors.yellow),
-                                          onRatingUpdate: (value) {
-                                            setState(() {
-                                              rating = value;
-                                            });
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                // if (context.watch<AuthCubit>().state is AuthSuccess)
+                                //   Padding(
+                                //     padding: const EdgeInsets.symmetric(horizontal: AppSizes.pix8),
+                                //     child: Row(
+                                //       children: [
+                                //         Tex(
+                                //           '${locals.rate}:   ',
+                                //           con: context,
+                                //         ).white,
+                                //         RatingBar.builder(
+                                //           initialRating: rating,
+                                //           unratedColor: AppColors.black,
+                                //           minRating: 1,
+                                //           direction: Axis.horizontal,
+                                //           allowHalfRating: true,
+                                //           itemCount: 5,
+                                //           itemSize: AppSizes.pix16,
+                                //           itemBuilder: (context, _) => const Icon(Icons.star, color: AppColors.yellow),
+                                //           onRatingUpdate: (value) {
+                                //             setState(() {
+                                //               rating = value;
+                                //             });
+                                //           },
+                                //         ),
+                                //       ],
+                                //     ),
+                                //   ),
                                 Padding(
                                   padding: EdgeInsets.fromLTRB(
                                     AppSizes.pix8,
@@ -150,8 +149,8 @@ class RateWidgetState extends State<RateWidget> {
                                     decoration: InputDecoration(
                                       hintText: locals.writeComment,
                                       filled: true,
-                                      fillColor: Colors.white.withOpacity(.3),
-                                      hintStyle: const TextStyle(color: AppColors.secondaryTextDark),
+                                      fillColor: const Color(0xff8B9498),
+                                      hintStyle: const TextStyle(color: AppColors.white),
                                       border: InputBorder.none,
                                     ),
                                     style: const TextStyle(color: AppColors.black),
@@ -205,11 +204,11 @@ class RateWidgetState extends State<RateWidget> {
                                     const SizedBox(width: 8),
                                     TextButton(
                                       onPressed: () async {
-                                        if (rating > 0 && descrCtrl.text.isNotEmpty && acceptedTerms) {
-                                          await cmCubit.comment(widget.houseId, rating, descrCtrl.text).whenComplete(() async {
+                                        if (descrCtrl.text.isNotEmpty && acceptedTerms) {
+                                          await cmCubit.comment(widget.houseId, 0, descrCtrl.text).whenComplete(() async {
                                             descrCtrl.clear();
                                             acceptedTerms = false;
-                                            rating = 0;
+                                            // rating = 0;
                                             successToast(locals.commentSaved);
 
                                             await cmCubit.getHouseComments(widget.houseId);
@@ -232,7 +231,7 @@ class RateWidgetState extends State<RateWidget> {
                                       child: Tex(
                                         locals.accept.toUpperCase(),
                                         con: context,
-                                        col: AppColors.black,
+                                        col: AppColors.white,
                                       ),
                                     ),
                                     const SizedBox(width: 13)

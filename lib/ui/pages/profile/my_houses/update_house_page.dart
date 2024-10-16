@@ -18,7 +18,6 @@ import '/config/config.dart';
 import '/localization/locals.dart';
 import '/logic/cubits/categs/categs_cubit.dart';
 import '/logic/cubits/house/house_cubit.dart';
-import '/logic/cubits/lang/lang_cubit.dart';
 import '/models/category/category_model.dart';
 import '/models/models.dart';
 import '/ui/pages/profile/terms_and_conditions.dart';
@@ -381,115 +380,183 @@ class UpdateHousePageState extends State<UpdateHousePage> {
               ),
               divider,
             ]),
-            Sli(children: [
-              SizedBox(height: isTablet(context) ? AppSizes.pix32 : AppSizes.pix10),
-              RoomCountAddHouse(
-                  isAdding: true,
-                  roomCount: roomCount,
-                  onRoomCountChanged: (newCount) {
-                    setState(() {
-                      if (roomCount == newCount) {
-                        roomCount = 0;
-                      } else {
-                        roomCount = newCount;
-                      }
-                    });
-                  }),
-              const SizedBox(height: AppSizes.pix16),
-              FloorCountWidget(
-                  isAdding: true,
-                  floorCount: floorCount,
-                  onFloorCountChanged: (newCount) {
-                    setState(() {
-                      if (floorCount == newCount) {
-                        floorCount = 0;
-                      } else {
-                        floorCount = newCount;
-                      }
-                    });
-                  }),
-              const SizedBox(
-                height: AppSizes.pix20,
+            Theme(
+              data: ThemeData(
+                dividerColor: Colors.white, // Set your desired color here
               ),
-              divider,
-              GuestCountWidget(
-                  guestNumber: guestNumber,
-                  onGuestNumberChanged: (newCount) {
-                    setState(() {
-                      guestNumber = newCount;
-                    });
-                  }),
-              divider,
-              Tex(
-                locals.possibilities,
-                con: context,
-                padding: AppSizes.pix16,
-              ).title,
-              FeatureCheckbox(
-                onFeaturesSelected: handleFeaturesSelected,
-                checkedIds: selectedFeaturesIndices,
-              ),
-            ]),
-            Sli(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(AppSizes.pix8),
-                  child: Tex(locals.rules, con: context).title,
-                ),
-                Tex('     ${locals.enterTime}', con: context, padding: 0, size: AppSizes.pix16).subtitle,
-                pickTime(context, enterTime, ignEnterTime, () => _selectTime(context, enterTime)),
-                Tex('     ${locals.leaveTime}', con: context, padding: 0, size: AppSizes.pix16).subtitle,
-                pickTime(context, leaveTime, ignLeaveTime, () => _selectTime(context, leaveTime)),
-                Container(
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  color: AppColors.primary,
-                  padding: const EdgeInsets.all(3),
-                  child: Tex(
-                    locals.whenJourney,
+              child: Sli(children: [
+                SizedBox(height: isTablet(context) ? AppSizes.pix32 : AppSizes.pix10),
+                ExpansionTile(
+                  initiallyExpanded: true,
+                  title: Tex(
+                    locals.roomCount,
                     con: context,
-                  ).white,
-                ),
-                BlocBuilder<LangCubit, Locale>(
-                  builder: (context, state) {
-                    return TableCalendar(
-                      locale: context.read<LangCubit>().localize(state),
-                      daysOfWeekHeight: AppSizes.pix24,
-                      availableGestures: AvailableGestures.horizontalSwipe,
-                      firstDay: (_rangeStart!.isBefore(DateTime.now())) ? _rangeStart ?? DateTime.now() : DateTime.now(),
-                      lastDay: DateTime.utc(2030),
-                      focusedDay: _focusedDay,
-                      selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-                      startingDayOfWeek: StartingDayOfWeek.monday,
-                      onDaySelected: _onDaySelected,
-                      calendarStyle: CalendarStyle(
-                        selectedTextStyle: const TextStyle(color: AppColors.mainTextDark),
-                        selectedDecoration: const BoxDecoration(color: Colors.transparent),
-                        isTodayHighlighted: false,
-                        todayTextStyle: const TextStyle(color: AppColors.mainTextDark),
-                        rangeHighlightColor: AppColors.secondaryText.withOpacity(.4),
-                        rangeStartDecoration: const BoxDecoration(color: AppColors.statusBar, shape: BoxShape.circle),
-                        rangeEndDecoration: const BoxDecoration(color: AppColors.statusBar, shape: BoxShape.circle),
-                        todayDecoration: BoxDecoration(
-                          color: Colors.transparent,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: AppColors.statusBar,
-                          ),
-                        ),
-                      ),
-                      onPageChanged: (focusedDay) {
-                        _focusedDay = focusedDay;
-                      },
-                      rangeStartDay: _rangeStart,
-                      onRangeSelected: _onRangeSelected,
-                      rangeEndDay: _rangeEnd,
-                      headerStyle: const HeaderStyle(titleCentered: true, formatButtonVisible: false),
-                      rangeSelectionMode: RangeSelectionMode.toggledOn,
-                    );
-                  },
+                    padding: 0,
+                  ).title,
+                  children: [
+                    RoomCountAddHouse(
+                        isAdding: true,
+                        roomCount: roomCount,
+                        onRoomCountChanged: (newCount) {
+                          setState(() {
+                            if (roomCount == newCount) {
+                              roomCount = 0;
+                            } else {
+                              roomCount = newCount;
+                            }
+                          });
+                        }),
+                  ],
                 ),
                 const SizedBox(height: AppSizes.pix16),
+                ExpansionTile(
+                  initiallyExpanded: true,
+                  title: Tex(
+                    locals.floorCount,
+                    con: context,
+                    padding: 0,
+                  ).title,
+                  children: [
+                    FloorCountWidget(
+                        isAdding: true,
+                        floorCount: floorCount,
+                        onFloorCountChanged: (newCount) {
+                          setState(() {
+                            if (floorCount == newCount) {
+                              floorCount = 0;
+                            } else {
+                              floorCount = newCount;
+                            }
+                          });
+                        }),
+                  ],
+                ),
+
+                const SizedBox(
+                  height: AppSizes.pix20,
+                ),
+                divider,
+                // Gues er,
+                Tex(
+                  locals.possibilities,
+                  con: context,
+                  padding: AppSizes.pix16,
+                ).title,
+                FeatureCheckbox(
+                  onFeaturesSelected: handleFeaturesSelected,
+                  checkedIds: selectedFeaturesIndices,
+                ),
+              ]),
+            ),
+            // Sli(children: [
+            //   SizedBox(height: isTablet(context) ? AppSizes.pix32 : AppSizes.pix10),
+            //   RoomCountAddHouse(
+            //       isAdding: true,
+            //       roomCount: roomCount,
+            //       onRoomCountChanged: (newCount) {
+            //         setState(() {
+            //           if (roomCount == newCount) {
+            //             roomCount = 0;
+            //           } else {
+            //             roomCount = newCount;
+            //           }
+            //         });
+            //       }),
+            //   const SizedBox(height: AppSizes.pix16),
+            //   FloorCountWidget(
+            //       isAdding: true,
+            //       floorCount: floorCount,
+            //       onFloorCountChanged: (newCount) {
+            //         setState(() {
+            //           if (floorCount == newCount) {
+            //             floorCount = 0;
+            //           } else {
+            //             floorCount = newCount;
+            //           }
+            //         });
+            //       }),
+            //   const SizedBox(
+            //     height: AppSizes.pix20,
+            //   ),
+            //   divider,
+            //   GuestCountWidget(
+            //       guestNumber: guestNumber,
+            //       onGuestNumberChanged: (newCount) {
+            //         setState(() {
+            //           guestNumber = newCount;
+            //         });
+            //       }),
+            //   divider,
+            //   Tex(
+            //     locals.possibilities,
+            //     con: context,
+            //     padding: AppSizes.pix16,
+            //   ).title,
+            //   FeatureCheckbox(
+            //     onFeaturesSelected: handleFeaturesSelected,
+            //     checkedIds: selectedFeaturesIndices,
+            //   ),
+            // ]),
+            Sli(
+              children: [
+                // Padding(
+                //   padding: const EdgeInsets.all(AppSizes.pix8),
+                //   child: Tex(locals.rules, con: context).title,
+                // ),
+                // Tex('     ${locals.enterTime}', con: context, padding: 0, size: AppSizes.pix16).subtitle,
+                // pickTime(context, enterTime, ignEnterTime, () => _selectTime(context, enterTime)),
+                // Tex('     ${locals.leaveTime}', con: context, padding: 0, size: AppSizes.pix16).subtitle,
+                // pickTime(context, leaveTime, ignLeaveTime, () => _selectTime(context, leaveTime)),
+                // Container(
+                //   width: double.infinity,
+                //   alignment: Alignment.center,
+                //   color: AppColors.primary,
+                //   padding: const EdgeInsets.all(3),
+                //   child: Tex(
+                //     locals.whenJourney,
+                //     con: context,
+                //   ).white,
+                // ),
+                // BlocBuilder<LangCubit, Locale>(
+                //   builder: (context, state) {
+                //     return TableCalendar(
+                //       locale: context.read<LangCubit>().localize(state),
+                //       daysOfWeekHeight: AppSizes.pix24,
+                //       availableGestures: AvailableGestures.horizontalSwipe,
+                //       firstDay: (_rangeStart!.isBefore(DateTime.now())) ? _rangeStart ?? DateTime.now() : DateTime.now(),
+                //       lastDay: DateTime.utc(2030),
+                //       focusedDay: _focusedDay,
+                //       selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                //       startingDayOfWeek: StartingDayOfWeek.monday,
+                //       onDaySelected: _onDaySelected,
+                //       calendarStyle: CalendarStyle(
+                //         selectedTextStyle: const TextStyle(color: AppColors.mainTextDark),
+                //         selectedDecoration: const BoxDecoration(color: Colors.transparent),
+                //         isTodayHighlighted: false,
+                //         todayTextStyle: const TextStyle(color: AppColors.mainTextDark),
+                //         rangeHighlightColor: AppColors.secondaryText.withOpacity(.4),
+                //         rangeStartDecoration: const BoxDecoration(color: AppColors.statusBar, shape: BoxShape.circle),
+                //         rangeEndDecoration: const BoxDecoration(color: AppColors.statusBar, shape: BoxShape.circle),
+                //         todayDecoration: BoxDecoration(
+                //           color: Colors.transparent,
+                //           shape: BoxShape.circle,
+                //           border: Border.all(
+                //             color: AppColors.statusBar,
+                //           ),
+                //         ),
+                //       ),
+                //       onPageChanged: (focusedDay) {
+                //         _focusedDay = focusedDay;
+                //       },
+                //       rangeStartDay: _rangeStart,
+                //       onRangeSelected: _onRangeSelected,
+                //       rangeEndDay: _rangeEnd,
+                //       headerStyle: const HeaderStyle(titleCentered: true, formatButtonVisible: false),
+                //       rangeSelectionMode: RangeSelectionMode.toggledOn,
+                //     );
+                //   },
+                // ),
+                // const SizedBox(height: AppSizes.pix16),
                 GestureDetector(
                   onTap: () async {
                     await pickImages();
@@ -736,7 +803,7 @@ class UpdateHousePageState extends State<UpdateHousePage> {
                 Padding(
                   padding: const EdgeInsets.only(
                     left: AppSizes.pix10,
-                    bottom: AppSizes.pix100,
+                    bottom: AppSizes.pix10,
                   ),
                   child: Row(
                     children: [
@@ -764,186 +831,185 @@ class UpdateHousePageState extends State<UpdateHousePage> {
                     ],
                   ),
                 ),
+                Container(
+                  margin: const EdgeInsets.only(left: 10, right: 10, bottom: 50),
+                  width: width(context),
+                  height: 45,
+                  child: FloatingActionButton(
+                    shape: RoundedRectangleBorder(borderRadius: borderAll10),
+                    backgroundColor: AppColors.buttons,
+                    onPressed: () {
+                      if (_validateAndSaveForm()) {
+                        showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (ctx) {
+                            return StatefulBuilder(builder: (context, useState) {
+                              return PopScope(
+                                canPop: false,
+                                child: AlertDialog(
+                                  insetPadding: const EdgeInsets.all(20),
+                                  actionsPadding: const EdgeInsets.all(AppSizes.pix10),
+                                  actionsAlignment: MainAxisAlignment.center,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(AppSizes.pix10),
+                                  ),
+                                  title: Tex(
+                                    _isClicked ? locals.pleaseWait : locals.confirm,
+                                    con: ctx,
+                                  ),
+                                  content: Row(
+                                    children: [
+                                      if (_isClicked)
+                                        const CircularProgressIndicator(
+                                          color: AppColors.mainTextDark,
+                                        ),
+                                      Expanded(
+                                        child: Tex(
+                                          _isClicked ? "${locals.workinOn} ${locals.pleaseWait}" : locals.doUWantToUpdate,
+                                          con: ctx,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  actions: [
+                                    _isClicked
+                                        ? Container()
+                                        : DialogActions(
+                                            locals: locals,
+                                            onDeny: () => Navigator.of(ctx).pop(),
+                                            onSubmit: () {
+                                              Net.checkInternet().then((value) async {
+                                                if (value) {
+                                                  successToast(locals.updatingHouse);
+                                                  if (!_isClicked) {
+                                                    useState(() {
+                                                      _isClicked = true;
+                                                    });
+                                                  }
+                                                  // String? dayEnterTime = ignEnterTime ? null : enterTime.format(context);
+                                                  // String? dayLeaveTime = ignLeaveTime ? null : leaveTime.format(context);
+
+                                                  Map<String, String> data = {
+                                                    "name": name.text,
+                                                    "category_id": chosenCategId.toString(),
+                                                    "location_id": selectedCityId.toString(),
+                                                    "room_number": roomCount.toString(),
+                                                    "floor_number": floorCount.toString(),
+                                                    "guest_number": guestNumber.toString(),
+                                                    "enter_time": toSendDate(DateTime.now()),
+                                                    // "leave_time": toSendDate(_rangeEnd),
+                                                    //add one year leave_Time
+                                                    "leave_time": toSendDate(DateTime.now().add(const Duration(days: 365))),
+                                                    "description": descriptionCtrl.text,
+                                                    "price": double.parse(priceCtrl.text).toString(),
+                                                    "bron_number": "+993${phoneCtrl.text}",
+                                                  };
+
+                                                  if (selectedFeaturesIndices.isNotEmpty) {
+                                                    data["possibilities"] = selectedFeaturesIndices.toString();
+                                                  }
+
+                                                  // if (dayEnterTime != null) {
+                                                  //   data["day_enter_time"] = dayEnterTime;
+                                                  // }
+
+                                                  // if (dayLeaveTime != null) {
+                                                  //   data["day_leave_time"] = dayLeaveTime;
+                                                  // }
+
+                                                  await context
+                                                      .read<HouseCubit>()
+                                                      .tryUpdateHouse(
+                                                        data: data,
+                                                        imagePaths: isNetworkImage ? [] : houseImages.map((e) => e.path).toList(),
+                                                        id: widget.house.id,
+                                                      )
+                                                      .then((value) async {
+                                                    Navigator.of(ctx).pop(value);
+                                                    if (value) {
+                                                      useState(() {
+                                                        _isClicked = false;
+                                                      });
+
+                                                      showDialog(
+                                                        barrierDismissible: false,
+                                                        context: context,
+                                                        builder: (cntxt) {
+                                                          return StatefulBuilder(builder: (context, rebuild) {
+                                                            return PopScope(
+                                                              canPop: false,
+                                                              child: AlertDialog(
+                                                                insetPadding: const EdgeInsets.all(20),
+                                                                actionsPadding: const EdgeInsets.all(AppSizes.pix10),
+                                                                actionsAlignment: MainAxisAlignment.center,
+                                                                shape: RoundedRectangleBorder(
+                                                                  borderRadius: BorderRadius.circular(AppSizes.pix10),
+                                                                ),
+                                                                title: Tex(
+                                                                  locals.habarnama,
+                                                                  con: cntxt,
+                                                                ),
+                                                                content: Tex(
+                                                                  locals.houseAddedAndSaved.split('.')[0],
+                                                                  con: cntxt,
+                                                                ),
+                                                                actions: [
+                                                                  if (_isClicked)
+                                                                    const CircularProgressIndicator(
+                                                                      color: AppColors.mainTextDark,
+                                                                    )
+                                                                  else
+                                                                    DialogActions(
+                                                                      applyText: 'OK',
+                                                                      locals: locals,
+                                                                      hasPop: false,
+                                                                      onDeny: () => Navigator.of(cntxt).pop(false),
+                                                                      onSubmit: () async {
+                                                                        Navigator.of(cntxt).pop(value);
+                                                                        Navigator.of(context).pop(value);
+                                                                        Navigator.of(context).pop(value);
+                                                                        context.read<CategsCubit>().fetchCategsorites();
+                                                                        await context.read<HouseCubit>().getAllHouses();
+                                                                      },
+                                                                    ),
+                                                                ],
+                                                              ),
+                                                            );
+                                                          });
+                                                        },
+                                                      );
+                                                    } else {
+                                                      useState(() {
+                                                        _isClicked = false;
+                                                      });
+                                                      errorToast(locals.sthWentWrong);
+                                                    }
+                                                  });
+                                                } else {
+                                                  errorToast(locals.noInternet);
+                                                }
+                                              });
+                                            },
+                                          ),
+                                  ],
+                                ),
+                              );
+                            });
+                          },
+                        );
+                      } else {
+                        errorToast(locals.fillAllBlanks);
+                      }
+                    },
+                    child: Tex(locals.updateHouse, con: context).white,
+                  ),
+                ),
               ],
             ),
           ],
         ),
       ),
-      floatingActionButton: Visibility(
-        visible: MediaQuery.of(context).viewInsets.bottom == 0.0,
-        child: SizedBox(
-          width: width(context) - 60,
-          height: 34,
-          child: FloatingActionButton(
-            shape: RoundedRectangleBorder(borderRadius: borderAll10),
-            backgroundColor: AppColors.buttons,
-            onPressed: () {
-              if (_validateAndSaveForm()) {
-                showDialog(
-                  barrierDismissible: false,
-                  context: context,
-                  builder: (ctx) {
-                    return StatefulBuilder(builder: (context, useState) {
-                      return PopScope(
-                        canPop: false,
-                        child: AlertDialog(
-                          insetPadding: const EdgeInsets.all(20),
-                          actionsPadding: const EdgeInsets.all(AppSizes.pix10),
-                          actionsAlignment: MainAxisAlignment.center,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(AppSizes.pix10),
-                          ),
-                          title: Tex(
-                            _isClicked ? locals.pleaseWait : locals.confirm,
-                            con: ctx,
-                          ),
-                          content: Row(
-                            children: [
-                              if (_isClicked)
-                                const CircularProgressIndicator(
-                                  color: AppColors.mainTextDark,
-                                ),
-                              Expanded(
-                                child: Tex(
-                                  _isClicked ? "${locals.workinOn} ${locals.pleaseWait}" : locals.doUWantToUpdate,
-                                  con: ctx,
-                                ),
-                              ),
-                            ],
-                          ),
-                          actions: [
-                            _isClicked
-                                ? Container()
-                                : DialogActions(
-                                    locals: locals,
-                                    onDeny: () => Navigator.of(ctx).pop(),
-                                    onSubmit: () {
-                                      Net.checkInternet().then((value) async {
-                                        if (value) {
-                                          successToast(locals.updatingHouse);
-                                          if (!_isClicked) {
-                                            useState(() {
-                                              _isClicked = true;
-                                            });
-                                          }
-                                          String? dayEnterTime = ignEnterTime ? null : enterTime.format(context);
-                                          String? dayLeaveTime = ignLeaveTime ? null : leaveTime.format(context);
-
-                                          Map<String, String> data = {
-                                            "name": name.text,
-                                            "category_id": chosenCategId.toString(),
-                                            "location_id": selectedCityId.toString(),
-                                            "room_number": roomCount.toString(),
-                                            "floor_number": floorCount.toString(),
-                                            "guest_number": guestNumber.toString(),
-                                            "enter_time": toSendDate(_rangeStart),
-                                            "leave_time": toSendDate(_rangeEnd),
-                                            "description": descriptionCtrl.text,
-                                            "price": double.parse(priceCtrl.text).toString(),
-                                            "bron_number": "+993${phoneCtrl.text}",
-                                          };
-
-                                          if (selectedFeaturesIndices.isNotEmpty) {
-                                            data["possibilities"] = selectedFeaturesIndices.toString();
-                                          }
-
-                                          if (dayEnterTime != null) {
-                                            data["day_enter_time"] = dayEnterTime;
-                                          }
-
-                                          if (dayLeaveTime != null) {
-                                            data["day_leave_time"] = dayLeaveTime;
-                                          }
-
-                                          await context
-                                              .read<HouseCubit>()
-                                              .tryUpdateHouse(
-                                                data: data,
-                                                imagePaths: isNetworkImage ? [] : houseImages.map((e) => e.path).toList(),
-                                                id: widget.house.id,
-                                              )
-                                              .then((value) async {
-                                            Navigator.of(ctx).pop(value);
-                                            if (value) {
-                                              useState(() {
-                                                _isClicked = false;
-                                              });
-
-                                              showDialog(
-                                                barrierDismissible: false,
-                                                context: context,
-                                                builder: (cntxt) {
-                                                  return StatefulBuilder(builder: (context, rebuild) {
-                                                    return PopScope(
-                                                      canPop: false,
-                                                      child: AlertDialog(
-                                                        insetPadding: const EdgeInsets.all(20),
-                                                        actionsPadding: const EdgeInsets.all(AppSizes.pix10),
-                                                        actionsAlignment: MainAxisAlignment.center,
-                                                        shape: RoundedRectangleBorder(
-                                                          borderRadius: BorderRadius.circular(AppSizes.pix10),
-                                                        ),
-                                                        title: Tex(
-                                                          locals.habarnama,
-                                                          con: cntxt,
-                                                        ),
-                                                        content: Tex(
-                                                          locals.houseAddedAndSaved.split('.')[0],
-                                                          con: cntxt,
-                                                        ),
-                                                        actions: [
-                                                          if (_isClicked)
-                                                            const CircularProgressIndicator(
-                                                              color: AppColors.mainTextDark,
-                                                            )
-                                                          else
-                                                            DialogActions(
-                                                              applyText: 'OK',
-                                                              locals: locals,
-                                                              hasPop: false,
-                                                              onDeny: () => Navigator.of(cntxt).pop(false),
-                                                              onSubmit: () async {
-                                                                Navigator.of(cntxt).pop(value);
-                                                                Navigator.of(context).pop(value);
-                                                                Navigator.of(context).pop(value);
-                                                                context.read<CategsCubit>().fetchCategsorites();
-                                                                await context.read<HouseCubit>().getAllHouses();
-                                                              },
-                                                            ),
-                                                        ],
-                                                      ),
-                                                    );
-                                                  });
-                                                },
-                                              );
-                                            } else {
-                                              useState(() {
-                                                _isClicked = false;
-                                              });
-                                              errorToast(locals.sthWentWrong);
-                                            }
-                                          });
-                                        } else {
-                                          errorToast(locals.noInternet);
-                                        }
-                                      });
-                                    },
-                                  ),
-                          ],
-                        ),
-                      );
-                    });
-                  },
-                );
-              } else {
-                errorToast(locals.fillAllBlanks);
-              }
-            },
-            child: Tex(locals.updateHouse, con: context).white,
-          ),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
     );
   }
 

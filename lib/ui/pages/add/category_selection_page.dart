@@ -30,7 +30,7 @@ class CategorySelectionPage extends StatelessWidget {
                   style: const TextStyle(color: AppColors.black, fontFamily: robotoSemiBold),
                 ),
                 onTap: () {
-                  final category2 = categNames(context)[index + 1];
+                  final category2 = categNames(context)[index];
 
                   Navigator.push(
                     context,

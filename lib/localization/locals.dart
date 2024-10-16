@@ -38,6 +38,8 @@ class Locals {
       'kat20': 'LUXE etmek',
       'kat22': 'saýlanmadyk',
       'kat21': 'LUXE derejeli jaylar tiz satylmak mümkinçiligi yokarydyr. LUXE derejelil jaýlar 3 günün dowamynda yerini üýtgedip duryar hem-de reñki we görnüsi boyunça tapawutlanýar.',
+      'kat23': 'surat goşuldy',
+      'kat24': 'Parolyňyzy öwrenmek üçin Jäň edip administrator bilen habarlaşyň',
       'all': 'Ählisi',
       'phoneNumber': 'Nomeri',
       'city': 'Şäher içi',
@@ -95,7 +97,7 @@ class Locals {
       'leaveTime': 'Iň giç giriş wagty:',
       'enterTime': 'Iň ir çykyş wagty:',
       'any': 'islendik',
-      'description': 'Düşündirilşi',
+      'description': 'Doly ady, aýratynlygy, ýagdaýy we ş.m maglmat ',
       'categType': 'Kategoriýa',
       'mainImage': 'ESASY SURAT',
       'insertImage': 'Suratlary saýlaň',
@@ -221,6 +223,7 @@ class Locals {
       'choose': 'Saýla',
     },
     'en': {
+      'kat23': 'images added',
       'kat22': 'not selected',
       'kat21': 'LUXE apartments have a high chance of being sold quickly. LUXE-class houses will change their location during 3 days and differ in color and appearance.',
       'kat17': 'FREE',
@@ -243,6 +246,7 @@ class Locals {
       'kat5': 'Commercial Properties for Rent',
       'kat6': 'Commercial Properties For Sale',
       'kat7': 'Other Properties',
+      'kat24': 'To learn your password, call and contact the administrator',
       'all': 'All',
       'city': 'City',
       'add': 'Add',
@@ -299,7 +303,7 @@ class Locals {
       'enterTime': 'Earliest entry time:',
       'leaveTime': 'Latest check out time:',
       'any': 'any',
-      'description': 'Description',
+      'description': 'Full name, feature, status etc information',
       'categType': 'Category',
       'mainImage': 'MAIN IMAGE',
       'insertImage': 'Select photos',
@@ -407,6 +411,7 @@ class Locals {
       'isYourHBronned': 'Is your house bronned?',
       'sendEmptySms': 'send a blank sms',
       'bronned': 'Bronned',
+      'phoneNumber': 'Phone number',
       'putted': 'Put',
       'enterThoughts': 'You can write your thoughts about the program',
       'removedFromHomepage': 'Removed from homepage',
@@ -426,6 +431,7 @@ class Locals {
       'choose': 'Choose',
     },
     'ru': {
+      'kat23': 'изображение добавлено',
       'kat22': 'не выбрано',
       'kat21': 'LUXE apartments have a high chance of being sold quickly. LUXE-class houses will change their location during 3 days and differ in color and appearance.',
       'kat17': 'БЕСПЛАТНО',
@@ -448,6 +454,7 @@ class Locals {
       'kat5': 'Коммерческая недвижимость в аренду',
       'kat6': 'Коммерческая недвижимость на продажу',
       'kat7': 'Другие свойства',
+      'kat24': 'Чтобы узнать ваш пароль, позвоните администратору',
       'all': 'Все',
       'city': 'Город',
       'add': 'Добавить',
@@ -504,7 +511,7 @@ class Locals {
       'enterTime': 'Время прибытия',
       'leaveTime': 'Время выезд до',
       'any': 'любой',
-      'description': 'Описание',
+      'description': 'Полное имя, функция, статус и т. д.',
       'categType': 'Категория',
       'mainImage': 'ГЛАВНОЕ ФОТО',
       'insertImage': 'Выберите фото',
@@ -655,6 +662,8 @@ class Locals {
   String get kat20 => _localizedValues[locale.languageCode]!['kat20']!;
   String get kat21 => _localizedValues[locale.languageCode]!['kat21']!;
   String get kat22 => _localizedValues[locale.languageCode]!['kat22']!;
+  String get kat23 => _localizedValues[locale.languageCode]!['kat23']!;
+  String get kat24 => _localizedValues[locale.languageCode]!['kat24']!;
 
   String get all => _localizedValues[locale.languageCode]!['all']!;
   String get city => _localizedValues[locale.languageCode]!['city']!;

@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mekanly_com/logic/cubits/region/region_cubit.dart';
+import 'package:mekanly_com/ui/pages/profile/my_houses/edit_house.dart';
 
 import '/localization/locals.dart';
 import '/logic/cubits/cubits.dart';
@@ -9,8 +10,6 @@ import '/ui/style/app_sizes.dart';
 import '/ui/widgets/widgets.dart';
 import '../../../../config/config.dart';
 import '../../../../logic/cubits/categs/categs_cubit.dart';
-import '../../../style/style.dart';
-import 'edit_house.dart';
 
 class MyHouses extends StatefulWidget {
   const MyHouses({super.key});
@@ -45,7 +44,7 @@ class _MyHousesState extends State<MyHouses> {
     var locals = Locals.of(context);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Colors.grey.shade100,
       appBar: TopBar(title: locals.kat16),
       body: RefreshIndicator(
         onRefresh: () => _onRefresh(),
@@ -66,39 +65,44 @@ class _MyHousesState extends State<MyHouses> {
                     ? Center(child: EmptyWidget(locals.myPosts, icon: Icons.browser_not_supported_outlined))
                     : ListView.separated(
                         separatorBuilder: (context, index) {
-                          return const Padding(
-                            padding: EdgeInsets.only(bottom: AppSizes.pix8),
-                            child: SizedBox(height: AppSizes.pix16),
+                          return Container(
+                            color: Colors.grey.shade100,
+                            child: const Divider(
+                              color: Colors.grey,
+                            ),
                           );
                         },
                         itemCount: userHouses.length,
                         itemBuilder: (context, i) {
-                          return InkWell(
-                            borderRadius: borderAll,
+                          return GestureDetector(
                             onTap: () {
+                              print("asdasdasd");
                               go(context, EditHousePage(house: userHouses[i]));
                             },
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                IgnorePointer(
-                                    child: HouseCardEDIT(
-                                  house: userHouses[i],
-                                  bronStatus: userHouses[i].leaveTime.isAfter(DateTime.now())
-                                      ? state.houses.houses.firstWhere((element) => element.id == userHouses[i].id).bronStatus
-                                          ? locals.bronnedAndDisappeared.split('.')[1]
-                                          : locals.unbronnedAndAppeared.split('.')[1]
-                                      : '',
-                                  status: userHouses[i].leaveTime.isAfter(DateTime.now())
-                                      ? userHouses[i].status == 'pending'
-                                          ? locals.pending
-                                          : userHouses[i].status == 'non-active'
-                                              ? locals.notAccepted
-                                              : locals.putted
-                                      : '',
-                                  leaveTime: userHouses[i].leaveTime,
-                                )),
-                              ],
+                            child: Container(
+                              color: Colors.grey.shade100,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  IgnorePointer(
+                                      child: HouseCardEDIT(
+                                    house: userHouses[i],
+                                    bronStatus: userHouses[i].leaveTime.isAfter(DateTime.now())
+                                        ? state.houses.houses.firstWhere((element) => element.id == userHouses[i].id).bronStatus
+                                            ? locals.bronnedAndDisappeared.split('.')[1]
+                                            : locals.unbronnedAndAppeared.split('.')[1]
+                                        : '',
+                                    status: userHouses[i].leaveTime.isAfter(DateTime.now())
+                                        ? userHouses[i].status == 'pending'
+                                            ? locals.pending
+                                            : userHouses[i].status == 'non-active'
+                                                ? locals.notAccepted
+                                                : locals.putted
+                                        : '',
+                                    leaveTime: userHouses[i].leaveTime,
+                                  )),
+                                ],
+                              ),
                             ),
                           );
                         }),

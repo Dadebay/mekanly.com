@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:mekanly_com/logic/cubits/view_count/view_count.dart';
 import 'package:mekanly_com/ui/widgets/notfication_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,6 +41,8 @@ Future<void> main() async {
   await Future.delayed(const Duration(seconds: 3));
 
   WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -80,12 +83,22 @@ class MyAppState extends State<MyApp> {
   @override
   void initState() {
     logger("${"-" * 50} INITIALIZED${"-" * 50}");
+    FlutterNativeSplash.remove();
     firebaseTask();
     super.initState();
   }
 
   dynamic firebaseTask() async {
-    await FirebaseMessaging.instance.getToken();
+    await FirebaseMessaging.instance.getToken().then((a) {
+      print(a);
+      print(a);
+      print(a);
+      print(a);
+      return a;
+    });
+    FirebaseMessaging.instance.subscribeToTopic('ttf_channel').then((a) {
+      return a;
+    });
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       FCMConfig().sendNotification(body: message.notification!.body!, title: message.notification!.title!);
     });

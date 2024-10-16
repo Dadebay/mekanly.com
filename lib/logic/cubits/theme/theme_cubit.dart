@@ -56,7 +56,7 @@ class ThemeCubit extends Cubit<AppThemeState> {
     actionIconTheme: ActionIconThemeData(
       backButtonIconBuilder: (BuildContext context) => const Icon(
         Icons.arrow_back,
-        color: Colors.black,
+        color: Colors.white,
       ),
     ),
     textTheme: style,

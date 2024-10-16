@@ -1,11 +1,11 @@
 import 'package:mekanly_com/ui/pages/profile/terms_and_conditions.dart';
 
-import '../../../../localization/locals.dart';
-import '../../../style/app_sizes.dart';
-import '../../../style/style.dart';
 import '/config/config.dart';
 import '/ui/pages/profile/auth/send_sms_page.dart';
 import '/ui/widgets/widgets.dart';
+import '../../../../localization/locals.dart';
+import '../../../style/app_sizes.dart';
+import '../../../style/style.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -71,18 +71,22 @@ class _RegisterPageState extends State<RegisterPage> with SingleTickerProviderSt
       children: <Widget>[
         const Padding(
           padding: EdgeInsets.all(AppSizes.pix12),
-          child: Mekanly(),
+          child: MekanlyBLUE(),
         ),
         Padding(
-          padding: const EdgeInsets.all(AppSizes.pix8),
+          padding: const EdgeInsets.symmetric(vertical: AppSizes.pix12, horizontal: AppSizes.pix8),
           child: TextFormField(
             onTapOutside: (v) => FocusScope.of(context).unfocus(),
             controller: _usernameController,
             inputFormatters: [LengthLimitingTextInputFormatter(20)],
             decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(horizontal: AppSizes.pix12),
-              border: border(),
-              focusedBorder: focusedBorder(),
+              // contentPadding: const EdgeInsets.symmetric(horizontal: AppSizes.pix12),
+              border: const UnderlineInputBorder(
+                borderSide: BorderSide(color: AppColors.black),
+              ),
+              focusedBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xff384CFF)),
+              ),
               hintText: locals.username,
             ),
             validator: (value) {
@@ -94,21 +98,21 @@ class _RegisterPageState extends State<RegisterPage> with SingleTickerProviderSt
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(AppSizes.pix8),
+          padding: const EdgeInsets.symmetric(vertical: AppSizes.pix12, horizontal: AppSizes.pix8),
           child: TextFormField(
             onTapOutside: (v) => FocusScope.of(context).unfocus(),
             controller: _phoneController,
             keyboardType: TextInputType.phone,
             inputFormatters: [LengthLimitingTextInputFormatter(8)],
             decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(horizontal: AppSizes.pix12),
-              border: border(),
-              focusedBorder: focusedBorder(),
-              hintText: locals.phone,
-              prefixIcon: Padding(
-                padding: const EdgeInsets.fromLTRB(AppSizes.pix10, 2, 0, 0),
-                child: Tex('+993', con: context, size: AppSizes.pix16).title,
+              border: const UnderlineInputBorder(
+                borderSide: BorderSide(color: AppColors.black),
               ),
+              focusedBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xff384CFF)),
+              ),
+              hintText: locals.phone,
+              prefixIcon: Tex('+993', con: context, size: AppSizes.pix16).title,
               prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
             ),
             validator: (value) {
@@ -125,15 +129,19 @@ class _RegisterPageState extends State<RegisterPage> with SingleTickerProviderSt
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(AppSizes.pix8),
+          padding: const EdgeInsets.symmetric(vertical: AppSizes.pix12, horizontal: AppSizes.pix8),
           child: TextFormField(
             onTapOutside: (v) => FocusScope.of(context).unfocus(),
             controller: _passwordController,
             inputFormatters: [LengthLimitingTextInputFormatter(16)],
             decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(horizontal: AppSizes.pix12),
-              border: border(),
-              focusedBorder: focusedBorder(),
+              // contentPadding: const EdgeInsets.symmetric(horizontal: AppSizes.pix12),
+              border: const UnderlineInputBorder(
+                borderSide: BorderSide(color: AppColors.black),
+              ),
+              focusedBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xff384CFF)),
+              ),
               hintText: locals.passCode,
               suffixIcon: IconButton(
                 onPressed: () {
@@ -159,15 +167,19 @@ class _RegisterPageState extends State<RegisterPage> with SingleTickerProviderSt
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(AppSizes.pix8),
+          padding: const EdgeInsets.symmetric(vertical: AppSizes.pix12, horizontal: AppSizes.pix8),
           child: TextFormField(
             inputFormatters: [LengthLimitingTextInputFormatter(16)],
             onTapOutside: (v) => FocusScope.of(context).unfocus(),
             decoration: InputDecoration(
               hintText: locals.reTypePass,
-              contentPadding: const EdgeInsets.symmetric(horizontal: AppSizes.pix12),
-              border: border(),
-              focusedBorder: focusedBorder(),
+              // contentPadding: const EdgeInsets.symmetric(horizontal: AppSizes.pix12),
+              border: const UnderlineInputBorder(
+                borderSide: BorderSide(color: AppColors.black),
+              ),
+              focusedBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xff384CFF)),
+              ),
               suffixIcon: IconButton(
                 onPressed: () {
                   setState(() {
@@ -196,7 +208,7 @@ class _RegisterPageState extends State<RegisterPage> with SingleTickerProviderSt
         Row(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(5.0),
+              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 8),
               child: InkWell(
                 onTap: () {
                   setState(() {
@@ -218,9 +230,8 @@ class _RegisterPageState extends State<RegisterPage> with SingleTickerProviderSt
           ],
         ),
         const SizedBox(height: 15),
-        ActionButton(
-          radius: 0,
-          size: AppSizes.pix16,
+        ActionButtonGradient2(
+          mini: true,
           onTap: _register,
           label: locals.register.toUpperCase(),
         ),

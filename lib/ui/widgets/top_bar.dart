@@ -24,8 +24,8 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0.0,
       scrolledUnderElevation: 0.0,
       leading: leading,
-      // auto impleasding button color change
-      iconTheme: IconThemeData(color: color ?? AppColors.white),
+      //change autoimpleametnt leading icon color to white color
+      iconTheme: const IconThemeData(color: Colors.white),
       centerTitle: true,
       backgroundColor: AppColors.secondary1,
       surfaceTintColor: Colors.transparent,

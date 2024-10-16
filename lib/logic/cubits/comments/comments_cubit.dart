@@ -32,7 +32,16 @@ class CommentsCubit extends Cubit<CommentsState> {
   Future<void> comment(int id, double rating, String desc, {int? commentId}) async {
     try {
       emit(CommentLoading());
+      print(desc);
+      print(commentId);
       final result = await service.commentHouse(id, rating, desc, replyId: commentId);
+      print(result);
+      print(result);
+      print(result);
+      print(result);
+
+      print(result);
+      print(result);
       result.fold(
         (failure) => emit(CommentError()),
         (r) {

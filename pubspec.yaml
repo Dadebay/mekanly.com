@@ -82,6 +82,6 @@ flutter:
         - asset: assets/fonts/manrope-regular.otf
 
 flutter_native_splash:
-  background_image: "assets/images/screen.png"
+  background_image: "assets/images/screen1.png"
   android_12:
   fullscreen: true

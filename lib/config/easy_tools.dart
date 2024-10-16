@@ -90,7 +90,28 @@ class Mekanly extends StatelessWidget {
       height: AppSizes.pix45,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: AppSizes.pix12, vertical: 6),
-        child: Image.asset('assets/images/mekanly.png'),
+        child: Image.asset(
+          'assets/images/mekanly.png',
+        ),
+      ),
+    );
+  }
+}
+
+class MekanlyBLUE extends StatelessWidget {
+  const MekanlyBLUE({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: AppSizes.pix80 - 10,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: AppSizes.pix12, vertical: 6),
+        child: Image.asset(
+          'assets/icons/mekanly_blue.png',
+        ),
       ),
     );
   }

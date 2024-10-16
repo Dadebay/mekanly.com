@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconly/iconly.dart';
+import 'package:mekanly_com/ui/pages/home/notification_page_view.dart';
 import 'package:mekanly_com/ui/pages/profile/auth/register_page.dart';
 
 import '/config/config.dart';
@@ -48,7 +49,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     height: 35,
                     alignment: Alignment.centerLeft,
                   )),
-                  GestureDetector(onTap: () {}, child: const SvgAsset('notification', size: AppSizes.pix28, Colors.black)),
+                  GestureDetector(
+                      onTap: () {
+                        go(context, const NotifcationPageView());
+                      },
+                      child: const SvgAsset('notification', size: AppSizes.pix28, Colors.black)),
                 ],
               ),
             ),
@@ -117,7 +122,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     locals.kat9,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(color: Colors.black, fontFamily: robotoSemiBold, fontSize: AppSizes.pix16 + 2),
+                                    style: const TextStyle(color: Colors.black, fontFamily: robotoSemiBold, fontSize: AppSizes.pix16),
                                   ),
                                   const SizedBox(
                                     height: 15,
@@ -126,7 +131,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     locals.kat10,
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 4,
-                                    style: const TextStyle(color: Color(0xff717171), fontFamily: robotoMedium, fontSize: AppSizes.pix12 + 2),
+                                    style: const TextStyle(color: Color(0xff717171), fontFamily: robotoMedium, fontSize: AppSizes.pix12),
                                   ),
                                 ],
                               )),
@@ -176,7 +181,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ListView.separated(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: 6,
+                    itemCount: 5,
                     itemBuilder: (context, index) {
                       List icons = [Icons.language, IconlyLight.heart, IconlyLight.chat, IconlyLight.message, IconlyLight.document, IconlyLight.info_circle, IconlyLight.logout];
 

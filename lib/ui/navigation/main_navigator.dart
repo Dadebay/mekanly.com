@@ -1,17 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mekanly_com/config/config.dart';
 import 'package:mekanly_com/logic/cubits/categs/categs_cubit.dart';
 import 'package:mekanly_com/logic/cubits/house/house_cubit.dart';
 import 'package:mekanly_com/logic/data/net.dart';
 import 'package:mekanly_com/ui/navigation/navigation.dart';
 import 'package:mekanly_com/ui/pages/profile/auth/logout_dialog.dart';
 
+import '/logic/cubits/navigator/nav_cubit.dart';
 import '../../localization/locals.dart';
 import '../style/app_sizes.dart';
 import '../style/style.dart';
 import '../widgets/nav_bar.dart';
-import '/logic/cubits/navigator/nav_cubit.dart';
 
 class MainNavigator extends StatefulWidget {
   const MainNavigator({super.key});
@@ -121,41 +120,52 @@ class NoInternetDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var locals = Locals.of(context);
-    return AlertDialog(
-      insetPadding: const EdgeInsets.all(AppSizes.pix4),
-      title: Row(
-        children: [
-          const Icon(Icons.info_outline),
-          Text(" ${locals.noInternet}"),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 10),
+      width: double.infinity,
+      child: AlertDialog(
+        insetPadding: const EdgeInsets.all(AppSizes.pix4),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const Icon(Icons.info_outline),
+            Text(
+              " ${locals.noInternet}",
+              style: const TextStyle(color: Colors.black, fontFamily: robotoBold, fontSize: 24),
+            ),
+          ],
+        ),
+        content: Text(
+          locals.checkYourInternetRetry,
+          style: const TextStyle(color: Colors.black, fontFamily: robotoMedium, fontSize: 18),
+        ),
+        actions: <Widget>[
+          DialogActions(
+            locals: locals,
+            onDeny: () {
+              SystemNavigator.pop();
+            },
+            onSubmit: () {
+              Navigator.of(shx).pop();
+              Future.delayed(const Duration(milliseconds: 300), () async {
+                await Net.checkInternet().then((value) {
+                  if (!value) {
+                    showDialog(
+                      barrierDismissible: false,
+                      context: shx,
+                      builder: (ct) => NoInternetDialog(shx: shx),
+                    );
+                  }
+                  shx.read<CategsCubit>().fetchCategsorites();
+                  shx.read<HouseCubit>().getAllHouses();
+                  return value;
+                });
+              });
+            },
+            applyText: locals.retry,
+          ),
         ],
       ),
-      content: Text(locals.checkYourInternetRetry),
-      actions: <Widget>[
-        DialogActions(
-          locals: locals,
-          onDeny: () {
-            SystemNavigator.pop();
-          },
-          onSubmit: () {
-            Navigator.of(shx).pop();
-            Future.delayed(const Duration(milliseconds: 300), () async {
-              await Net.checkInternet().then((value) {
-                if (!value) {
-                  showDialog(
-                    barrierDismissible: false,
-                    context: shx,
-                    builder: (ct) => NoInternetDialog(shx: shx),
-                  );
-                }
-                shx.read<CategsCubit>().fetchCategsorites();
-                shx.read<HouseCubit>().getAllHouses();
-                return value;
-              });
-            });
-          },
-          applyText: locals.retry,
-        ),
-      ],
     );
   }
 }

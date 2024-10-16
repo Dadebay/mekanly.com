@@ -1,6 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:iconly/iconly.dart';
 import 'package:mekanly_com/logic/cubits/comments/comments_cubit.dart';
 import 'package:mekanly_com/logic/cubits/view_count/view_count.dart';
@@ -84,7 +83,7 @@ class _HouseDetailsPageState extends State<HouseDetailsPage> {
                             child: Text(
                               "${widget.house.price} TMT",
                               textAlign: TextAlign.center,
-                              style: const TextStyle(color: Colors.black, fontFamily: robotoSemiBold, fontSize: AppSizes.pix20),
+                              style: const TextStyle(color: Colors.black, fontFamily: robotoSemiBold, fontSize: AppSizes.pix20 - 2),
                             )),
                         const SizedBox(width: AppSizes.pix20),
                         Expanded(
@@ -294,14 +293,35 @@ class _DetailsState extends State<Details> {
             ),
           ),
           if (widget.house.user.id == context.read<AuthCubit>().repo.user.id && widget.house.status == 'active')
-            Padding(
+            Container(
+                margin: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  borderRadius: borderAll10,
+                  color: const Color(0xff7E8C90).withOpacity(.2),
+                ),
                 padding: const EdgeInsets.symmetric(horizontal: AppSizes.pix12),
-                child: Tex(
-                  '${locals.comments} (${widget.house.comments.where((element) => element.replyId == null).toList().length})',
-                  con: context,
-                  col: AppColors.mainText,
-                  size: AppSizes.pix16,
-                ).title)
+                child: Row(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 8),
+                      child: SvgAsset('messageMinus', AppColors.black),
+                    ),
+                    Expanded(
+                      child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: AppSizes.pix12),
+                          child: Tex(
+                            '${locals.myComments} (${widget.house.comments.where((element) => element.replyId == null).toList().length})',
+                            con: context,
+                            col: AppColors.black,
+                            size: AppSizes.pix16,
+                          ).title),
+                    ),
+                    IconButton(
+                      icon: const SvgAsset('messagePlus', AppColors.black),
+                      onPressed: () {},
+                    ),
+                  ],
+                ))
         ]),
         if (widget.house.status == 'active')
           Sli(children: [
@@ -439,24 +459,27 @@ class _DetailsState extends State<Details> {
                                       )
                                   ],
                                 ),
-                                Row(
-                                  children: [
-                                    RatingBar.builder(
-                                      unratedColor: AppColors.secondaryText,
-                                      ignoreGestures: true,
-                                      initialRating: double.parse(thisComment.star ?? "3.0"),
-                                      direction: Axis.horizontal,
-                                      allowHalfRating: true,
-                                      itemCount: 5,
-                                      itemSize: AppSizes.pix20,
-                                      itemBuilder: (context, _) => const Icon(Icons.star, color: AppColors.yellow),
-                                      onRatingUpdate: (newRating) {},
-                                    ),
-                                    const SizedBox(width: AppSizes.pix10),
-                                    Tex(toTime(thisComment.createdAt), con: context),
-                                    const Spacer(),
-                                  ],
-                                ),
+                                Tex(toTime(thisComment.createdAt), con: context),
+                                // Tex(thisComment.createdAt.toString(), con: context),
+
+                                // Row(
+                                //   children: [
+                                //     RatingBar.builder(
+                                //       unratedColor: AppColors.secondaryText,
+                                //       ignoreGestures: true,
+                                //       initialRating: double.parse(thisComment.star ?? "3.0"),
+                                //       direction: Axis.horizontal,
+                                //       allowHalfRating: true,
+                                //       itemCount: 5,
+                                //       itemSize: AppSizes.pix20,
+                                //       itemBuilder: (context, _) => const Icon(Icons.star, color: AppColors.yellow),
+                                //       onRatingUpdate: (newRating) {},
+                                //     ),
+                                //     const SizedBox(width: AppSizes.pix10),
+                                //     Tex(toTime(thisComment.createdAt), con: context),
+                                //     const Spacer(),
+                                //   ],
+                                // ),
                                 Row(
                                   children: [
                                     Expanded(child: Tex(thisComment.description, con: context)),
@@ -551,39 +574,37 @@ class _DetailsState extends State<Details> {
                   )
               ],
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    IconlyBold.location,
+                    size: AppSizes.pix16 + 2,
+                    color: Colors.black,
+                  ),
+                  Expanded(
+                    child: Text(
+                      (widget.house.location.parentName == widget.house.location.name) ? widget.house.location.parentName : "${widget.house.location.parentName} - ${widget.house.location.name}",
+                      style: const TextStyle(
+                        fontFamily: robotoRegular,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 13,
+                        color: AppColors.mainTextDark,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(height: AppSizes.pix6),
             BlocBuilder<LangCubit, Locale>(
               builder: (context, state) {
                 return Row(
                   children: [
-                    Expanded(
-                      flex: 3,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            IconlyBold.location,
-                            size: AppSizes.pix16 + 2,
-                            color: Colors.black,
-                          ),
-                          Expanded(
-                            child: Text(
-                              (widget.house.location.parentName == widget.house.location.name)
-                                  ? widget.house.location.parentName
-                                  : "${widget.house.location.parentName} - ${widget.house.location.name}",
-                              style: const TextStyle(
-                                fontFamily: robotoRegular,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 13,
-                                color: AppColors.mainTextDark,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                     Expanded(
                       flex: 1,
                       child: Row(
@@ -596,7 +617,9 @@ class _DetailsState extends State<Details> {
                     ),
 
                     Expanded(
+                      flex: 1,
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           const SvgAsset('message', size: 18, Colors.black),
                           Text(
@@ -614,8 +637,9 @@ class _DetailsState extends State<Details> {
                       ),
                     ),
                     Expanded(
-                      flex: 2,
+                      flex: 4,
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           const SvgAsset('calendar', size: 18, Colors.black),
                           Expanded(

@@ -1,5 +1,4 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:iconly/iconly.dart';
 import 'package:mekanly_com/ui/pages/home/detail/cached_net_image.dart';
 
 import '/config/config.dart';
@@ -34,7 +33,7 @@ class HouseCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-          borderRadius: borderAll8,
+          // borderRadius: borderAll8,
           color: Colors.white,
           boxShadow: [
             BoxShadow(
@@ -54,7 +53,7 @@ class HouseCard extends StatelessWidget {
                 )
               : null),
       child: InkWell(
-        borderRadius: borderAll8,
+        // borderRadius: borderAll8,
         onTap: () {
           go(context, HouseDetailsPage(house: house));
         },
@@ -147,12 +146,13 @@ class HouseCard extends StatelessWidget {
                   onTap: () async {
                     await favCubit.toggleFavorite(house, locals, context);
                   },
-                  child: SvgAsset('heart', favCubit.isItemFavorited(house.id) ? AppColors.red : null, size: 30),
-                  // Icon(
-                  //   favCubit.isItemFavorited(house.id) ? IconlyBold.heart : IconlyLight.heart,
-                  //   size: 24,
-                  //   color: favCubit.isItemFavorited(house.id) ? AppColors.red : Colors.white,
-                  // ),
+                  child: favCubit.isItemFavorited(house.id)
+                      ? const Icon(
+                          Icons.favorite,
+                          color: AppColors.red,
+                          size: 35,
+                        )
+                      : SvgAsset('heart', favCubit.isItemFavorited(house.id) ? AppColors.red : null, size: 30),
                 ),
               ),
             if (house.luxe)
@@ -186,61 +186,58 @@ class _HouseCardImageState extends State<HouseCardImage> {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: borderAll10,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          CarouselSlider(
-            carouselController: _carouselController,
-            items: widget.house.images.map((imagePath) {
-              var img = imagePath.url;
-              return Builder(
-                builder: (BuildContext context) {
-                  return Container(
-                    color: AppColors.secondaryText.withOpacity(.4),
-                    height: width(context) - 55,
-                    width: MediaQuery.of(context).size.width,
-                    child: CachedNetImage(img: img),
-                  );
-                },
-              );
-            }).toList(),
-            options: CarouselOptions(
-              onPageChanged: (index, reason) {
-                setState(() {
-                  _imageIndex = index;
-                });
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        CarouselSlider(
+          carouselController: _carouselController,
+          items: widget.house.images.map((imagePath) {
+            var img = imagePath.url;
+            return Builder(
+              builder: (BuildContext context) {
+                return Container(
+                  color: AppColors.secondaryText.withOpacity(.4),
+                  height: width(context) - 55,
+                  width: MediaQuery.of(context).size.width,
+                  child: CachedNetImage(img: img),
+                );
               },
-              autoPlayCurve: Curves.fastOutSlowIn,
-              enableInfiniteScroll: true,
-              autoPlayAnimationDuration: const Duration(milliseconds: 500),
-              viewportFraction: 1,
-              height: width(context) - 55,
-            ),
+            );
+          }).toList(),
+          options: CarouselOptions(
+            onPageChanged: (index, reason) {
+              setState(() {
+                _imageIndex = index;
+              });
+            },
+            autoPlayCurve: Curves.fastOutSlowIn,
+            enableInfiniteScroll: true,
+            autoPlayAnimationDuration: const Duration(milliseconds: 500),
+            viewportFraction: 1,
+            height: width(context) - 55,
           ),
-          widget.house.luxe == true
-              ? const SizedBox.shrink()
-              : Positioned(
-                  top: 10,
-                  left: 10,
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(color: const Color(0xff00BEA7).withOpacity(0.4), borderRadius: borderAll6),
-                    child: Text(
-                      widget.house.categoryName,
-                      style: const TextStyle(color: Colors.white, fontFamily: robotoSemiBold),
-                    ),
+        ),
+        widget.house.luxe == true
+            ? const SizedBox.shrink()
+            : Positioned(
+                top: 10,
+                left: 10,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(color: const Color(0xff00BEA7).withOpacity(0.4), borderRadius: borderAll6),
+                  child: Text(
+                    widget.house.categoryName,
+                    style: const TextStyle(color: Colors.white, fontFamily: robotoSemiBold),
                   ),
                 ),
-          Positioned(
-            bottom: AppSizes.pix6,
-            child: Row(
-              children: [...indicators(widget.house.images.length, _imageIndex, context)],
-            ),
-          )
-        ],
-      ),
+              ),
+        Positioned(
+          bottom: AppSizes.pix6,
+          child: Row(
+            children: [...indicators(widget.house.images.length, _imageIndex, context)],
+          ),
+        )
+      ],
     );
   }
 }
@@ -270,18 +267,8 @@ class HouseCardEDIT extends StatelessWidget {
     return Container(
       height: 150,
       decoration: BoxDecoration(
-          borderRadius: borderAll8,
-          color: Colors.grey.shade200,
-          gradient: house.luxe
-              ? const LinearGradient(
-                  begin: Alignment.bottomLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Color(0xffF4E49c),
-                    Color(0xffFefdf7),
-                  ],
-                )
-              : null),
+        color: Colors.grey.shade100,
+      ),
       child: Stack(
         children: [
           Row(
@@ -295,17 +282,23 @@ class HouseCardEDIT extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        house.name.characters.take(30).toString(),
-                        style: TextStyle(
-                          fontFamily: robotoBold,
-                          fontSize: ((Responsive.isTablet(context) ? AppSizes.pix12 : AppSizes.pix16) * ratio),
-                          color: AppColors.mainTextDark,
-                          textBaseline: TextBaseline.alphabetic,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                      house.luxe == true
+                          ? const SizedBox.shrink()
+                          : Text(
+                              house.categoryName,
+                              style: const TextStyle(color: AppColors.mainTextDark, fontFamily: robotoSemiBold),
+                            ),
+                      // Text(
+                      //   house.name.characters.take(30).toString(),
+                      //   style: TextStyle(
+                      //     fontFamily: robotoBold,
+                      //     fontSize: ((Responsive.isTablet(context) ? AppSizes.pix12 : AppSizes.pix16) * ratio),
+                      //     color: AppColors.mainTextDark,
+                      //     textBaseline: TextBaseline.alphabetic,
+                      //   ),
+                      //   maxLines: 1,
+                      //   overflow: TextOverflow.ellipsis,
+                      // ),
                       Text(
                         (house.location.parentName == house.location.name) ? house.location.parentName : "${house.location.parentName} - ${house.location.name}",
                         style: const TextStyle(
@@ -328,21 +321,29 @@ class HouseCardEDIT extends StatelessWidget {
                         style: const TextStyle(fontSize: AppSizes.pix16 + 2, fontFamily: robotoBold),
                       ),
                       if (leaveTime.isBefore(DateTime.now()))
-                        Tex(
-                          locals.expired,
-                          con: context,
-                          col: AppColors.red,
-                        ).subtitle
+                        Container(
+                          width: double.infinity,
+                          alignment: Alignment.centerRight,
+                          child: Tex(
+                            locals.expired,
+                            con: context,
+                            col: AppColors.red,
+                          ).subtitle,
+                        )
                       else
-                        Tex(status ?? '',
-                                overflow: TextOverflow.ellipsis,
-                                con: context,
-                                col: house.status == 'pending'
-                                    ? AppColors.buttons
-                                    : house.status == 'non-active'
-                                        ? Colors.red
-                                        : AppColors.green)
-                            .subtitle,
+                        Container(
+                          width: double.infinity,
+                          alignment: Alignment.centerRight,
+                          child: Tex(status ?? '',
+                                  overflow: TextOverflow.ellipsis,
+                                  con: context,
+                                  col: house.status == 'pending'
+                                      ? AppColors.buttons
+                                      : house.status == 'non-active'
+                                          ? Colors.red
+                                          : AppColors.green)
+                              .subtitle,
+                        ),
                     ],
                   ),
                 ),
@@ -357,11 +358,13 @@ class HouseCardEDIT extends StatelessWidget {
                 onTap: () async {
                   await favCubit.toggleFavorite(house, locals, context);
                 },
-                child: Icon(
-                  favCubit.isItemFavorited(house.id) ? IconlyBold.heart : IconlyLight.heart,
-                  size: 24,
-                  color: favCubit.isItemFavorited(house.id) ? AppColors.red : Colors.white,
-                ),
+                child: favCubit.isItemFavorited(house.id)
+                    ? const Icon(
+                        Icons.favorite,
+                        color: AppColors.red,
+                        size: 35,
+                      )
+                    : SvgAsset('heart', favCubit.isItemFavorited(house.id) ? AppColors.red : null, size: 30),
               ),
             ),
           if (house.luxe)
@@ -394,61 +397,44 @@ class _HouseCardImageEDITState extends State<HouseCardImageEDIT> {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: borderAll10,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          CarouselSlider(
-            carouselController: _carouselController,
-            items: widget.house.images.map((imagePath) {
-              var img = imagePath.url;
-              return Builder(
-                builder: (BuildContext context) {
-                  return Container(
-                    color: AppColors.secondaryText.withOpacity(.4),
-                    height: width(context) - 55,
-                    width: MediaQuery.of(context).size.width,
-                    child: CachedNetImage(img: img),
-                  );
-                },
-              );
-            }).toList(),
-            options: CarouselOptions(
-              onPageChanged: (index, reason) {
-                setState(() {
-                  _imageIndex = index;
-                });
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        CarouselSlider(
+          carouselController: _carouselController,
+          items: widget.house.images.map((imagePath) {
+            var img = imagePath.url;
+            return Builder(
+              builder: (BuildContext context) {
+                return Container(
+                  color: AppColors.secondaryText.withOpacity(.4),
+                  height: width(context) - 55,
+                  width: MediaQuery.of(context).size.width,
+                  child: CachedNetImage(img: img),
+                );
               },
-              autoPlayCurve: Curves.fastOutSlowIn,
-              enableInfiniteScroll: true,
-              autoPlayAnimationDuration: const Duration(milliseconds: 500),
-              viewportFraction: 1,
-              height: width(context) - 55,
-            ),
+            );
+          }).toList(),
+          options: CarouselOptions(
+            onPageChanged: (index, reason) {
+              setState(() {
+                _imageIndex = index;
+              });
+            },
+            autoPlayCurve: Curves.fastOutSlowIn,
+            enableInfiniteScroll: true,
+            autoPlayAnimationDuration: const Duration(milliseconds: 500),
+            viewportFraction: 1,
+            height: width(context) - 55,
           ),
-          widget.house.luxe == true
-              ? const SizedBox.shrink()
-              : Positioned(
-                  top: 10,
-                  left: 10,
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(color: AppColors.secondary, borderRadius: borderAll6),
-                    child: Text(
-                      widget.house.categoryName,
-                      style: const TextStyle(color: Colors.white, fontFamily: robotoSemiBold),
-                    ),
-                  ),
-                ),
-          Positioned(
-            bottom: AppSizes.pix6,
-            child: Row(
-              children: [...indicators(widget.house.images.length, _imageIndex, context)],
-            ),
-          )
-        ],
-      ),
+        ),
+        Positioned(
+          bottom: AppSizes.pix6,
+          child: Row(
+            children: [...indicators(widget.house.images.length, _imageIndex, context)],
+          ),
+        )
+      ],
     );
   }
 }
