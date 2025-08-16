@@ -1,87 +1,103 @@
-name: mekanly_com
+name: mekanly
 description: "A new Flutter project."
 publish_to: "none"
-
-version: 1.0.0+1
+version: 1.0.8+1
 
 environment:
-  sdk: ">=3.2.2 <4.0.0"
+  sdk: ">=3.4.0 <4.0.0"
+  # flutter: ^3.32.0
 
 dependencies:
+  bloc_concurrency: ^0.2.5
+  common:
+    path: module/common
+  cupertino_icons: ^1.0.6
+  dartz: ^0.10.1
+  device_info_plus: ^11.3.0
+  dio: ^5.8.0+1
+  # dio_http_adapter: ^1.0.1
+  dotted_border: ^2.1.0
+  equatable: ^2.0.5
+  extended_nested_scroll_view: ^6.2.1
+  firebase_core: ^3.13.0
+  firebase_messaging: ^15.2.5
   flutter:
     sdk: flutter
-
-  cupertino_icons: ^1.0.2
-  flutter_bloc:
-  dartz:
-  equatable:
-  shared_preferences:
-  get_it:
-  http:
+  flutter_bloc: ^8.1.6
+  flutter_local_notifications: ^19.1.0
   flutter_localizations:
     sdk: flutter
-  intl:
-  localization:
-  get:
-  chalkdart:
-  fluttertoast:
-  flutter_svg:
-  flutter_native_splash: ^2.3.10
-  flutter_rating_bar: ^4.0.1
-  carousel_slider: ^4.2.1
-  table_calendar: ^3.0.9
-  image_picker:
-  photo_view: ^0.15.0
-  turkmen_localization_support: ^0.0.5
-  change_app_package_name: ^1.2.0
-  http_parser: ^4.0.2
-  url_launcher: ^6.2.2
-  dotted_border: ^2.1.0
+  flutter_screenutil: ^5.9.3
+  flutter_spinkit: ^5.2.1
   flutter_staggered_grid_view: ^0.7.0
-  transparent_image: ^2.0.1
-  connectivity_plus: ^5.0.2
-  flutter_image_compress: ^2.2.0
-  path: ^1.8.3
-  cached_network_image: ^3.3.1
-  iconly:
-  share_plus: 
-  firebase_messaging: 
-  awesome_notifications: ^0.9.3+1
-  cloud_firestore: 
-  firebase_core: any
-  firebase_core_platform_interface: 4.5.1
-
+  freezed_annotation: ^2.4.4
+  gen:
+    path: module/gen
+  get_it: ^8.0.2
+  image_picker: ^1.1.2
+  injectable: ^2.5.0
+  json_annotation: ^4.9.0
+  pinput: ^5.0.1
+  pull_to_refresh: ^2.0.0
+  rxdart: ^0.28.0
+  shared_preferences: ^2.3.2
+  stream_transform: ^2.1.0
+  cloud_firestore: ^5.1.0
+  # mekanly_video_player:
+  #   git:
+  visibility_detector: ^0.4.0+2
+  video_player: ^2.9.5
+  cached_network_image: ^3.4.1
+  carousel_slider: ^5.1.1
+  permission_handler: ^12.0.0+1
+  url_launcher: ^6.3.1
+  share_plus: ^11.0.0
+  path_provider: ^2.1.5
+  flutter_gen: ^5.10.0
+  gallery_saver_plus: ^3.2.8
+  flutter_inappwebview: ^6.1.5
+  intl: ^0.20.2
+  collection: ^1.18.0
+  extended_image: ^8.2.0
 
 dev_dependencies:
+  build_runner: ^2.4.11
+  flutter_lints: ^3.0.0
   flutter_test:
     sdk: flutter
+  freezed: ^2.5.0
+  injectable_generator: ^2.6.2
+  json_serializable: ^6.8.0
 
-  flutter_lints: ^4.0.0
 
 flutter:
   uses-material-design: true
+  generate: true
 
   assets:
-    - assets/images/
-    - assets/fonts/
-    - assets/icons/
-    - assets/comment.txt
-    - assets/legals.txt
+    - assets/
   fonts:
-    - family: ManropeBold
+    - family: Roboto
       fonts:
-        - asset: assets/fonts/manrope-bold.otf
-    - family: manropeSemiBold
+        - asset: assets/fonts/Roboto/Roboto-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Roboto/Roboto-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Roboto/Roboto-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Roboto/Roboto-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Roboto/Roboto-Bold.ttf
+          weight: 700
+    - family: Manrope
       fonts:
-        - asset: assets/fonts/manrope-semibold.otf
-    - family: ManropeMedium
-      fonts:
-        - asset: assets/fonts/manrope-medium.otf
-    - family: ManropeRegular
-      fonts:
-        - asset: assets/fonts/manrope-regular.otf
-
-flutter_native_splash:
-  background_image: "assets/images/screen1.png"
-  android_12:
-  fullscreen: true
+        - asset: assets/fonts/Manrope/Manrope-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Manrope/Manrope-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Manrope/Manrope-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Manrope/Manrope-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Manrope/Manrope-Bold.ttf
+          weight: 700

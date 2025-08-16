@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAVEciNEJxDev7IO1VWjn8UrLSkB6jiqkM',
-    appId: '1:848730361934:android:c14ed119cd050af024731f',
-    messagingSenderId: '848730361934',
-    projectId: 'mekanly',
-    storageBucket: 'mekanly.appspot.com',
+    apiKey: 'AIzaSyCZ-vYn6JClewlGl4GpOnmNC0WfM_wfkrM',
+    appId: '1:469988090606:android:d4d0307c5b0bd95fbb49ff',
+    messagingSenderId: '469988090606',
+    projectId: 'mekanlyv2',
+    storageBucket: 'mekanlyv2.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCSo5yJpxSUZtCavdyMHGrVN6msr3TIhP0',
-    appId: '1:848730361934:ios:0aecff4d116da7bf24731f',
-    messagingSenderId: '848730361934',
-    projectId: 'mekanly',
-    storageBucket: 'mekanly.appspot.com',
-    iosBundleId: 'com.example.mekanlyCom',
+    apiKey: 'AIzaSyBYYw2tictfmZfPquwZLMoCQvhP4rkUzDA',
+    appId: '1:469988090606:ios:34d9d5fe081859bcbb49ff',
+    messagingSenderId: '469988090606',
+    projectId: 'mekanlyv2',
+    storageBucket: 'mekanlyv2.firebasestorage.app',
+    iosBundleId: 'com.gurbanow.mekanly',
   );
 }

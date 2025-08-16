@@ -1,0 +1,41 @@
+name: gen
+description: "A new Flutter package project."
+version: 0.0.1
+homepage: null
+
+environment:
+  sdk: ^3.6.1
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_svg: ^2.0.17
+
+dev_dependencies:
+  flutter_lints: ^5.0.0
+  build_runner: ^2.4.14
+  flutter_gen_runner: ^5.9.0
+  flutter_test:
+    sdk: flutter
+
+flutter_gen:
+  output: lib/src/asset/
+  integrations:
+    flutter_svg: true
+
+  colors:
+    inputs:
+      - assets/colors/colors.xml
+
+flutter:
+  assets:
+    - assets/images/
+    - assets/colors/
+    - assets/icons/
+    - assets/icons/business_profiles/
+    - assets/icons/carpets/
+    - assets/icons/chandelier/
+    - assets/icons/constructions/
+    - assets/icons/furniture/
+    - assets/icons/house_equipments/

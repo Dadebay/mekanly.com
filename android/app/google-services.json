@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "848730361934",
     "project_id": "mekanly",
-    "storage_bucket": "mekanly.appspot.com"
+    "storage_bucket": "mekanly.firebasestorage.app"
   },
   "client": [
     {

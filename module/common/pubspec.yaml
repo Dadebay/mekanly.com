@@ -1,0 +1,24 @@
+name: common
+description: "A new Flutter package project."
+version: 0.0.1
+homepage:
+
+environment:
+  sdk: ^3.6.1
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # flutter_inappwebview: ^6.0.0
+  flutter_svg: ^2.0.10+1
+  shimmer: ^3.0.0
+  logger: ^2.0.2+1
+  cached_network_image: ^3.4.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: ^5.1.0
+
+flutter: null

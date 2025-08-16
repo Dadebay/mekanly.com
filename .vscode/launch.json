@@ -5,18 +5,58 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "mekanly_master",
+            "name": "Mekanly",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "mekanly_master (profile mode)",
+            "name": "Mekanly (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "mekanly_master (release mode)",
+            "name": "Mekanly (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "common",
+            "cwd": "module\\common",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "common (profile mode)",
+            "cwd": "module\\common",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "common (release mode)",
+            "cwd": "module\\common",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "gen",
+            "cwd": "module\\gen",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "gen (profile mode)",
+            "cwd": "module\\gen",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "gen (release mode)",
+            "cwd": "module\\gen",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
